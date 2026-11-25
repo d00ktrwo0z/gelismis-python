@@ -391,8 +391,8 @@
     }
 
     .task-pane {
-      width: 410px;
-      min-width: 290px;
+      width: 400px;
+      min-width: 280px;
       background: var(--bg-panel);
       border: 1.5px solid var(--border-line);
       border-radius: 10px;
@@ -570,6 +570,7 @@
     }
     .nav-small-btn:hover { border-color: var(--accent-purple); color: var(--accent-purple); }
 
+    /* Sağ Kod Editörü & Çizim Ekranı */
     .editor-pane {
       flex: 1;
       min-width: 280px;
@@ -628,17 +629,24 @@
       outline: none;
     }
 
-    .console-area {
-      height: 185px;
+    /* Alt Bölüm: Metin Konsolu + Turtle Çizim Tuvali */
+    .bottom-output-split {
+      height: 215px;
       border-top: 1.5px solid var(--border-line);
       background: var(--bg-elevated);
       display: flex;
+    }
+
+    .console-area {
+      flex: 1;
+      display: flex;
       flex-direction: column;
+      min-width: 160px;
     }
 
     .console-header {
       padding: 7px 14px;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.06em;
@@ -656,6 +664,42 @@
       white-space: pre-wrap;
       overflow-y: auto;
       line-height: 1.5;
+    }
+
+    /* Turtle Grafik Tuvali */
+    .turtle-stage {
+      width: 240px;
+      border-left: 1.5px solid var(--border-line);
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-editor);
+      flex-shrink: 0;
+    }
+    .turtle-stage-header {
+      padding: 7px 10px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #eab308;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border-line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .turtle-canvas-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+    }
+    #turtle-canvas {
+      background: #0b1120;
+      border: 1px solid rgba(139, 92, 246, 0.35);
+      border-radius: 6px;
+    }
+    [data-theme="light"] #turtle-canvas {
+      background: #ffffff;
     }
 
     #lecture-view {
@@ -774,7 +818,7 @@
       <div class="lecture-banner">
         <h2 style="color:var(--accent-purple); margin-bottom:6px;">📚 Python Konu Özeti ve Formül Rehberi</h2>
         <p style="font-size:0.88rem; color:var(--text-secondary); line-height:1.6;">
-          Tüm konuların mantığı, altın kuralları ve örnek kalıpları aşağıdadır. Alıştırmalar ekranında her konunun yanındaki yuvarlak sarı <b>ƒ</b> butonuna basarak da formüllere anında erişebilirsin.
+          Tüm konuların (Turtle Grafik Çizimi dahil) mantığı, altın kuralları ve örnek kalıpları aşağıdadır. Alıştırmalar ekranında her konunun yanındaki yuvarlak sarı <b>ƒ</b> butonuna basarak da formüllere anında erişebilirsin.
         </p>
       </div>
       <div class="lecture-grid" id="lecture-grid"></div>
@@ -785,7 +829,7 @@
     <aside class="sidebar" id="pane-left">
       <div class="sidebar-header">
         <span id="sidebar-title">Konu Klasörleri</span>
-        <span id="progress-counter">0 / 54</span>
+        <span id="progress-counter">0 / 60</span>
       </div>
       <div class="topic-list" id="sidebar-list"></div>
     </aside>
@@ -806,7 +850,7 @@
         <p class="task-desc" id="task-desc"></p>
 
         <div>
-          <div style="font-size:0.74rem; font-weight:700; color:var(--text-secondary); margin-bottom:5px;">BEKLENEN ÇIKTI (Büyük/Küçük Harf Esnek):</div>
+          <div style="font-size:0.74rem; font-weight:700; color:var(--text-secondary); margin-bottom:5px;">BEKLENEN ÇIKTI / ÇİZİM SONUCU:</div>
           <div class="expected-box" id="task-expected"></div>
         </div>
 
@@ -866,33 +910,57 @@
 
       <textarea id="code-editor" placeholder="# Kodunu buraya yaz veya yukarıdaki '🧩 Örnek Başlangıç' butonunu kullan..." spellcheck="false"></textarea>
 
-      <div class="console-area">
-        <div class="console-header">
-          <span>Çıktı Konsolu</span>
-          <span style="cursor:pointer;" onclick="document.getElementById('console-output').textContent=''">Temizle</span>
+      <!-- Metin Çıktı Konsolu + Canlı Turtle Çizim Ekranı -->
+      <div class="bottom-output-split">
+        <div class="console-area">
+          <div class="console-header">
+            <span>Çıktı Konsolu</span>
+            <span style="cursor:pointer;" onclick="document.getElementById('console-output').textContent=''">Temizle</span>
+          </div>
+          <div id="console-output">Hazır. Kodunu yazıp Çalıştır'a basabilirsin.</div>
         </div>
-        <div id="console-output">Hazır. Kodunu yazıp Çalıştır'a basabilirsin.</div>
+
+        <div class="turtle-stage">
+          <div class="turtle-stage-header">
+            <span>🐢 Turtle Çizim Tuvali</span>
+            <span style="cursor:pointer; font-weight:normal;" onclick="clearTurtleCanvas()">Sil</span>
+          </div>
+          <div class="turtle-canvas-wrap">
+            <canvas id="turtle-canvas" width="215" height="162"></canvas>
+          </div>
+        </div>
       </div>
     </main>
   </div>
 
+  <!-- Serbest Kod Penceresi (Canlı Turtle Tuvali Dahil) -->
   <div id="freecode-modal">
     <div class="editor-toolbar">
-      <span style="font-weight:800; color:var(--accent-purple);">⚡ Serbest Kod Laboratuvarı (Bağımsız Alan)</span>
+      <span style="font-weight:800; color:var(--accent-purple);">⚡ Serbest Kod & Turtle Çizim Laboratuvarı</span>
       <div class="btn-group">
-        <button class="run-btn" onclick="runFreeCode()">▶ Kodu Çalıştır</button>
+        <button class="run-btn" onclick="runFreeCode()">▶ Kodu Çalıştır & Çiz</button>
         <button class="nav-small-btn" onclick="closeFreeModal()">✕ Kapat</button>
       </div>
     </div>
     <div class="modal-body">
       <div class="modal-col">
-        <textarea id="free-editor" spellcheck="false"># Görevlerden bağımsız istediğin Python kodunu burada dene!
-demet = ("Python", "Tuple", 2026)
-for eleman in demet:
-    print(eleman)</textarea>
+        <textarea id="free-editor" spellcheck="false"># İstediğin Python veya Turtle çizim kodunu burada dene!
+import turtle
+
+t = turtle.Turtle()
+t.color("#eab308")
+for i in range(5):
+    t.forward(70)
+    t.right(144)</textarea>
       </div>
       <div class="modal-col">
-        <div id="free-output">Çıktı burada görünecek...</div>
+        <div style="display:flex; gap:10px; flex:1;">
+          <div id="free-output" style="flex:1;">Çıktı burada görünecek...</div>
+          <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--bg-editor); border:1.5px solid var(--border-line); border-radius:8px; padding:8px;">
+            <span style="font-size:0.72rem; font-weight:800; color:#eab308; margin-bottom:6px;">🐢 ÇİZİM ALANI</span>
+            <canvas id="free-turtle-canvas" width="230" height="230" style="background:#0b1120; border-radius:6px; border:1px solid rgba(139,92,246,0.4);"></canvas>
+          </div>
+        </div>
         <div class="yellow-notice">
           <strong style="color:#f59e0b; display:block; margin-bottom:3px;">⚠️ Hata Telafi & Bildirim</strong>
           <span id="free-yellow-text">Hata yaparsan burada nasıl düzelteceğin gösterilir.</span>
@@ -965,6 +1033,13 @@ for eleman in demet:
         desc: "def ile tekrar kullanılabilir fonksiyonlar tanımlanır. try-except blokları ise çalışma zamanı hatalarında programın çökmesini engeller.",
         rule: "Altın Kural: Riskli işlemleri try: bloğuna, hata oluştuğunda verilecek güvenli mesajı except: bloğuna yaz.",
         code: 'try:\n    print(10 / 0)\nexcept:\n    print("Sıfıra bölünemez")'
+      },
+      {
+        title: "10. Grafik ve Çizim (Turtle)",
+        badge: "import turtle | forward() | right()",
+        desc: "Turtle (Kaplumbağa) kütüphanesi ekranda bir kalemi hareket ettirerek çizgi, çokgen, daire ve geometrik desenler çizdirmeyi sağlar.",
+        rule: "Altın Kural: Çokgen çizerken dış açı 360 / kenar_sayisi formülüyle bulunur (Kare için 90, Üçgen için 120 derece).",
+        code: 'import turtle\nt = turtle.Turtle()\nfor i in range(4):\n    t.forward(50)\n    t.right(90)'
       }
     ];
 
@@ -1634,6 +1709,86 @@ for eleman in demet:
             solution: "def ortalama(liste):\n    try:\n        return sum(liste) / len(liste)\n    except:\n        return 0\n\nprint(ortalama([10, 20, 30]))"
           }
         ]
+      },
+      {
+        name: "10. Grafik ve Çizim (Turtle)",
+        formulaList: ["import turtle", "t = turtle.Turtle()", "t.forward(50)", "t.right(90)", "t.circle(30)", "t.color('gold')"],
+        formulaNote: "Çizim komutları sağ alttaki Turtle Çizim Tuvalinde anında şekle dönüşür.",
+        poolCommands: ["import turtle", "forward()", "right() / left()", "circle()", "color()", "for döngüsü"],
+        questions: [
+          {
+            diff: "Kolay",
+            title: "İlk Çizgiyi Çizdirme",
+            desc: "turtle modülünü içe aktar, bir kalem oluştur ve 60 birim ileri doğru çizgi çiz. (Çizim bitince 'Çizim Tamam' yazdır).",
+            expected: "Çizim Tamam",
+            isTurtle: true,
+            usedCommands: ["import turtle", "forward()"],
+            skeleton: 'import turtle\nt = turtle.Turtle()\nt.forward(___)\nprint("Çizim Tamam")',
+            hint: "t.forward(60) komutuyla kalemi 60 birim ileri yürüt.",
+            example: 'import turtle\nt = turtle.Turtle()\nt.forward(50)\nprint("Çizim Tamam")',
+            solution: 'import turtle\nt = turtle.Turtle()\nt.forward(60)\nprint("Çizim Tamam")'
+          },
+          {
+            diff: "Kolay",
+            title: "Daire Çizimi (circle)",
+            desc: "turtle kalemiyle yarıçapı 35 birim olan bir daire çizdir ve 'Daire Hazır' yazdır.",
+            expected: "Daire Hazır",
+            isTurtle: true,
+            usedCommands: ["import turtle", "circle()"],
+            skeleton: 'import turtle\nt = turtle.Turtle()\nt.circle(___)\nprint("Daire Hazır")',
+            hint: "t.circle(35) komutu yarıçapı 35 olan tam bir çember çizer.",
+            example: 'import turtle\nt = turtle.Turtle()\nt.circle(25)\nprint("Daire Hazır")',
+            solution: 'import turtle\nt = turtle.Turtle()\nt.circle(35)\nprint("Daire Hazır")'
+          },
+          {
+            diff: "Orta",
+            title: "Döngü ile Kare Çizimi",
+            desc: "for döngüsü kullanarak kenarı 50 birim olan bir kare çizdir (4 kez 50 ileri git, 90 derece sağa dön) ve 'Kare Çizildi' yazdır.",
+            expected: "Kare Çizildi",
+            isTurtle: true,
+            usedCommands: ["import turtle", "forward()", "right() / left()", "for döngüsü"],
+            skeleton: 'import turtle\nt = turtle.Turtle()\nfor i in range(4):\n    t.forward(50)\n    t.right(___)\nprint("Kare Çizildi")',
+            hint: "Karenin her köşesi 90 derecedir: t.right(90)",
+            example: 'import turtle\nt = turtle.Turtle()\nfor i in range(4):\n    t.forward(40)\n    t.right(90)',
+            solution: 'import turtle\nt = turtle.Turtle()\nfor i in range(4):\n    t.forward(50)\n    t.right(90)\nprint("Kare Çizildi")'
+          },
+          {
+            diff: "Orta",
+            title: "Eşkenar Üçgen Çizimi",
+            desc: "for döngüsüyle 3 kez 60 birim ileri gidip 120 derece sola dönerek üçgen çizdir ve 'Üçgen Çizildi' yazdır.",
+            expected: "Üçgen Çizildi",
+            isTurtle: true,
+            usedCommands: ["import turtle", "forward()", "right() / left()", "for döngüsü"],
+            skeleton: 'import turtle\nt = turtle.Turtle()\nfor i in range(3):\n    t.forward(60)\n    t.left(___)\nprint("Üçgen Çizildi")',
+            hint: "Eşkenar üçgenin dış açısı 360 / 3 = 120 derecedir.",
+            example: 'import turtle\nt = turtle.Turtle()\nfor i in range(3):\n    t.forward(50)\n    t.left(120)',
+            solution: 'import turtle\nt = turtle.Turtle()\nfor i in range(3):\n    t.forward(60)\n    t.left(120)\nprint("Üçgen Çizildi")'
+          },
+          {
+            diff: "Orta",
+            title: "Renkli Altıgen Çizimi",
+            desc: "Kalem rengini 'gold' (veya '#eab308') yapıp 6 kenarlı, her kenarı 35 birim ve dış açısı 60 derece olan altıgen çizdir; 'Altıgen Hazır' yazdır.",
+            expected: "Altıgen Hazır",
+            isTurtle: true,
+            usedCommands: ["import turtle", "forward()", "right() / left()", "color()", "for döngüsü"],
+            skeleton: 'import turtle\nt = turtle.Turtle()\nt.color("___")\nfor i in range(6):\n    t.forward(35)\n    t.right(60)\nprint("Altıgen Hazır")',
+            hint: 't.color("gold") ve t.right(60) kullan.',
+            example: 'import turtle\nt = turtle.Turtle()\nt.color("gold")\nt.forward(40)',
+            solution: 'import turtle\nt = turtle.Turtle()\nt.color("gold")\nfor i in range(6):\n    t.forward(35)\n    t.right(60)\nprint("Altıgen Hazır")'
+          },
+          {
+            diff: "Zor",
+            title: "5 Köşeli Yıldız Çizimi",
+            desc: "5 kez 65 birim ileri gidip 144 derece sağa dönerek 5 köşeli yıldız çizdir ve 'Yıldız Tamam' yazdır.",
+            expected: "Yıldız Tamam",
+            isTurtle: true,
+            usedCommands: ["import turtle", "forward()", "right() / left()", "for döngüsü"],
+            skeleton: 'import turtle\nt = turtle.Turtle()\nfor i in range(5):\n    t.forward(65)\n    t.right(___)\nprint("Yıldız Tamam")',
+            hint: "5 köşeli yıldız için dönüş açısı 144 derecedir.",
+            example: 'import turtle\nt = turtle.Turtle()\nfor i in range(5):\n    t.forward(50)\n    t.right(144)',
+            solution: 'import turtle\nt = turtle.Turtle()\nfor i in range(5):\n    t.forward(65)\n    t.right(144)\nprint("Yıldız Tamam")'
+          }
+        ]
       }
     ];
 
@@ -1826,9 +1981,162 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
     let savedCodes = {};
     let pyodide = null;
 
+    // Canlı Turtle Çizim Motoru (Canvas Üzerinde Komutları İşler)
+    function renderTurtleCommands(canvasId, commandsJson) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Hafif kılavuz ızgarası
+      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
+      ctx.lineWidth = 1;
+      for (let gx = 0; gx < canvas.width; gx += 20) {
+        ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, canvas.height); ctx.stroke();
+      }
+      for (let gy = 0; gy < canvas.height; gy += 20) {
+        ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(canvas.width, gy); ctx.stroke();
+      }
+
+      let x = canvas.width / 2;
+      let y = canvas.height / 2;
+      let angle = 0; // derece (0 = sağa)
+      let penDown = true;
+      let color = '#eab308';
+      let width = 2.2;
+
+      let cmds = [];
+      try { cmds = JSON.parse(commandsJson || '[]'); } catch (e) {}
+
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      cmds.forEach(c => {
+        if (c.type === 'forward') {
+          const rad = (angle * Math.PI) / 180;
+          const nx = x + Math.cos(rad) * c.val;
+          const ny = y - Math.sin(rad) * c.val;
+          if (penDown) {
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            ctx.moveTo(x, y);
+            ctx.lineTo(nx, ny);
+            ctx.stroke();
+          }
+          x = nx; y = ny;
+        } else if (c.type === 'right') {
+          angle -= c.val;
+        } else if (c.type === 'left') {
+          angle += c.val;
+        } else if (c.type === 'color') {
+          color = c.val || '#eab308';
+        } else if (c.type === 'pensize') {
+          width = c.val || 2;
+        } else if (c.type === 'penup') {
+          penDown = false;
+        } else if (c.type === 'pendown') {
+          penDown = true;
+        } else if (c.type === 'goto') {
+          const nx = canvas.width / 2 + c.x;
+          const ny = canvas.height / 2 - c.y;
+          if (penDown) {
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            ctx.moveTo(x, y);
+            ctx.lineTo(nx, ny);
+            ctx.stroke();
+          }
+          x = nx; y = ny;
+        } else if (c.type === 'circle') {
+          ctx.beginPath();
+          ctx.strokeStyle = color;
+          ctx.lineWidth = width;
+          ctx.arc(x, y, Math.abs(c.val), 0, Math.PI * 2);
+          ctx.stroke();
+        }
+      });
+
+      // Kaplumbağa imleci
+      ctx.fillStyle = '#8b5cf6';
+      ctx.beginPath();
+      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function clearTurtleCanvas() {
+      renderTurtleCommands('turtle-canvas', '[]');
+    }
+
+    // Pyodide içine yerleşik sanal 'turtle' modülü enjekte etme
+    const PYTHON_TURTLE_SHIM = `
+import sys, types, json
+
+_turtle_log = []
+
+class _VirtualTurtle:
+    def __init__(self):
+        pass
+    def forward(self, d):
+        _turtle_log.append({"type": "forward", "val": float(d)})
+    fd = forward
+    def backward(self, d):
+        _turtle_log.append({"type": "forward", "val": -float(d)})
+    bk = backward
+    def right(self, a):
+        _turtle_log.append({"type": "right", "val": float(a)})
+    rt = right
+    def left(self, a):
+        _turtle_log.append({"type": "left", "val": float(a)})
+    lt = left
+    def circle(self, r):
+        _turtle_log.append({"type": "circle", "val": float(r)})
+    def color(self, c):
+        _turtle_log.append({"type": "color", "val": str(c)})
+    pencolor = color
+    def pensize(self, w):
+        _turtle_log.append({"type": "pensize", "val": float(w)})
+    width = pensize
+    def penup(self):
+        _turtle_log.append({"type": "penup"})
+    pu = penup
+    def pendown(self):
+        _turtle_log.append({"type": "pendown"})
+    pd = pendown
+    def goto(self, x, y=0):
+        _turtle_log.append({"type": "goto", "x": float(x), "y": float(y)})
+    setpos = goto
+    def speed(self, s):
+        pass
+    def hideturtle(self):
+        pass
+
+_default_t = _VirtualTurtle()
+_turtle_mod = types.ModuleType("turtle")
+_turtle_mod.Turtle = _VirtualTurtle
+_turtle_mod.forward = _default_t.forward
+_turtle_mod.fd = _default_t.forward
+_turtle_mod.backward = _default_t.backward
+_turtle_mod.right = _default_t.right
+_turtle_mod.rt = _default_t.right
+_turtle_mod.left = _default_t.left
+_turtle_mod.lt = _default_t.left
+_turtle_mod.circle = _default_t.circle
+_turtle_mod.color = _default_t.color
+_turtle_mod.pensize = _default_t.pensize
+_turtle_mod.penup = _default_t.penup
+_turtle_mod.pendown = _default_t.pendown
+_turtle_mod.goto = _default_t.goto
+_turtle_mod.speed = _default_t.speed
+_turtle_mod.done = lambda: None
+_turtle_mod.mainloop = lambda: None
+sys.modules["turtle"] = _turtle_mod
+`;
+
     function loadSavedState() {
       try {
-        const raw = localStorage.getItem('pythonhazirlik_save_v2');
+        const raw = localStorage.getItem('pythonhazirlik_save_v3');
         if (!raw) return;
         const data = JSON.parse(raw);
         if (Array.isArray(data.completed)) completedSet = new Set(data.completed);
@@ -1848,12 +2156,12 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
         questionIndex,
         savedCodes
       };
-      localStorage.setItem('pythonhazirlik_save_v2', JSON.stringify(payload));
+      localStorage.setItem('pythonhazirlik_save_v3', JSON.stringify(payload));
       document.getElementById('yellow-text').innerHTML = `<span style="color:#10b981; font-weight:700;">💾 İlerlemen ve yazdığın kod başarıyla kaydedildi!</span>`;
     }
 
     function resetAllProgress() {
-      localStorage.removeItem('pythonhazirlik_save_v2');
+      localStorage.removeItem('pythonhazirlik_save_v3');
       completedSet.clear();
       savedCodes = {};
       topicIndex = 0;
@@ -1861,6 +2169,7 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
       projectIndex = 0;
       openFolders = new Set([0]);
       openFormulaDrawers.clear();
+      clearTurtleCanvas();
       renderSidebar();
       renderTask();
       document.getElementById('yellow-text').innerHTML = `<span style="color:#f59e0b; font-weight:700;">🗑️ Tüm ilerleme ve kayıtlar sıfırlandı, en baştan başlayabilirsin.</span>`;
@@ -1868,6 +2177,7 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
 
     window.addEventListener('load', () => {
       loadSavedState();
+      clearTurtleCanvas();
       renderSidebar();
       renderTask();
       const splash = document.getElementById('welcome-splash');
@@ -2080,6 +2390,7 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
 
     function renderTask() {
       closeThreeSplit();
+      clearTurtleCanvas();
       const catEl = document.getElementById('task-category');
       const diffEl = document.getElementById('task-diff');
       const titleEl = document.getElementById('task-title');
@@ -2122,6 +2433,7 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
     function resetEditor() {
       document.getElementById('code-editor').value = "";
       document.getElementById('console-output').textContent = "Temizlendi.";
+      clearTurtleCanvas();
     }
 
     function prevItem() {
@@ -2175,31 +2487,40 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
       if (!pyodide) { out.textContent = "Python motoru yükleniyor, birkaç saniye bekleyin..."; return; }
 
       try {
-        pyodide.runPython(`
+        pyodide.runPython(PYTHON_TURTLE_SHIM + `
 import sys, io, builtins
 sys.stdout = io.StringIO()
 sys.stderr = io.StringIO()
+_turtle_log.clear()
 def _mock_input(prompt=""):
     return "25" if "Sayı" in str(prompt) else "Python"
 builtins.input = _mock_input
         `);
         await pyodide.runPythonAsync(code);
         const result = pyodide.runPython("sys.stdout.getvalue()").trim();
+        const turtleData = pyodide.runPython("json.dumps(_turtle_log)");
+        const turtleCount = JSON.parse(turtleData).length;
+
+        renderTurtleCommands('turtle-canvas', turtleData);
+
         out.style.color = "var(--text-primary)";
-        out.textContent = result || "(Çıktı yok)";
+        out.textContent = result || (turtleCount > 0 ? `(🐢 ${turtleCount} çizim komutu uygulandı)` : "(Çıktı yok)");
 
         if (checkAnswer) {
-          const isMatch = normalizeText(result) === normalizeText(currentItem.expected);
+          const textMatch = normalizeText(result) === normalizeText(currentItem.expected);
+          const turtleValid = currentItem.isTurtle ? (turtleCount > 0 && textMatch) : textMatch;
 
-          if (isMatch) {
+          if (turtleValid) {
             closeThreeSplit();
-            yellowText.innerHTML = `<span style="color:#10b981; font-weight:700;">✔ Harika! Doğru sonucu elde ettin.</span>`;
+            yellowText.innerHTML = `<span style="color:#10b981; font-weight:700;">✔ Harika! Doğru sonucu ve çizimi elde ettin.</span>`;
             if (currentMode === 'topics') {
               completedSet.add(`${topicIndex}-${questionIndex}`);
               renderSidebar();
             }
           } else {
-            const wrongMsg = `Beklenen çıktı "${currentItem.expected}" iken senin kodun "${result || 'boş çıktı'}" üretti.`;
+            const wrongMsg = currentItem.isTurtle && turtleCount === 0
+              ? "Herhangi bir turtle çizim komutu (ör. forward, circle) çalıştırılmadı."
+              : `Beklenen çıktı "${currentItem.expected}" iken senin kodun "${result || 'boş çıktı'}" üretti.`;
             openThreeSplit(wrongMsg, currentItem.example, currentItem.solution);
           }
         }
@@ -2210,7 +2531,10 @@ builtins.input = _mock_input
       }
     }
 
-    function openFreeModal() { document.getElementById('freecode-modal').classList.add('open'); }
+    function openFreeModal() {
+      document.getElementById('freecode-modal').classList.add('open');
+      renderTurtleCommands('free-turtle-canvas', '[]');
+    }
     function closeFreeModal() { document.getElementById('freecode-modal').classList.remove('open'); }
 
     async function runFreeCode() {
@@ -2220,11 +2544,19 @@ builtins.input = _mock_input
       if (!pyodide) { out.textContent = "Python motoru hazırlanıyor..."; return; }
 
       try {
-        pyodide.runPython("import sys, io\nsys.stdout = io.StringIO()");
+        pyodide.runPython(PYTHON_TURTLE_SHIM + `
+import sys, io
+sys.stdout = io.StringIO()
+_turtle_log.clear()
+        `);
         await pyodide.runPythonAsync(code);
+        const res = pyodide.runPython("sys.stdout.getvalue()");
+        const turtleData = pyodide.runPython("json.dumps(_turtle_log)");
+        renderTurtleCommands('free-turtle-canvas', turtleData);
+
         out.style.color = "var(--text-primary)";
-        out.textContent = pyodide.runPython("sys.stdout.getvalue()") || "(Çıktı yok)";
-        yText.textContent = "Kod hatasız çalıştırıldı.";
+        out.textContent = res || "(Çizim ve kod başarıyla çalıştırıldı)";
+        yText.textContent = "Kod hatasız çalıştırıldı ve çizim tuvaline aktarıldı.";
       } catch (err) {
         out.style.color = "#f43f5e";
         out.textContent = err.toString();
@@ -2270,7 +2602,7 @@ builtins.input = _mock_input
     }
 
     makeResizable('resizer-1', 'pane-left', 220, 420);
-    makeResizable('resizer-2', 'pane-mid', 290, 580);
+    makeResizable('resizer-2', 'pane-mid', 280, 580);
   </script>
 </body>
 </html>
