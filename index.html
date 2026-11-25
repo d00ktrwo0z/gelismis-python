@@ -81,6 +81,7 @@
       opacity: 1;
     }
 
+    /* Özel Giriş Ekranı (Splash) */
     #welcome-splash {
       position: fixed;
       inset: 0;
@@ -97,69 +98,90 @@
       opacity: 0;
       pointer-events: none;
     }
-    #welcome-splash h1 {
-      color: #f8fafc;
-      font-size: clamp(2.5rem, 5vw, 4.2rem);
+    .splash-main-title {
+      font-size: clamp(2.4rem, 5vw, 4rem);
       font-weight: 800;
-      letter-spacing: -0.03em;
+      font-style: italic;
+      transform: skewX(-6deg) translateY(22px);
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #c4b5fd 0%, #9333ea 55%, #6b21a8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 6px 20px rgba(126, 34, 206, 0.38));
+      padding: 4px 16px;
       opacity: 0;
-      transform: translateY(22px);
-      animation: fadeSlide 0.65s ease forwards 0.12s;
+      animation: fadeSlideMain 0.65s ease forwards 0.12s;
     }
-    #welcome-splash p {
-      color: #c084fc;
-      font-size: 0.95rem;
-      letter-spacing: 0.2em;
+    .splash-sub-gold {
+      color: #eab308;
+      font-size: clamp(1.35rem, 2.8vw, 2.1rem);
+      font-weight: 800;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      margin-top: 10px;
+      margin-top: 8px;
+      text-shadow: 0 4px 18px rgba(234, 179, 8, 0.35);
       opacity: 0;
       transform: translateY(14px);
-      animation: fadeSlide 0.65s ease forwards 0.3s;
+      animation: fadeSlideSub 0.65s ease forwards 0.3s;
     }
-    @keyframes fadeSlide { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeSlideMain {
+      to { opacity: 1; transform: skewX(-6deg) translateY(0); }
+    }
+    @keyframes fadeSlideSub {
+      to { opacity: 1; transform: translateY(0); }
+    }
 
+    /* Üst Menü (Header) — Taşma ve Beyaz Çizgi Olmadan Tam Hizalı */
     header {
-      height: 60px;
+      height: 58px;
       background: var(--bg-panel);
       border-bottom: 1.5px solid var(--border-line);
       box-shadow: var(--panel-shadow);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 14px;
+      padding: 0 12px;
       flex-shrink: 0;
       z-index: 20;
       position: relative;
-      gap: 8px;
+      gap: 6px;
+      overflow: hidden;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 7px;
       font-weight: 800;
-      font-size: 1.02rem;
+      font-size: 0.95rem;
       letter-spacing: -0.02em;
       flex-shrink: 0;
     }
     .brand-gem {
-      width: 11px;
-      height: 11px;
+      width: 10px;
+      height: 10px;
       background: linear-gradient(135deg, var(--accent-purple), var(--accent-gold));
       transform: rotate(45deg);
       border-radius: 2px;
       box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
     }
 
-    .nav-tabs { display: flex; align-items: center; gap: 5px; overflow-x: auto; }
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 1;
+      overflow: visible;
+    }
+    .nav-tabs::-webkit-scrollbar { display: none; }
 
     .tab-btn {
       background: transparent;
       color: var(--text-secondary);
       border: 1px solid transparent;
-      padding: 6px 10px;
-      border-radius: 7px;
-      font-size: 0.8rem;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 0.74rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -191,27 +213,28 @@
       background: var(--freecode-bg);
       color: #ffffff;
       border: 1px solid rgba(255, 255, 255, 0.25);
-      padding: 6px 14px;
-      font-size: 0.79rem;
+      padding: 5px 11px;
+      font-size: 0.73rem;
       font-weight: 700;
       cursor: pointer;
-      transform: skewX(-14deg);
+      transform: skewX(-12deg);
       border-radius: 5px;
-      margin-left: 3px;
-      box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
+      margin-left: 2px;
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
       transition: all 0.2s ease;
       white-space: nowrap;
+      flex-shrink: 0;
     }
-    .freecode-skew-btn span { display: inline-block; transform: skewX(14deg); }
+    .freecode-skew-btn span { display: inline-block; transform: skewX(12deg); }
     .freecode-skew-btn:hover {
-      transform: skewX(-14deg) translateY(-1px);
-      box-shadow: 0 6px 22px rgba(124, 58, 237, 0.6);
+      transform: skewX(-12deg) translateY(-1px);
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.6);
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       flex-shrink: 0;
     }
 
@@ -219,9 +242,9 @@
       background: var(--bg-elevated);
       color: var(--text-primary);
       border: 1px solid var(--border-line);
-      padding: 5px 9px;
-      border-radius: 6px;
-      font-size: 0.75rem;
+      padding: 4px 7px;
+      border-radius: 5px;
+      font-size: 0.7rem;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -233,12 +256,12 @@
     .action-pill-btn.reset-all-btn:hover { border-color: #f43f5e; color: #f43f5e; }
 
     #engine-status {
-      font-size: 0.73rem;
+      font-size: 0.69rem;
       font-weight: 700;
       color: var(--text-secondary);
       background: var(--bg-elevated);
-      padding: 5px 9px;
-      border-radius: 6px;
+      padding: 4px 7px;
+      border-radius: 5px;
       border: 1px solid var(--border-line);
       white-space: nowrap;
     }
@@ -247,15 +270,15 @@
       background: var(--bg-elevated);
       color: var(--text-primary);
       border: 1.5px solid var(--border-line);
-      padding: 5px 10px;
-      border-radius: 7px;
-      font-size: 0.76rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
     }
 
-    /* Ana Çalışma Alanı (z-index: 1 ile arka çapraz şeritlerin üstünde) */
+    /* Ana Çalışma Alanı */
     .workspace {
       flex: 1;
       display: flex;
@@ -933,9 +956,10 @@
   <!-- En En Arkada Koyu Tema Özel Beyaz-Mor Gölgeli Çapraz Şerit Katmanı -->
   <div class="dark-diagonal-backdrop"></div>
 
+  <!-- Özel Giriş Ekranı -->
   <div id="welcome-splash">
-    <h1>Merhaba 👋</h1>
-    <p>pythonhazırlık stüdyo</p>
+    <h1 class="splash-main-title">Python Stüdyoya</h1>
+    <p class="splash-sub-gold">Hoşgeldiniz</p>
   </div>
 
   <header>
@@ -945,21 +969,21 @@
     </div>
 
     <div class="nav-tabs">
-      <button class="tab-btn" id="mode-lecture" onclick="switchMode('lecture')">📖 Konu Özeti & Anlatım</button>
+      <button class="tab-btn" id="mode-lecture" onclick="switchMode('lecture')">📖 Konu Özeti</button>
       <button class="tab-btn active" id="mode-topics" onclick="switchMode('topics')">Konu Alıştırmaları</button>
-      <button class="tab-btn" id="mode-projects" onclick="switchMode('projects')">Kapsamlı Projeler (7)</button>
+      <button class="tab-btn" id="mode-projects" onclick="switchMode('projects')">Projeler (7)</button>
       <button class="tab-btn exam-tab-btn" id="mode-exam" onclick="switchMode('exam')">📝 Mini Sınavlar</button>
       <button class="freecode-skew-btn" onclick="openFreeModal()"><span>⚡ Serbest Kod</span></button>
     </div>
 
     <div class="header-actions">
       <button class="action-pill-btn save-btn" onclick="saveProgress()" title="Tarayıcıya kaydeder">💾 Kaydet</button>
-      <button class="action-pill-btn export-btn" onclick="exportBackupFile()" title="Tüm ilerlemeni ve kodlarını masaüstüne dosya olarak indirir">📤 Dışa Aktar</button>
-      <button class="action-pill-btn export-btn" onclick="document.getElementById('import-file-input').click()" title="Daha önce indirdiğin yedek dosyasını yükler">📥 İçe Aktar</button>
+      <button class="action-pill-btn export-btn" onclick="exportBackupFile()" title="İlerlemeni dosya olarak bilgisayarına indirir">📤 Dışa Aktar</button>
+      <button class="action-pill-btn export-btn" onclick="document.getElementById('import-file-input').click()" title="İndirdiğin yedek dosyasını yükler">📥 İçe Aktar</button>
       <input type="file" id="import-file-input" accept=".json" style="display:none;" onchange="importBackupFile(event)" />
       <button class="action-pill-btn reset-all-btn" onclick="resetAllProgress()" title="Tüm ilerlemeyi sıfırlar">🗑️ Sıfırla</button>
       <span id="engine-status">Python Yükleniyor...</span>
-      <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">☀️ Beyaz-Mor Tema</button>
+      <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">☀️ Beyaz-Mor</button>
     </div>
   </header>
 
@@ -1451,7 +1475,7 @@ for i in range(5):
     let examPassedSet = new Set();
     let examUserCodes = {};
     let examTimerInterval = null;
-    let examSecondsLeft = 900; // 15 dakika = 900 saniye
+    let examSecondsLeft = 900;
 
     function selectExamDifficulty(diff) {
       selectedExamDiff = diff;
@@ -1865,10 +1889,11 @@ sys.modules["turtle"] = _turtle_mod
       renderSidebar();
       renderTask();
       const splash = document.getElementById('welcome-splash');
+      // 1 saniye arttırılmış giriş ekranı süresi (2100ms)
       setTimeout(() => {
         splash.classList.add('hide-splash');
         setTimeout(() => splash.remove(), 850);
-      }, 1100);
+      }, 2100);
     });
 
     (async function initPython() {
@@ -1887,10 +1912,10 @@ sys.modules["turtle"] = _turtle_mod
       const btn = document.getElementById('theme-btn');
       if (html.getAttribute('data-theme') === 'dark') {
         html.setAttribute('data-theme', 'light');
-        btn.textContent = "🌙 Koyu Elit Tema";
+        btn.textContent = "🌙 Koyu Tema";
       } else {
         html.setAttribute('data-theme', 'dark');
-        btn.textContent = "☀️ Beyaz-Mor Tema";
+        btn.textContent = "☀️ Beyaz-Mor";
       }
     }
 
