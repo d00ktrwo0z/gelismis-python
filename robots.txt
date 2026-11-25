@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://trwo0z.github.io/geli-mi-python/sitemap.xml
