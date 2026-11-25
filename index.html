@@ -100,18 +100,20 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 22px;
+      padding: 0 18px;
       flex-shrink: 0;
       z-index: 20;
+      gap: 10px;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 9px;
       font-weight: 800;
-      font-size: 1.08rem;
+      font-size: 1.05rem;
       letter-spacing: -0.02em;
+      flex-shrink: 0;
     }
     .brand-gem {
       width: 11px;
@@ -122,18 +124,19 @@
       box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
     }
 
-    .nav-tabs { display: flex; align-items: center; gap: 8px; }
+    .nav-tabs { display: flex; align-items: center; gap: 6px; }
 
     .tab-btn {
       background: transparent;
       color: var(--text-secondary);
       border: 1px solid transparent;
-      padding: 7px 14px;
+      padding: 6px 12px;
       border-radius: 7px;
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s ease;
+      white-space: nowrap;
     }
     .tab-btn:hover {
       color: var(--text-primary);
@@ -151,15 +154,16 @@
       background: var(--freecode-bg);
       color: #ffffff;
       border: 1px solid rgba(255, 255, 255, 0.25);
-      padding: 7px 18px;
-      font-size: 0.82rem;
+      padding: 6px 16px;
+      font-size: 0.8rem;
       font-weight: 700;
       cursor: pointer;
       transform: skewX(-14deg);
       border-radius: 5px;
-      margin-left: 6px;
+      margin-left: 4px;
       box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
       transition: all 0.2s ease;
+      white-space: nowrap;
     }
     .freecode-skew-btn span { display: inline-block; transform: skewX(14deg); }
     .freecode-skew-btn:hover {
@@ -167,28 +171,61 @@
       box-shadow: 0 6px 22px rgba(124, 58, 237, 0.6);
     }
 
-    .header-actions { display: flex; align-items: center; gap: 10px; }
+    /* Sağ Aksiyon Grubu: Kaydet + Sıfırla + Python Hazır + Tema */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-shrink: 0;
+    }
+
+    .action-pill-btn {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      border: 1px solid var(--border-line);
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 0.77rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .action-pill-btn:hover {
+      border-color: var(--accent-purple);
+      color: var(--accent-purple);
+    }
+    .action-pill-btn.save-btn:hover {
+      border-color: var(--accent-emerald);
+      color: var(--accent-emerald);
+    }
+    .action-pill-btn.reset-all-btn:hover {
+      border-color: #f43f5e;
+      color: #f43f5e;
+    }
 
     #engine-status {
-      font-size: 0.76rem;
-      font-weight: 600;
+      font-size: 0.75rem;
+      font-weight: 700;
       color: var(--text-secondary);
       background: var(--bg-elevated);
       padding: 5px 10px;
       border-radius: 6px;
       border: 1px solid var(--border-line);
+      white-space: nowrap;
     }
 
     .theme-toggle {
       background: var(--bg-elevated);
       color: var(--text-primary);
       border: 1.5px solid var(--border-line);
-      padding: 6px 12px;
+      padding: 5px 11px;
       border-radius: 7px;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
       cursor: pointer;
       box-shadow: 0 2px 8px rgba(124, 58, 237, 0.12);
+      white-space: nowrap;
     }
 
     /* Ana 3 Panelli Çalışma Alanı */
@@ -201,9 +238,9 @@
 
     /* Sol Klasör Menü */
     .sidebar {
-      width: 280px;
-      min-width: 210px;
-      max-width: 400px;
+      width: 295px;
+      min-width: 220px;
+      max-width: 420px;
       background: var(--bg-panel);
       border: 1.5px solid var(--border-line);
       border-radius: 10px;
@@ -239,13 +276,13 @@
     }
 
     .folder-header {
-      padding: 9px 11px;
+      padding: 9px 10px;
       cursor: pointer;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 6px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 700;
       transition: background 0.15s;
     }
@@ -255,16 +292,16 @@
       border-bottom: 1px solid var(--border-line);
     }
 
-    /* Konu Başlığının Yanındaki Tıklanabilir Yuvarlak Sarı Formül Butonu */
+    /* Yuvarlak Sarı Formül Butonu */
     .yellow-round-btn {
-      width: 24px;
-      height: 24px;
+      width: 23px;
+      height: 23px;
       border-radius: 50%;
       background: rgba(234, 179, 8, 0.18);
       border: 1.5px solid #eab308;
       color: #eab308;
       font-family: 'Consolas', monospace;
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-weight: 900;
       display: inline-flex;
       align-items: center;
@@ -280,7 +317,6 @@
       transform: scale(1.08);
     }
 
-    /* Yuvarlak Sarı Kutuya Tıklayınca Açılan Formül Çekmecesi */
     .formula-drawer {
       display: none;
       background: var(--yellow-vault-bg);
@@ -293,7 +329,7 @@
     .formula-drawer.open { display: block; }
     .formula-drawer-title {
       font-weight: 800;
-      font-size: 0.72rem;
+      font-size: 0.71rem;
       color: #eab308;
       text-transform: uppercase;
       margin-bottom: 4px;
@@ -307,7 +343,7 @@
       border-radius: 4px;
       margin: 2px 3px 2px 0;
       font-family: 'Consolas', monospace;
-      font-size: 0.74rem;
+      font-size: 0.73rem;
       color: #eab308;
     }
 
@@ -330,7 +366,7 @@
     .sub-question-item {
       padding: 7px 10px;
       border-radius: 6px;
-      font-size: 0.79rem;
+      font-size: 0.78rem;
       color: var(--text-secondary);
       cursor: pointer;
       display: flex;
@@ -394,13 +430,8 @@
       background: var(--bg-elevated);
     }
 
-    .pane-top-right {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
+    .pane-top-right { display: flex; align-items: center; gap: 7px; }
 
-    /* Zorluk Seviyesinin Yanındaki Örnek Başlangıç Butonu */
     .skeleton-btn {
       background: rgba(139, 92, 246, 0.15);
       color: var(--accent-purple);
@@ -412,10 +443,7 @@
       cursor: pointer;
       transition: all 0.2s ease;
     }
-    .skeleton-btn:hover {
-      background: var(--accent-purple);
-      color: #ffffff;
-    }
+    .skeleton-btn:hover { background: var(--accent-purple); color: #ffffff; }
 
     .difficulty-pill {
       font-size: 0.71rem;
@@ -449,7 +477,7 @@
       font-size: 0.81rem;
     }
 
-    /* Dinamik Sarı Komut Deposu (Sadece O Sorudaki Komutlar Yanar, Diğerleri Söner) */
+    /* Soruya Göre Yanan ve Sönen Sarı Komut Deposu */
     .yellow-vault {
       background: var(--yellow-vault-bg);
       border: 1.5px solid var(--yellow-vault-border);
@@ -479,11 +507,7 @@
       opacity: 0.42;
       transition: all 0.25s ease;
     }
-    [data-theme="light"] .cmd-chip {
-      background: #f1f5f9;
-      opacity: 0.5;
-    }
-    /* O Soruda Kullanılacak Komutlar Parlak Sarı Yanar */
+    [data-theme="light"] .cmd-chip { background: #f1f5f9; opacity: 0.5; }
     .cmd-chip.lit-now {
       opacity: 1;
       background: rgba(234, 179, 8, 0.24);
@@ -493,11 +517,8 @@
       box-shadow: 0 0 12px rgba(234, 179, 8, 0.45);
       cursor: pointer;
     }
-    .cmd-chip.lit-now:hover {
-      transform: translateY(-1px);
-    }
 
-    /* Yanlış Yapıldığında Açılan 3 Bölmeli Sarı Telafi Kutusu */
+    /* 3 Bölmeli Sarı Telafi Kutusu */
     #three-split-helper {
       display: none;
       flex-direction: column;
@@ -537,7 +558,6 @@
       border: 1px solid var(--border-line);
     }
 
-    /* Sarı Bildirim Kutusu */
     .yellow-notice {
       background: rgba(245, 158, 11, 0.1);
       border: 1px solid rgba(245, 158, 11, 0.4);
@@ -666,7 +686,7 @@
       overflow-y: auto;
     }
     #lecture-view.active { display: block; }
-    .lecture-container { max-width: 1120px; margin: 0 auto; }
+    .lecture-container { max-width: 1140px; margin: 0 auto; }
     .lecture-banner {
       background: var(--bg-panel);
       border: 1.5px solid var(--border-line);
@@ -690,19 +710,15 @@
       flex-direction: column;
       gap: 10px;
     }
-    .lecture-card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .lecture-card h3 { color: var(--accent-purple); font-size: 1.04rem; }
-    .lecture-card p { font-size: 0.86rem; line-height: 1.65; color: var(--text-secondary); }
+    .lecture-card-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .lecture-card h3 { color: var(--accent-purple); font-size: 1.02rem; }
+    .lecture-card p { font-size: 0.85rem; line-height: 1.65; color: var(--text-secondary); }
     .lecture-rule {
       background: rgba(139, 92, 246, 0.09);
       border-left: 3px solid var(--accent-purple);
       padding: 8px 10px;
       border-radius: 5px;
-      font-size: 0.81rem;
+      font-size: 0.8rem;
     }
     .lecture-code {
       background: var(--bg-editor);
@@ -710,7 +726,7 @@
       padding: 11px;
       border-radius: 7px;
       font-family: 'Consolas', monospace;
-      font-size: 0.81rem;
+      font-size: 0.8rem;
       white-space: pre-wrap;
       line-height: 1.5;
     }
@@ -761,13 +777,16 @@
     </div>
 
     <div class="nav-tabs">
-      <button class="tab-btn" id="mode-lecture" onclick="switchMode('lecture')">📖 Konu Özeti & Anlatım</button>
-      <button class="tab-btn active" id="mode-topics" onclick="switchMode('topics')">Konu Alıştırmaları</button>
+      <button class="tab-btn" id="mode-lecture" onclick="switchMode('lecture')">📖 Konu Özeti (8 Modül)</button>
+      <button class="tab-btn active" id="mode-topics" onclick="switchMode('topics')">Modül Alıştırmaları</button>
       <button class="tab-btn" id="mode-projects" onclick="switchMode('projects')">Kapsamlı Projeler (7)</button>
       <button class="freecode-skew-btn" onclick="openFreeModal()"><span>⚡ Serbest Kod</span></button>
     </div>
 
+    <!-- Sağ Bölüm: Kaydet ve Sıfırla Butonları Python Hazır'ın Solunda -->
     <div class="header-actions">
+      <button class="action-pill-btn save-btn" onclick="saveProgress()" title="İlerlemeni ve yazdığın kodu tarayıcıya kaydeder">💾 Kaydet</button>
+      <button class="action-pill-btn reset-all-btn" onclick="resetAllProgress()" title="Tüm ilerlemeyi ve kayıtları sıfırlar">🗑️ Sıfırla</button>
       <span id="engine-status">Python Yükleniyor...</span>
       <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">☀️ Beyaz-Mor Tema</button>
     </div>
@@ -777,9 +796,9 @@
   <section id="lecture-view">
     <div class="lecture-container">
       <div class="lecture-banner">
-        <h2 style="color:var(--accent-purple); margin-bottom:6px;">📚 Python Temelleri — Kapsamlı Konu Özeti (Tuples Dahil)</h2>
+        <h2 style="color:var(--accent-purple); margin-bottom:6px;">📚 8 Modüllük Python Eğitim Özeti ve Formül Rehberi</h2>
         <p style="font-size:0.88rem; color:var(--text-secondary); line-height:1.6;">
-          Tüm konuların mantığı, altın kuralları ve örnek kullanımları aşağıdadır. Alıştırmalar ekranında her konunun yanındaki yuvarlak sarı <b>ƒ</b> butonuna basarak da formüllere anında ulaşabilirsin.
+          Modül 1'den Modül 8'e kadar tüm konuların mantığı, altın kuralları ve örnek kalıpları aşağıdadır. Alıştırmalar ekranında her modülün yanındaki yuvarlak sarı <b>ƒ</b> butonuna basarak da formüllere anında erişebilirsin.
         </p>
       </div>
       <div class="lecture-grid" id="lecture-grid"></div>
@@ -791,8 +810,8 @@
     <!-- Sol Klasör Menü -->
     <aside class="sidebar" id="pane-left">
       <div class="sidebar-header">
-        <span id="sidebar-title">Konu Klasörleri</span>
-        <span id="progress-counter">0 / 0</span>
+        <span id="sidebar-title">Eğitim Modülleri</span>
+        <span id="progress-counter">0 / 48</span>
       </div>
       <div class="topic-list" id="sidebar-list"></div>
     </aside>
@@ -802,7 +821,7 @@
     <!-- Orta Görev & Dinamik Sarı Komut Deposu -->
     <section class="task-pane" id="pane-mid">
       <div class="pane-top">
-        <span id="task-category" style="font-size:0.78rem; font-weight:700; color:var(--accent-purple);">Bölüm</span>
+        <span id="task-category" style="font-size:0.76rem; font-weight:700; color:var(--accent-purple);">Modül</span>
         <div class="pane-top-right">
           <button class="skeleton-btn" onclick="loadSkeleton()" title="Çözüm iskeletini boşluklu olarak editöre yerleştirir">🧩 Örnek Başlangıç</button>
           <span class="difficulty-pill diff-kolay" id="task-diff">Kolay</span>
@@ -900,8 +919,8 @@
     <div class="modal-body">
       <div class="modal-col">
         <textarea id="free-editor" spellcheck="false"># Görevlerden bağımsız istediğin Python kodunu burada dene!
-demet = ("Python", "Tuple", 2026)
-for eleman in demet:
+kume = {"Python", "Tuple", "Set"}
+for eleman in kume:
     print(eleman)</textarea>
       </div>
       <div class="modal-col">
@@ -915,110 +934,198 @@ for eleman in demet:
   </div>
 
   <script>
-    // Kapsamlı Konu Özetleri (6. Konu Tuples Dahil)
+    // 8 Modüllük Konu Özeti
     const LECTURES_DATA = [
       {
-        title: "1. Değişkenler, Veri Tipleri ve f-String",
-        badge: "print() | f\"{}\"",
-        desc: "Değişkenler verileri saklayan isimlerdir. Metinler (str) tırnak içinde, sayılar (int/float) doğrudan yazılır. f-string ile metin ve değişkenleri tek satırda birleştirebilirsin.",
-        rule: "Altın Kural: Metin ile sayıyı birleştirirken f\"Metin {degisken}\" yapısını kullan.",
-        code: 'urun = "Klavye"\nfiyat = 450\nprint(f"{urun}: {int(fiyat * 1.20)} TL")'
+        title: "Modül 1: Python'a Giriş ve print()",
+        badge: "print() | sep | end",
+        desc: "Python'da kullanıcıya mesaj göstermek veya hesaplama sonuçlarını ekrana basmak için print() fonksiyonu kullanılır. Metinler tek (' ') veya çift (\" \") tırnak içinde yazılır.",
+        rule: "Altın Kural: print() içine virgülle birden fazla değer yazarsan aralarına otomatik boşluk koyar; sep='-' ile ayırıcıyı değiştirebilirsin.",
+        code: 'print("Python Dünyasına Hoş Geldin")\nprint("2026", "Python", "Eğitimi", sep="-")'
       },
       {
-        title: "2. Koşul Yapıları (if / elif / else)",
+        title: "Modül 2: Değişkenler ve Veri Tipleri",
+        badge: "int | float | str | bool",
+        desc: "Değişkenler verileri saklayan isimlerdir. Tam sayılar (int), ondalıklı sayılar (float), metinler (str) ve mantıksal değerler (True/False - bool) en temel veri tipleridir.",
+        rule: "Altın Kural: Metin ile sayıyı birleştirirken f\"Metin {degisken}\" (f-string) veya tip dönüşümü str() / int() kullanılır.",
+        code: 'ad = "Samsun"\nplaka = 55\nprint(f"{ad} plaka kodu: {plaka}")'
+      },
+      {
+        title: "Modül 3: Operatörler ve input()",
+        badge: "+ - * / // % ** | input()",
+        desc: "Matematiksel operatörler (+, -, *, /, // tam bölme, % mod alma, ** üs alma) hesaplama yapar. input() fonksiyonu ise kullanıcıdan klavye yoluyla veri alır.",
+        rule: "Altın Kural: input() her zaman metin (str) döndürür; sayısal işlem yapacaksan int(input()) şeklinde tam sayıya çevirmelisin.",
+        code: 'sayi = int(input("Sayı gir: "))\nprint("Karesi:", sayi ** 2)'
+      },
+      {
+        title: "Modül 4: Karar Yapıları (if - elif - else)",
         badge: "if : | elif : | else:",
-        desc: "Programın şartlara göre karar vermesini sağlar. İlk şart if, ara şartlar elif, hiçbiri tutmazsa çalışacak blok ise else ile yazılır.",
-        rule: "Altın Kural: Şart satırının sonuna iki nokta (:) koy ve alt satırı 4 boşluk içeriden yaz.",
-        code: 'puan = 78\nif puan >= 85:\n    print("Pekiyi")\nelif puan >= 50:\n    print("Geçti")\nelse:\n    print("Kaldı")'
+        desc: "Programın koşullara göre farklı yollar izlemesini sağlar. Karşılaştırma operatörleri (==, !=, >, <, >=, <=) ve mantıksal bağlaçlar (and, or, not) ile şartlar kurulur.",
+        rule: "Altın Kural: Şart satırının sonuna mutlaka iki nokta (:) koy ve alt satırı 4 boşluk içeriden başlat.",
+        code: 'notu = 82\nif notu >= 85:\n    print("Pekiyi")\nelif notu >= 50:\n    print("Geçti")\nelse:\n    print("Kaldı")'
       },
       {
-        title: "3. Döngüler (for ve while)",
+        title: "Modül 5: Döngüler (while ve for)",
         badge: "for | range() | while",
-        desc: "Tekrarlayan işlemleri otomatikleştirir. range(1, 6) ifadesi 1'den 5'e kadar sayı üretir. while ise koşul doğru olduğu sürece çalışır.",
-        rule: "Altın Kural: while döngüsünde sayacı artırmayı veya azaltmayı unutma, yoksa sonsuz döngü oluşur.",
-        code: 'toplam = 0\nfor i in range(1, 6):\n    toplam += i\nprint(toplam)'
+        desc: "Tekrarlayan işlemleri otomatikleştirir. for döngüsü belirli bir aralık veya koleksiyon üzerinde gezerken, while döngüsü koşul doğru olduğu sürece çalışır.",
+        rule: "Altın Kural: range(1, 6) 1'den 5'e kadar sayı üretir (bitiş değeri dahil değildir). while döngüsünde sayacı güncellemeyi unutma.",
+        code: 'toplam = 0\nfor i in range(1, 6):\n    toplam += i\nprint("Toplam:", toplam)'
       },
       {
-        title: "4. Listeler ve Sözlükler",
-        badge: "[] | {} | append()",
-        desc: "Listeler [] değiştirilebilir sıralı koleksiyonlardır. Sözlükler {} ise 'anahtar: değer' çiftleriyle etiketli veri tutar.",
-        rule: "Altın Kural: Listeye eleman eklemek için .append(), eleman sayısı için len() kullanılır.",
-        code: 'notlar = [70, 85, 90]\nnotlar.append(100)\nprint(max(notlar))'
+        title: "Modül 6: Listeler ve Tuple/Demetler",
+        badge: "[] Liste | () Tuple",
+        desc: "Listeler [] köşeli parantez ile oluşturulur ve sonradan değiştirilebilir (.append, .remove). Tuple (Demet) ise () normal parantezle oluşturulur ve elemanları değiştirilemez (immutable).",
+        rule: "Altın Kural: Değişmesi gereken listeler için [], sabit ve güvenli kalması gereken veriler için () Tuple kullanılır.",
+        code: 'liste = [10, 20]\nliste.append(30)\ndemet = ("Mor", "Sarı")\nprint(demet[0])'
       },
       {
-        title: "5. Fonksiyonlar (def & return)",
-        badge: "def : | return",
-        desc: "Tekrar kullanılabilir kod blokları oluşturur. Parametreler dışarıdan girdi alır, return sonucu dışarı döndürür.",
-        rule: "Altın Kural: Fonksiyonu tanımladıktan sonra alt satırda adını yazıp çağırarak çalıştırmalısın.",
-        code: 'def kare(x):\n    return x ** 2\n\nprint(kare(5))'
+        title: "Modül 7: Sözlükler (Dict) ve Kümeler (Set)",
+        badge: "{k: v} Dict | {a, b} Set",
+        desc: "Sözlükler (Dict) 'anahtar: değer' çiftleriyle etiketli veri tutar. Kümeler (Set) ise süslü parantez içinde tekrar eden elemanları otomatik temizleyen benzersiz koleksiyonlardır.",
+        rule: "Altın Kural: Bir listedeki tekrar eden elemanları tekilleştirmek için set(liste) dönüşümü kullanılır.",
+        code: 'ogrenci = {"ad": "Can", "not": 90}\nkume = {1, 2, 2, 3}\nprint(len(kume))  # 3'
       },
       {
-        title: "6. Tuples (Demetler) ve Veri Paketleme",
-        badge: "(a, b) | .count() | .index()",
-        desc: "Tuple (Demet), normal parantez () ile oluşturulan ve oluşturulduktan sonra elemanları değiştirilemeyen (immutable) güvenli veri koleksiyonudur. Sabit ayarlar, koordinatlar veya değişmemesi gereken kayıtlar için kullanılır.",
-        rule: "Altın Kural: Tek elemanlı bir Tuple oluştururken sonuna mutlaka virgül koymalısın: tek = (5,). Elemanları değiştirilemez ama indekslenebilir ve döngüyle gezilebilir.",
-        code: 'koordinat = (41.28, 36.33)\nprint(koordinat[0])\nrenkler = ("Mor", "Sarı", "Mor")\nprint(renkler.count("Mor"))'
+        title: "Modül 8: Fonksiyonlar (def) ve Hata Yakalama",
+        badge: "def | return | try-except",
+        desc: "def ile tekrar kullanılabilir fonksiyonlar tanımlanır. try-except blokları ise sıfıra bölme veya yanlış tip gibi çalışma zamanı hatalarında programın çökmesini engeller.",
+        rule: "Altın Kural: Riskli işlemleri try: bloğuna, hata oluştuğunda verilecek güvenli mesajı except: bloğuna yaz.",
+        code: 'try:\n    print(10 / 0)\nexcept ZeroDivisionError:\n    print("Sıfıra bölünemez")'
       }
     ];
 
-    // Konular + Yuvarlak Sarı Kutu Formülleri + Soruya Özel Yanan Komutlar + Boşluklu Örnek Başlangıç İskeletleri
+    // 8 Modül x 6 Soru = 48 Soru + Yuvarlak Formül Çekmecesi + Yanan/Sönen Komut Deposu
     const TOPICS_DATA = [
       {
-        name: "1. Değişkenler & Çıktı",
-        formulaList: ["print(deger)", "degisken = 'metin'", "f'{degisken}'", "a, b = b, a", "int(sayi)"],
-        formulaNote: "Metinler tırnak içinde yazılır; f-string süslü parantez içine değişken alır.",
-        poolCommands: ["print()", "değişken =", "f-string", "a, b = b, a", "int()"],
+        name: "Modül 1: Python'a Giriş ve print()",
+        formulaList: ["print('metin')", "print(a, b, sep='-')", "print('a\\nb')", "print('x' * 3)"],
+        formulaNote: "print() metinleri tırnak içinde, sayıları doğrudan ekrana yazdırır.",
+        poolCommands: ["print()", "sep=", "\\n (alt satır)", "* (tekrar)"],
         questions: [
           {
             diff: "Kolay",
-            title: "İlk Mesajını Yazdır",
-            desc: "Ekrana Python Hazırlık Başladı yazdıran kodu yaz.",
-            expected: "Python Hazırlık Başladı",
+            title: "İlk Çıktı Komutu",
+            desc: "Ekrana Python Başladı yazdıran kodu yaz.",
+            expected: "Python Başladı",
             usedCommands: ["print()"],
             skeleton: 'print("___")',
-            hint: "print() içine çift tırnak kullanarak metni yaz.",
-            example: 'print("Merhaba Dünya")',
-            solution: 'print("Python Hazırlık Başladı")'
+            hint: "print() fonksiyonunun içine çift tırnakla metni yaz.",
+            example: 'print("Merhaba Python")',
+            solution: 'print("Python Başladı")'
           },
           {
             diff: "Kolay",
-            title: "Değişken Tanımlama",
-            desc: "sehir adlı değişkene Samsun değerini ata ve ekrana yazdır.",
+            title: "Sayı Yazdırma",
+            desc: "Ekrana tırnak kullanmadan 2026 sayısını yazdır.",
+            expected: "2026",
+            usedCommands: ["print()"],
+            skeleton: "print(___)",
+            hint: "Sayılar tırnak işaretine ihtiyaç duymaz: print(2026)",
+            example: "print(100)",
+            solution: "print(2026)"
+          },
+          {
+            diff: "Orta",
+            title: "Ayırıcı (sep) Kullanımı",
+            desc: "print('10', '20', '30') ifadelerini aralarında '-' işareti olacak şekilde (10-20-30) yazdır.",
+            expected: "10-20-30",
+            usedCommands: ["print()", "sep="],
+            skeleton: 'print("10", "20", "30", sep="___")',
+            hint: 'sep="-" parametresini kullan.',
+            example: 'print("A", "B", sep="-")',
+            solution: 'print("10", "20", "30", sep="-")'
+          },
+          {
+            diff: "Orta",
+            title: "Tek Satırda Alt Alta Yazdırma",
+            desc: "Tek bir print() komutu ve \\n karakteri kullanarak üst satıra Ali, alt satıra Veli yazdır.",
+            expected: "Ali\nVeli",
+            usedCommands: ["print()", "\\n (alt satır)"],
+            skeleton: 'print("Ali___Veli")',
+            hint: "\\n kaçış karakteri imleci bir alt satıra geçirir.",
+            example: 'print("Bir\\nİki")',
+            solution: 'print("Ali\\nVeli")'
+          },
+          {
+            diff: "Orta",
+            title: "Metin Çoğaltma",
+            desc: "'Py' metnini 3 kez yan yana (PyPyPy) yazdır.",
+            expected: "PyPyPy",
+            usedCommands: ["print()", "* (tekrar)"],
+            skeleton: 'print("Py" * ___)',
+            hint: "Metinleri tam sayıyla çarparak tekrar ettirebilirsin.",
+            example: 'print("Ha" * 3)',
+            solution: 'print("Py" * 3)'
+          },
+          {
+            diff: "Zor",
+            title: "Biçimli Başlık Çıktısı",
+            desc: "print('Modül', '1', 'Tamam', sep=' | ') çıktısını ekrana yazdır.",
+            expected: "Modül | 1 | Tamam",
+            usedCommands: ["print()", "sep="],
+            skeleton: 'print("Modül", "1", "Tamam", sep="___")',
+            hint: 'sep=" | " olarak ayarla.',
+            example: 'print("X", "Y", sep=" | ")',
+            solution: 'print("Modül", "1", "Tamam", sep=" | ")'
+          }
+        ]
+      },
+      {
+        name: "Modül 2: Değişkenler ve Veri Tipleri",
+        formulaList: ["degisken = deger", "f'{ad} {yas}'", "int('25')", "float(10)", "type(x)"],
+        formulaNote: "f-string ile metin ve sayılar tek tırnak bloğu içinde birleştirilir.",
+        poolCommands: ["değişken =", "f-string", "int()", "float()", "a, b = b, a"],
+        questions: [
+          {
+            diff: "Kolay",
+            title: "Metin Değişkeni (str)",
+            desc: "sehir değişkenine Samsun değerini ata ve ekrana yazdır.",
             expected: "Samsun",
-            usedCommands: ["print()", "değişken ="],
-            skeleton: 'sehir = "___"\nprint(___)',
-            hint: "Metin değerini tırnak içine yaz.",
-            example: 'ulke = "Türkiye"\nprint(ulke)',
+            usedCommands: ["değişken ="],
+            skeleton: 'sehir = "___"\nprint(sehir)',
+            hint: "Metin değerini çift tırnak içine yaz.",
+            example: 'ad = "Ece"\nprint(ad)',
             solution: 'sehir = "Samsun"\nprint(sehir)'
           },
           {
             diff: "Kolay",
-            title: "İki Sayının Toplamı",
-            desc: "a = 18 ve b = 24 değişkenlerinin toplamını ekrana yazdır.",
-            expected: "42",
-            usedCommands: ["print()", "değişken ="],
-            skeleton: "a = 18\nb = 24\nprint(___ + ___)",
-            hint: "print(a + b) kullan.",
-            example: "x = 10\ny = 15\nprint(x + y)",
-            solution: "a = 18\nb = 24\nprint(a + b)"
+            title: "Tam Sayı Değişkeni (int)",
+            desc: "plaka = 55 değişkenini tanımla ve ekrana yazdır.",
+            expected: "55",
+            usedCommands: ["değişken ="],
+            skeleton: "plaka = ___\nprint(plaka)",
+            hint: "plaka = 55 yaz.",
+            example: "yil = 2026\nprint(yil)",
+            solution: "plaka = 55\nprint(plaka)"
           },
           {
             diff: "Orta",
-            title: "f-String Biçimli Çıktı",
+            title: "f-String Birleştirme",
             desc: "ad = 'Can' ve yas = 20 kullanarak 'Can 20 yasindadir' yazdır.",
             expected: "Can 20 yasindadir",
-            usedCommands: ["print()", "değişken =", "f-string"],
+            usedCommands: ["değişken =", "f-string"],
             skeleton: 'ad = "Can"\nyas = 20\nprint(f"{___} {___} yasindadir")',
             hint: 'f"{ad} {yas} yasindadir" kalıbını kullan.',
-            example: 'isim = "Ece"\nnotu = 95\nprint(f"{isim} {notu} aldi")',
+            example: 'kisi = "Ali"\npuan = 90\nprint(f"{kisi} {puan} aldi")',
             solution: 'ad = "Can"\nyas = 20\nprint(f"{ad} {yas} yasindadir")'
           },
           {
             diff: "Orta",
+            title: "Tip Dönüşümü (str -> int)",
+            desc: "Metin olan s1 = '15' ve s2 = '25' değerlerini int() ile tam sayıya çevirip toplamlarını (40) yazdır.",
+            expected: "40",
+            usedCommands: ["değişken =", "int()"],
+            skeleton: 's1 = "15"\ns2 = "25"\nprint(int(s1) + ___(s2))',
+            hint: "int(s1) + int(s2) yazmalısın.",
+            example: 'a = "5"\nb = "7"\nprint(int(a) + int(b))',
+            solution: 's1 = "15"\ns2 = "25"\nprint(int(s1) + int(s2))'
+          },
+          {
+            diff: "Orta",
             title: "Değer Takası (Swap)",
-            desc: "x = 10 ve y = 99 değerlerini değiştirip aralarında boşlukla yazdır (99 10).",
+            desc: "x = 10 ve y = 99 değerlerini yer değiştirip aralarında boşlukla yazdır (99 10).",
             expected: "99 10",
-            usedCommands: ["print()", "değişken =", "a, b = b, a"],
+            usedCommands: ["değişken =", "a, b = b, a"],
             skeleton: "x = 10\ny = 99\nx, y = ___, ___\nprint(x, y)",
             hint: "x, y = y, x satırını ekle.",
             example: "a = 1\nb = 2\na, b = b, a\nprint(a, b)",
@@ -1026,20 +1133,94 @@ for eleman in demet:
           },
           {
             diff: "Zor",
-            title: "KDV Dahil Fiyat",
-            desc: "fiyat = 250 olan ürüne %20 KDV ekleyip tam sayı (int) olarak yazdır.",
-            expected: "300",
-            usedCommands: ["print()", "değişken =", "int()"],
-            skeleton: "fiyat = 250\nkdvli = int(fiyat * ___)\nprint(kdvli)",
-            hint: "int(fiyat * 1.20) kullan.",
-            example: "tutar = 100\nprint(int(tutar * 1.20))",
-            solution: "fiyat = 250\nprint(int(fiyat * 1.20))"
+            title: "Ondalıklı Dönüşüm (float)",
+            desc: "tam = 12 sayısını float() ile ondalıklı sayıya çevirip ekrana (12.0) yazdır.",
+            expected: "12.0",
+            usedCommands: ["değişken =", "float()"],
+            skeleton: "tam = 12\nprint(___(tam))",
+            hint: "float(12) sonucu 12.0 olur.",
+            example: "s = 7\nprint(float(s))",
+            solution: "tam = 12\nprint(float(tam))"
           }
         ]
       },
       {
-        name: "2. Koşullar (if - else)",
-        formulaList: ["if şart:", "elif şart:", "else:", "sayi % 2 == 0", "şart1 and şart2"],
+        name: "Modül 3: Operatörler ve input()",
+        formulaList: ["a // b (tam bölme)", "a % b (kalan/mod)", "a ** b (üs alma)", "input('mesaj')"],
+        formulaNote: "// bölme sonucunun tam kısmını, % ise bölümden kalanı verir.",
+        poolCommands: ["// (tam bölme)", "% (mod)", "** (üs)", "input()", "int()"],
+        questions: [
+          {
+            diff: "Kolay",
+            title: "Üs Alma Operatörü (**)",
+            desc: "2 üzeri 5 işleminin sonucunu (32) ekrana yazdır.",
+            expected: "32",
+            usedCommands: ["** (üs)"],
+            skeleton: "print(2 ___ 5)",
+            hint: "Python'da üs alma için ** kullanılır.",
+            example: "print(3 ** 2)",
+            solution: "print(2 ** 5)"
+          },
+          {
+            diff: "Kolay",
+            title: "Mod Alma (Kalan Bulma)",
+            desc: "17 sayısının 5'e bölümünden kalanı (%) ekrana yazdır.",
+            expected: "2",
+            usedCommands: ["% (mod)"],
+            skeleton: "print(17 ___ 5)",
+            hint: "17 % 5 işleminin sonucu 2'dir.",
+            example: "print(10 % 3)",
+            solution: "print(17 % 5)"
+          },
+          {
+            diff: "Orta",
+            title: "Tam Sayı Bölmesi (//)",
+            desc: "23 sayısının 4'e tam bölümünü (ondalıksız kısmı 5) yazdır.",
+            expected: "5",
+            usedCommands: ["// (tam bölme)"],
+            skeleton: "print(23 ___ 4)",
+            hint: "23 // 4 işlemi 5.75 yerine tam kısım olan 5'i verir.",
+            example: "print(15 // 2)",
+            solution: "print(23 // 4)"
+          },
+          {
+            diff: "Orta",
+            title: "input() ile Kullanıcıdan İsim Alma",
+            desc: "ad = input('Adınız: ') ile kullanıcıdan isim al ve ekrana 'Merhaba ' + ad yazdır. (Sistem otomatik 'Python' girdisi verir).",
+            expected: "Merhaba Python",
+            usedCommands: ["input()"],
+            skeleton: 'ad = ___("Adınız: ")\nprint("Merhaba " + ad)',
+            hint: "input() fonksiyonu kullanıcıdan gelen metni ad değişkenine aktarır.",
+            example: 'isim = input("Gir: ")\nprint("Selam " + isim)',
+            solution: 'ad = input("Adınız: ")\nprint("Merhaba " + ad)'
+          },
+          {
+            diff: "Orta",
+            title: "input() ile Sayısal Hesaplama",
+            desc: "sayi = int(input('Sayı: ')) ile alınan sayının 2 katını yazdır. (Sistem otomatik 25 girdisi verir -> 50).",
+            expected: "50",
+            usedCommands: ["input()", "int()"],
+            skeleton: 'sayi = int(___("Sayı: "))\nprint(sayi * 2)',
+            hint: "int(input(...)) ile girilen metni tam sayıya çevir.",
+            example: 'n = int(input("Sayı: "))\nprint(n + 10)',
+            solution: 'sayi = int(input("Sayı: "))\nprint(sayi * 2)'
+          },
+          {
+            diff: "Zor",
+            title: "Dakikayı Saat ve Dakikaya Çevirme",
+            desc: "toplam_dk = 135 dakikayı // ve % kullanarak '2 saat 15 dakika' şeklinde yazdır.",
+            expected: "2 saat 15 dakika",
+            usedCommands: ["// (tam bölme)", "% (mod)"],
+            skeleton: 'toplam_dk = 135\nsaat = toplam_dk // 60\ndk = toplam_dk ___ 60\nprint(f"{saat} saat {dk} dakika")',
+            hint: "135 // 60 = 2 saat, 135 % 60 = 15 dakika verir.",
+            example: 's = 90 // 60\nd = 90 % 60\nprint(s, d)',
+            solution: 'toplam_dk = 135\nsaat = toplam_dk // 60\ndk = toplam_dk % 60\nprint(f"{saat} saat {dk} dakika")'
+          }
+        ]
+      },
+      {
+        name: "Modül 4: Karar Yapıları (if - elif - else)",
+        formulaList: ["if şart:", "elif şart:", "else:", "and / or", "sayi % 2 == 0"],
         formulaNote: "Koşul sonuna : konur ve alt satır 4 boşluk içeriden başlatılır.",
         poolCommands: ["if :", "elif :", "else:", "% (mod)", "and"],
         questions: [
@@ -1112,7 +1293,7 @@ for eleman in demet:
         ]
       },
       {
-        name: "3. Döngüler (for & while)",
+        name: "Modül 5: Döngüler (while ve for)",
         formulaList: ["for i in range(bas, son):", "while şart:", "toplam += i", "sayac -= 1"],
         formulaNote: "range(1, 6) 1'den 5'e kadar sayar; bitiş değeri dahil edilmez.",
         poolCommands: ["for i in", "range()", "while :", "+= / -=", "% (mod)"],
@@ -1162,17 +1343,6 @@ for eleman in demet:
             solution: "sayac = 3\nwhile sayac > 0:\n    print(sayac)\n    sayac -= 1\nprint('Başla!')"
           },
           {
-            diff: "Orta",
-            title: "Harf Sayacı",
-            desc: "kelime = 'programlama' içindeki 'a' harflerinin sayısını yazdır.",
-            expected: "3",
-            usedCommands: ["for i in", "+= / -="],
-            skeleton: 'kelime = "programlama"\nsayac = 0\nfor h in kelime:\n    if h == "___":\n        sayac += 1\nprint(sayac)',
-            hint: "for h in kelime: if h == 'a': sayac += 1",
-            example: 'k = "adana"\ns = 0\nfor h in k:\n    if h == "a": s += 1\nprint(s)',
-            solution: 'kelime = "programlama"\nsayac = 0\nfor h in kelime:\n    if h == "a":\n        sayac += 1\nprint(sayac)'
-          },
-          {
             diff: "Zor",
             title: "Faktöriyel Hesabı",
             desc: "5! sonucunu döngüyle hesaplayıp yazdır.",
@@ -1197,10 +1367,10 @@ for eleman in demet:
         ]
       },
       {
-        name: "4. Listeler & Sözlükler",
-        formulaList: ["liste.append(x)", "len(liste)", "max(liste)", "sozluk['anahtar']", "sum(sozluk.values())"],
-        formulaNote: "Listeler köşeli parantez [], sözlükler süslü parantez {} ile tanımlanır.",
-        poolCommands: [".append()", "len()", "max()", "sozluk[key]", "sum()"],
+        name: "Modül 6: Listeler ve Tuple/Demetler",
+        formulaList: ["liste.append(x)", "len(liste)", "max(liste)", "demet = (a, b)", "demet.count(x)"],
+        formulaNote: "Listeler [] değiştirilebilir, Tuple () ise oluşturulduktan sonra değiştirilemez.",
+        poolCommands: [".append()", "len()", "max()", "( ) Tuple", ".count()"],
         questions: [
           {
             diff: "Kolay",
@@ -1237,123 +1407,8 @@ for eleman in demet:
           },
           {
             diff: "Orta",
-            title: "Sözlükten Veri Çekme",
-            desc: "arac = {'marka': 'Volvo', 'yil': 2024} sözlüğünden marka değerini yazdır.",
-            expected: "Volvo",
-            usedCommands: ["sozluk[key]"],
-            skeleton: 'arac = {"marka": "Volvo", "yil": 2024}\nprint(arac["___"])',
-            hint: 'print(arac["marka"])',
-            example: 'kisi = {"ad": "Mert"}\nprint(kisi["ad"])',
-            solution: 'arac = {"marka": "Volvo", "yil": 2024}\nprint(arac["marka"])'
-          },
-          {
-            diff: "Orta",
-            title: "Liste Filtreleme",
-            desc: "sayilar = [5, 12, 18, 3, 25] listesinden 10'dan büyükleri yeni listede yazdır.",
-            expected: "[12, 18, 25]",
-            usedCommands: ["len()"],
-            skeleton: "sayilar = [5, 12, 18, 3, 25]\nprint([x for x in sayilar if x > ___])",
-            hint: "print([x for x in sayilar if x > 10])",
-            example: "s = [2, 8, 15]\nprint([i for i in s if i > 5])",
-            solution: "sayilar = [5, 12, 18, 3, 25]\nprint([x for x in sayilar if x > 10])"
-          },
-          {
-            diff: "Zor",
-            title: "Sepet Toplamı",
-            desc: "sepet = {'kalem': 15, 'defter': 45, 'silgi': 10} toplam tutarını yazdır.",
-            expected: "70",
-            usedCommands: ["sum()", "sozluk[key]"],
-            skeleton: 'sepet = {"kalem": 15, "defter": 45, "silgi": 10}\nprint(sum(sepet.___()))',
-            hint: "print(sum(sepet.values()))",
-            example: 'fiyat = {"a": 20, "b": 30}\nprint(sum(fiyat.values()))',
-            solution: 'sepet = {"kalem": 15, "defter": 45, "silgi": 10}\nprint(sum(sepet.values()))'
-          }
-        ]
-      },
-      {
-        name: "5. Fonksiyonlar (def)",
-        formulaList: ["def ad(parametre):", "return sonuc", "x ** 2", "sum(l) / len(l)"],
-        formulaNote: "Fonksiyon tanımlandıktan sonra alt satırda çağrılmalıdır.",
-        poolCommands: ["def :", "return", "** (üs)", "sum() / len()"],
-        questions: [
-          {
-            diff: "Kolay",
-            title: "Selamlama Fonksiyonu",
-            desc: "selamla() fonksiyonu tanımla ve Merhaba Python yazdırsın.",
-            expected: "Merhaba Python",
-            usedCommands: ["def :"],
-            skeleton: "def selamla():\n    print('___')\n\nselamla()",
-            hint: "print('Merhaba Python') yaz.",
-            example: "def merhaba():\n    print('Selam')\nmerhaba()",
-            solution: "def selamla():\n    print('Merhaba Python')\nselamla()"
-          },
-          {
-            diff: "Kolay",
-            title: "Kare Alma",
-            desc: "kare(x) fonksiyonu x'in karesini döndürsün. kare(6) sonucunu yazdır.",
-            expected: "36",
-            usedCommands: ["def :", "return", "** (üs)"],
-            skeleton: "def kare(x):\n    return x ** ___\n\nprint(kare(6))",
-            hint: "return x ** 2",
-            example: "def kup(x):\n    return x ** 3\nprint(kup(2))",
-            solution: "def kare(x):\n    return x ** 2\nprint(kare(6))"
-          },
-          {
-            diff: "Orta",
-            title: "Dikdörtgen Alanı",
-            desc: "alan(kisa, uzun) fonksiyonu ile 5 ve 8 için alanı yazdır.",
-            expected: "40",
-            usedCommands: ["def :", "return"],
-            skeleton: "def alan(kisa, uzun):\n    return ___ * ___\n\nprint(alan(5, 8))",
-            hint: "return kisa * uzun",
-            example: "def carp(a, b):\n    return a * b\nprint(carp(3, 4))",
-            solution: "def alan(kisa, uzun):\n    return kisa * uzun\nprint(alan(5, 8))"
-          },
-          {
-            diff: "Orta",
-            title: "Varsayılan Üs Alma",
-            desc: "us_al(sayi, us=2) fonksiyonunu yaz. print(us_al(4)) 16 döndürsün.",
-            expected: "16",
-            usedCommands: ["def :", "return", "** (üs)"],
-            skeleton: "def us_al(sayi, us=2):\n    return sayi ** ___\n\nprint(us_al(4))",
-            hint: "return sayi ** us",
-            example: "def guc(x, y=2):\n    return x ** y\nprint(guc(5))",
-            solution: "def us_al(sayi, us=2):\n    return sayi ** us\nprint(us_al(4))"
-          },
-          {
-            diff: "Orta",
-            title: "Liste Ortalaması",
-            desc: "ortalama(liste) fonksiyonu [10, 20, 30] için 20.0 döndürsün.",
-            expected: "20.0",
-            usedCommands: ["def :", "return", "sum() / len()"],
-            skeleton: "def ortalama(liste):\n    return sum(liste) / ___(liste)\n\nprint(ortalama([10, 20, 30]))",
-            hint: "return sum(liste) / len(liste)",
-            example: "def ort(l):\n    return sum(l) / len(l)\nprint(ort([4, 6]))",
-            solution: "def ortalama(liste):\n    return sum(liste) / len(liste)\nprint(ortalama([10, 20, 30]))"
-          },
-          {
-            diff: "Zor",
-            title: "Asal Sayı Kontrolü",
-            desc: "asal_mi(17) fonksiyonunu tamamlayıp True sonucunu yazdır.",
-            expected: "True",
-            usedCommands: ["def :", "return"],
-            skeleton: "def asal_mi(n):\n    if n < 2: return False\n    for i in range(2, n):\n        if n % i == 0: return ___\n    return True\n\nprint(asal_mi(17))",
-            hint: "Tam bölünüyorsa False döndürmelidir.",
-            example: "print(17 % 2 != 0)",
-            solution: "def asal_mi(n):\n    if n < 2: return False\n    for i in range(2, n):\n        if n % i == 0: return False\n    return True\n\nprint(asal_mi(17))"
-          }
-        ]
-      },
-      {
-        name: "6. Tuples (Demetler)",
-        formulaList: ["demet = (a, b, c)", "demet[indeks]", "demet.count(x)", "demet.index(x)", "a, b = demet"],
-        formulaNote: "Tuple () parantezle tanımlanır ve elemanları sonradan değiştirilemez.",
-        poolCommands: ["( ) Tuple", "demet[i]", ".count()", ".index()", "Unpacking"],
-        questions: [
-          {
-            diff: "Kolay",
-            title: "İlk Tuple Oluşturma",
-            desc: "renkler adlı bir Tuple (demet) oluşturup içine 'Mor', 'Sarı', 'Siyah' ekle ve yazdır.",
+            title: "Tuple (Demet) Oluşturma",
+            desc: "renkler adlı Tuple içine 'Mor', 'Sarı', 'Siyah' ekleyip yazdır.",
             expected: "('Mor', 'Sarı', 'Siyah')",
             usedCommands: ["( ) Tuple"],
             skeleton: 'renkler = ("Mor", "___", "Siyah")\nprint(renkler)',
@@ -1362,19 +1417,8 @@ for eleman in demet:
             solution: 'renkler = ("Mor", "Sarı", "Siyah")\nprint(renkler)'
           },
           {
-            diff: "Kolay",
-            title: "Demet Elemanına Erişim",
-            desc: "sehirler = ('Samsun', 'Ankara', 'İzmir') demetinin ilk elemanını (0. indeks) yazdır.",
-            expected: "Samsun",
-            usedCommands: ["( ) Tuple", "demet[i]"],
-            skeleton: 'sehirler = ("Samsun", "Ankara", "İzmir")\nprint(sehirler[___])',
-            hint: "Python'da indeksler 0'dan başlar: sehirler[0]",
-            example: 't = ("A", "B")\nprint(t[0])',
-            solution: 'sehirler = ("Samsun", "Ankara", "İzmir")\nprint(sehirler[0])'
-          },
-          {
             diff: "Orta",
-            title: "Eleman Sayma (.count)",
+            title: "Demet Eleman Sayma (.count)",
             desc: "notlar = (90, 80, 90, 70, 90) demetinde 90 sayısının kaç kez geçtiğini yazdır.",
             expected: "3",
             usedCommands: ["( ) Tuple", ".count()"],
@@ -1384,37 +1428,163 @@ for eleman in demet:
             solution: "notlar = (90, 80, 90, 70, 90)\nprint(notlar.count(90))"
           },
           {
-            diff: "Orta",
-            title: "İndeks Bulma (.index)",
-            desc: "diller = ('C', 'Python', 'Rust') demetinde 'Python' elemanının sıra numarasını yazdır.",
-            expected: "1",
-            usedCommands: ["( ) Tuple", ".index()"],
-            skeleton: 'diller = ("C", "Python", "Rust")\nprint(diller.index("___"))',
-            hint: "diller.index('Python') 1 sonucunu döndürür.",
-            example: 'a = ("x", "y")\nprint(a.index("y"))',
-            solution: 'diller = ("C", "Python", "Rust")\nprint(diller.index("Python"))'
+            diff: "Zor",
+            title: "Tuple Paket Açma (Unpacking)",
+            desc: "koordinat = (41, 36) demetini enlem ve boylam değişkenlerine aktarıp toplamlarını (77) yazdır.",
+            expected: "77",
+            usedCommands: ["( ) Tuple"],
+            skeleton: "koordinat = (41, 36)\nenlem, boylam = ___\nprint(enlem + boylam)",
+            hint: "enlem, boylam = koordinat yaz.",
+            example: "nokta = (10, 20)\nx, y = nokta\nprint(x + y)",
+            solution: "koordinat = (41, 36)\nenlem, boylam = koordinat\nprint(enlem + boylam)"
+          }
+        ]
+      },
+      {
+        name: "Modül 7: Sözlükler (Dict) ve Kümeler (Set)",
+        formulaList: ["sozluk['anahtar']", "sum(sozluk.values())", "kume = {1, 2, 3}", "set(liste)", "kume.add(x)"],
+        formulaNote: "Sözlükler anahtar-değer eşleşmesi yapar; Kümeler (Set) tekrar eden elemanları siler.",
+        poolCommands: ["sozluk[key]", ".values()", "set()", ".add()", "len()"],
+        questions: [
+          {
+            diff: "Kolay",
+            title: "Sözlükten Değer Okuma",
+            desc: "arac = {'marka': 'Volvo', 'yil': 2024} sözlüğünden marka değerini yazdır.",
+            expected: "Volvo",
+            usedCommands: ["sozluk[key]"],
+            skeleton: 'arac = {"marka": "Volvo", "yil": 2024}\nprint(arac["___"])',
+            hint: 'print(arac["marka"])',
+            example: 'kisi = {"ad": "Mert"}\nprint(kisi["ad"])',
+            solution: 'arac = {"marka": "Volvo", "yil": 2024}\nprint(arac["marka"])'
+          },
+          {
+            diff: "Kolay",
+            title: "Sözlüğe Yeni Anahtar Ekleme",
+            desc: "ogrenci = {'ad': 'Ali'} sözlüğüne 'not': 95 ekleyip ogrenci['not'] değerini yazdır.",
+            expected: "95",
+            usedCommands: ["sozluk[key]"],
+            skeleton: 'ogrenci = {"ad": "Ali"}\nogrenci["not"] = ___\nprint(ogrenci["not"])',
+            hint: 'ogrenci["not"] = 95 yaz.',
+            example: 'd = {"a": 1}\nd["b"] = 2\nprint(d["b"])',
+            solution: 'ogrenci = {"ad": "Ali"}\nogrenci["not"] = 95\nprint(ogrenci["not"])'
           },
           {
             diff: "Orta",
-            title: "Tuple Paket Açma (Unpacking)",
-            desc: "koordinat = (41, 36) demetini enlem ve boylam değişkenlerine aktarıp toplamlarını yazdır.",
-            expected: "77",
-            usedCommands: ["( ) Tuple", "Unpacking"],
-            skeleton: "koordinat = (41, 36)\nenlem, boylam = ___\nprint(enlem + boylam)",
-            hint: "enlem, boylam = koordinat yazarak demeti iki değişkene ayırabilirsin.",
-            example: "nokta = (10, 20)\nx, y = nokta\nprint(x + y)",
-            solution: "koordinat = (41, 36)\nenlem, boylam = koordinat\nprint(enlem + boylam)"
+            title: "Sözlük Değerlerini Toplama",
+            desc: "sepet = {'kalem': 15, 'defter': 45, 'silgi': 10} toplam tutarını (70) yazdır.",
+            expected: "70",
+            usedCommands: [".values()"],
+            skeleton: 'sepet = {"kalem": 15, "defter": 45, "silgi": 10}\nprint(sum(sepet.___()))',
+            hint: "sum(sepet.values()) kullan.",
+            example: 'f = {"a": 20, "b": 30}\nprint(sum(f.values()))',
+            solution: 'sepet = {"kalem": 15, "defter": 45, "silgi": 10}\nprint(sum(sepet.values()))'
+          },
+          {
+            diff: "Orta",
+            title: "Küme (Set) ile Tekrarları Silme",
+            desc: "sayilar = [1, 2, 2, 3, 3, 3] listesini set() ile kümeye çevirip benzersiz eleman sayısını (3) yazdır.",
+            expected: "3",
+            usedCommands: ["set()", "len()"],
+            skeleton: "sayilar = [1, 2, 2, 3, 3, 3]\nbenzersiz = ___(sayilar)\nprint(len(benzersiz))",
+            hint: "set(sayilar) tekrar eden elemanları otomatik eler.",
+            example: "l = [5, 5, 6]\nprint(len(set(l)))",
+            solution: "sayilar = [1, 2, 2, 3, 3, 3]\nbenzersiz = set(sayilar)\nprint(len(benzersiz))"
+          },
+          {
+            diff: "Orta",
+            title: "Kümeye Eleman Ekleme (.add)",
+            desc: "kume = {'Python', 'C'} kümesine .add() ile 'Go' ekleyip eleman sayısını (3) yazdır.",
+            expected: "3",
+            usedCommands: [".add()", "len()"],
+            skeleton: 'kume = {"Python", "C"}\nkume.add("___")\nprint(len(kume))',
+            hint: "Kümelerde .append() yerine .add() kullanılır.",
+            example: 'k = {1, 2}\nk.add(3)\nprint(len(k))',
+            solution: 'kume = {"Python", "C"}\nkume.add("Go")\nprint(len(kume))'
           },
           {
             diff: "Zor",
-            title: "Demet İçinde En Büyük ve En Küçük",
-            desc: "puanlar = (45, 92, 68, 100, 74) demetindeki en yüksek ve en düşük puanın farkını yazdır.",
-            expected: "55",
-            usedCommands: ["( ) Tuple"],
-            skeleton: "puanlar = (45, 92, 68, 100, 74)\nfark = max(puanlar) - ___(puanlar)\nprint(fark)",
-            hint: "max(puanlar) - min(puanlar) işlemini kullan.",
-            example: "t = (10, 40)\nprint(max(t) - min(t))",
-            solution: "puanlar = (45, 92, 68, 100, 74)\nfark = max(puanlar) - min(puanlar)\nprint(fark)"
+            title: "İki Kümenin Kesişimi (&)",
+            desc: "a = {1, 2, 3, 4} ve b = {3, 4, 5, 6} kümelerinin ortak eleman sayısını (2) yazdır.",
+            expected: "2",
+            usedCommands: ["len()"],
+            skeleton: "a = {1, 2, 3, 4}\nb = {3, 4, 5, 6}\nortak = a & ___\nprint(len(ortak))",
+            hint: "a & b iki kümenin ortak elemanlarını (kesişimini) verir.",
+            example: "x = {1, 2}\ny = {2, 3}\nprint(len(x & y))",
+            solution: "a = {1, 2, 3, 4}\nb = {3, 4, 5, 6}\nortak = a & b\nprint(len(ortak))"
+          }
+        ]
+      },
+      {
+        name: "Modül 8: Fonksiyonlar (def) ve Hata Yakalama",
+        formulaList: ["def ad(x):", "return sonuc", "try:", "except Exception:"],
+        formulaNote: "try-except bloğu hatalı işlemlerde programın çökmesini engeller.",
+        poolCommands: ["def :", "return", "try:", "except:"],
+        questions: [
+          {
+            diff: "Kolay",
+            title: "Selamlama Fonksiyonu",
+            desc: "selamla() fonksiyonu tanımla ve çağrıldığında Merhaba Python yazdırsın.",
+            expected: "Merhaba Python",
+            usedCommands: ["def :"],
+            skeleton: "def selamla():\n    print('___')\n\nselamla()",
+            hint: "print('Merhaba Python') yaz.",
+            example: "def merhaba():\n    print('Selam')\nmerhaba()",
+            solution: "def selamla():\n    print('Merhaba Python')\nselamla()"
+          },
+          {
+            diff: "Kolay",
+            title: "Kare Alma Fonksiyonu",
+            desc: "kare(x) fonksiyonu x'in karesini return etsin. kare(6) sonucunu (36) yazdır.",
+            expected: "36",
+            usedCommands: ["def :", "return"],
+            skeleton: "def kare(x):\n    return x ** ___\n\nprint(kare(6))",
+            hint: "return x ** 2",
+            example: "def kup(x):\n    return x ** 3\nprint(kup(2))",
+            solution: "def kare(x):\n    return x ** 2\nprint(kare(6))"
+          },
+          {
+            diff: "Orta",
+            title: "Dikdörtgen Alanı",
+            desc: "alan(kisa, uzun) fonksiyonu ile 5 ve 8 kenarlı dikdörtgenin alanını (40) yazdır.",
+            expected: "40",
+            usedCommands: ["def :", "return"],
+            skeleton: "def alan(kisa, uzun):\n    return ___ * ___\n\nprint(alan(5, 8))",
+            hint: "return kisa * uzun",
+            example: "def carp(a, b):\n    return a * b\nprint(carp(3, 4))",
+            solution: "def alan(kisa, uzun):\n    return kisa * uzun\nprint(alan(5, 8))"
+          },
+          {
+            diff: "Orta",
+            title: "Sıfıra Bölme Hatası Yakalama",
+            desc: "try-except kullanarak 10 / 0 işlemini yakala ve ekrana Hata Yakalandı yazdır.",
+            expected: "Hata Yakalandı",
+            usedCommands: ["try:", "except:"],
+            skeleton: "try:\n    sonuc = 10 / 0\n___:\n    print('Hata Yakalandı')",
+            hint: "try bloğunun altına except: yaz.",
+            example: "try:\n    x = 5 / 0\nexcept:\n    print('Hata')",
+            solution: "try:\n    sonuc = 10 / 0\nexcept:\n    print('Hata Yakalandı')"
+          },
+          {
+            diff: "Orta",
+            title: "Güvenli Bölme Fonksiyonu",
+            desc: "bol(a, b) fonksiyonunda b=0 gelirse except ile 'Geçersiz' döndür. bol(10, 0) sonucunu yazdır.",
+            expected: "Geçersiz",
+            usedCommands: ["def :", "return", "try:", "except:"],
+            skeleton: "def bol(a, b):\n    try:\n        return a / b\n    except:\n        return '___'\n\nprint(bol(10, 0))",
+            hint: "except bloğunda return 'Geçersiz' döndür.",
+            example: "def test(x):\n    try:\n        return 1/x\n    except:\n        return 'Yok'\nprint(test(0))",
+            solution: "def bol(a, b):\n    try:\n        return a / b\n    except:\n        return 'Geçersiz'\n\nprint(bol(10, 0))"
+          },
+          {
+            diff: "Zor",
+            title: "Liste Ortalaması Fonksiyonu",
+            desc: "ortalama(liste) fonksiyonu [10, 20, 30] için 20.0 döndürsün; boş liste gelirse except ile 0 döndürsün.",
+            expected: "20.0",
+            usedCommands: ["def :", "return", "try:", "except:"],
+            skeleton: "def ortalama(liste):\n    try:\n        return sum(liste) / ___(liste)\n    except:\n        return 0\n\nprint(ortalama([10, 20, 30]))",
+            hint: "sum(liste) / len(liste) işlemini kullan.",
+            example: "def ort(l):\n    return sum(l) / len(l)\nprint(ort([4, 6]))",
+            solution: "def ortalama(liste):\n    try:\n        return sum(liste) / len(liste)\n    except:\n        return 0\n\nprint(ortalama([10, 20, 30]))"
           }
         ]
       }
@@ -1428,8 +1598,8 @@ for eleman in demet:
         desc: "Başlangıç bakiyesi 1500 TL olan hesaba 750 TL yatır, 400 TL çek ve son bakiyeyi 'Güncel Bakiye: 1850 TL' olarak yazdır.",
         expected: "Güncel Bakiye: 1850 TL",
         poolCommands: ["class", "__init__", "self.bakiye", "append()"],
-        usedCommands: ["class", "__init__", "self.bakiye", "append()"],
-        hint: "hesap.para_yatir(750) ve hesap.para_cek(400) satırlarını ekle.",
+        usedCommands: ["class", "__init__", "self.bakiye"],
+        hint: "hesap.para_yatir(750) ve hesap.para_cek(400) satırlarını tamamla.",
         example: "hesap.para_yatir(500)\nhesap.para_cek(200)",
         skeleton: `class BankaHesabi:
     def __init__(self, sahip, bakiye=1500):
@@ -1466,7 +1636,7 @@ print(f"Güncel Bakiye: {hesap.bakiye} TL")`
         expected: "Ödenecek Tutar: 540.0 TL",
         poolCommands: ["dict", "sum()", "if >= 500", "* 0.90"],
         usedCommands: ["dict", "sum()", "if >= 500", "* 0.90"],
-        hint: "urun_ekle('Mouse', 250, 1) satırını ekleyip çalıştır.",
+        hint: "urun_ekle('Mouse', 250, 1) satırını tamamla.",
         example: 'urun_ekle("Klavye", 400, 1)',
         skeleton: `sepet = []
 def urun_ekle(ad, fiyat, adet=1):
@@ -1521,7 +1691,7 @@ print(f"Müsait Kitap Sayısı: {sum(1 for k in kutuphane if k['musait'])}")`
         expected: "Zeynep Ortalama: 86.0",
         poolCommands: ["dict{}", "float", "return", "f-string"],
         usedCommands: ["dict{}", "return", "f-string"],
-        hint: "ortalama_bul('Zeynep') fonksiyonunu tamamla.",
+        hint: "Final katsayısını 0.60 olarak tamamla.",
         example: "print(ortalama_bul('Ali'))",
         skeleton: `ogrenciler = {"Ali": {"vize": 60, "final": 70}, "Zeynep": {"vize": 80, "final": 90}}
 def ortalama_bul(isim):
@@ -1542,7 +1712,7 @@ print(f"Zeynep Ortalama: {ortalama_bul('Zeynep')}")`
         expected: "Toplam Ücret: 160 TL",
         poolCommands: [".get()", "if saat", "return", "int()"],
         usedCommands: [".get()", "return"],
-        hint: "ucret_hesapla('SUV', 4) sonucunu yazdır.",
+        hint: "birim * saat işlemini tamamla.",
         example: "ucret_hesapla('Otomobil', 2)",
         skeleton: `TARIFELER = {"Motosiklet": 15, "Otomobil": 25, "SUV": 40}
 def ucret_hesapla(tip, saat):
@@ -1607,10 +1777,56 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
     let openFolders = new Set([0]);
     let openFormulaDrawers = new Set();
     let completedSet = new Set();
+    let savedCodes = {};
     let pyodide = null;
 
-    // Açılış Ekranı
+    // Açılışta Kayıtlı İlerlemeyi Yükle
+    function loadSavedState() {
+      try {
+        const raw = localStorage.getItem('pythonhazirlik_save_v1');
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        if (Array.isArray(data.completed)) completedSet = new Set(data.completed);
+        if (typeof data.topicIndex === 'number') topicIndex = data.topicIndex;
+        if (typeof data.questionIndex === 'number') questionIndex = data.questionIndex;
+        if (data.savedCodes) savedCodes = data.savedCodes;
+        openFolders.add(topicIndex);
+      } catch (e) {}
+    }
+
+    // Üst Bardaki Kaydet Butonu İşlevi
+    function saveProgress() {
+      const key = `${currentMode}-${topicIndex}-${questionIndex}-${projectIndex}`;
+      savedCodes[key] = document.getElementById('code-editor').value;
+      const payload = {
+        completed: Array.from(completedSet),
+        topicIndex,
+        questionIndex,
+        savedCodes
+      };
+      localStorage.setItem('pythonhazirlik_save_v1', JSON.stringify(payload));
+      document.getElementById('yellow-text').innerHTML = `<span style="color:#10b981; font-weight:700;">💾 İlerlemen ve yazdığın kod başarıyla kaydedildi!</span>`;
+    }
+
+    // Üst Bardaki Tümünü Sıfırla Butonu İşlevi
+    function resetAllProgress() {
+      localStorage.removeItem('pythonhazirlik_save_v1');
+      completedSet.clear();
+      savedCodes = {};
+      topicIndex = 0;
+      questionIndex = 0;
+      projectIndex = 0;
+      openFolders = new Set([0]);
+      openFormulaDrawers.clear();
+      renderSidebar();
+      renderTask();
+      document.getElementById('yellow-text').innerHTML = `<span style="color:#f59e0b; font-weight:700;">🗑️ Tüm ilerleme ve kayıtlar sıfırlandı, en baştan başlayabilirsin.</span>`;
+    }
+
     window.addEventListener('load', () => {
+      loadSavedState();
+      renderSidebar();
+      renderTask();
       const splash = document.getElementById('welcome-splash');
       setTimeout(() => {
         splash.classList.add('hide-splash');
@@ -1618,7 +1834,6 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
       }, 1100);
     });
 
-    // Python Motoru
     (async function initPython() {
       const statusEl = document.getElementById('engine-status');
       try {
@@ -1630,7 +1845,6 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
       }
     })();
 
-    // Tema Değiştirici
     function toggleTheme() {
       const html = document.documentElement;
       const btn = document.getElementById('theme-btn');
@@ -1643,14 +1857,13 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
       }
     }
 
-    // Konu Özeti Kartları
     function renderLectures() {
       const grid = document.getElementById('lecture-grid');
       grid.innerHTML = LECTURES_DATA.map(item => `
         <div class="lecture-card">
           <div class="lecture-card-top">
             <h3>${item.title}</h3>
-            <span style="font-family:Consolas; font-size:0.75rem; color:var(--accent-gold); background:rgba(234,179,8,0.14); padding:3px 8px; border-radius:99px;">${item.badge}</span>
+            <span style="font-family:Consolas; font-size:0.73rem; color:var(--accent-gold); background:rgba(234,179,8,0.14); padding:3px 8px; border-radius:99px; white-space:nowrap;">${item.badge}</span>
           </div>
           <p>${item.desc}</p>
           <div class="lecture-rule">${item.rule}</div>
@@ -1680,7 +1893,6 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
       }
     }
 
-    // Sol Klasör Menü + Tıklanınca Açılan Yuvarlak Sarı Formül Kutusu
     function renderSidebar() {
       const list = document.getElementById('sidebar-list');
       const title = document.getElementById('sidebar-title');
@@ -1688,7 +1900,7 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
       list.innerHTML = '';
 
       if (currentMode === 'topics') {
-        title.textContent = "Konu Klasörleri";
+        title.textContent = "Eğitim Modülleri";
         const totalQ = TOPICS_DATA.reduce((a, b) => a + b.questions.length, 0);
         counter.textContent = `${completedSet.size} / ${totalQ}`;
 
@@ -1708,10 +1920,9 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
           const rightBox = document.createElement('div');
           rightBox.style.cssText = "display:flex; align-items:center; gap:6px;";
 
-          // Yuvarlak Sarı Formül Kutusu Butonu
           const roundBtn = document.createElement('button');
           roundBtn.className = `yellow-round-btn ${isFormulaOpen ? 'active' : ''}`;
-          roundBtn.title = "Bu konunun formüllerini aç/kapat";
+          roundBtn.title = "Bu modülün formüllerini aç/kapat";
           roundBtn.textContent = "ƒ";
           roundBtn.onclick = (e) => {
             e.stopPropagation();
@@ -1736,7 +1947,6 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
             renderSidebar();
           };
 
-          // Tıklayınca Açılan Sarı Formül Çekmecesi
           const drawer = document.createElement('div');
           drawer.className = `formula-drawer ${isFormulaOpen ? 'open' : ''}`;
           drawer.innerHTML = `
@@ -1788,7 +1998,6 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
       }
     }
 
-    // Soruya Özel Yanan ve Sönen Sarı Komut Deposu
     function renderYellowVault(poolCommands, usedCommands) {
       const status = document.getElementById('vault-status');
       const chips = document.getElementById('vault-chips');
@@ -1798,11 +2007,10 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
 
       chips.innerHTML = poolCommands.map(cmd => {
         const isLit = activeSet.has(cmd);
-        return `<span class="cmd-chip ${isLit ? 'lit-now' : ''}" title="${isLit ? 'Bu soruda kullanılacak komut' : 'Bu soruda gerekmiyor'}">${isLit ? '⚡ ' : ''}${cmd}</span>`;
+        return `<span class="cmd-chip ${isLit ? 'lit-now' : ''}">${isLit ? '⚡ ' : ''}${cmd}</span>`;
       }).join('');
     }
 
-    // Zorluk Seviyesinin Yanındaki "Örnek Başlangıç" Butonu İşlevi
     function loadSkeleton() {
       const editor = document.getElementById('code-editor');
       const currentItem = currentMode === 'topics'
@@ -1827,7 +2035,6 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
       document.getElementById('yellow-vault').style.display = 'block';
     }
 
-    // Orta Görev ve Boş Editör Yükleme
     function renderTask() {
       closeThreeSplit();
       const catEl = document.getElementById('task-category');
@@ -1838,6 +2045,7 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
       const yellowText = document.getElementById('yellow-text');
       const indicator = document.getElementById('item-indicator');
       const editor = document.getElementById('code-editor');
+      const saveKey = `${currentMode}-${topicIndex}-${questionIndex}-${projectIndex}`;
 
       if (currentMode === 'topics') {
         const topic = TOPICS_DATA[topicIndex];
@@ -1850,8 +2058,7 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
         expEl.textContent = q.expected;
         yellowText.textContent = q.hint;
         indicator.textContent = `${questionIndex + 1} / ${topic.questions.length}`;
-        // Editör her zaman boş başlar; kullanıcı isterse "Örnek Başlangıç" butonuna basar
-        editor.value = "";
+        editor.value = savedCodes[saveKey] || "";
         renderYellowVault(topic.poolCommands, q.usedCommands);
       } else {
         const p = PROJECTS_DATA[projectIndex];
@@ -1863,7 +2070,7 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
         expEl.textContent = p.expected;
         yellowText.textContent = p.hint;
         indicator.textContent = `${projectIndex + 1} / ${PROJECTS_DATA.length}`;
-        editor.value = "";
+        editor.value = savedCodes[saveKey] || "";
         renderYellowVault(p.poolCommands, p.usedCommands);
       }
       document.getElementById('console-output').textContent = "Hazır.";
@@ -1903,7 +2110,7 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
 
     function explainError(errStr) {
       if (errStr.includes("SyntaxError")) return "Yazım Hatası (SyntaxError): Satır sonundaki iki noktayı (:), tırnakları veya parantezleri kontrol et.";
-      if (errStr.includes("IndentationError")) return "Girinti Hatası: if, for veya def satırından sonraki satırı 4 boşluk içeriden başlatmalısın.";
+      if (errStr.includes("IndentationError")) return "Girinti Hatası: if, for, def veya try satırından sonraki satırı 4 boşluk içeriden başlatmalısın.";
       if (errStr.includes("NameError")) return "Tanımsız İsim: Kullandığın değişkeni veya '___' boşluğunu doldurmayı unutmuş olabilirsin.";
       if (errStr.includes("TypeError")) return "Tür Uyuşmazlığı: Metin (str) ile sayıyı (int) doğrudan birleştirmeye çalışıyorsun.";
       return "Kodunda bir çalışma hatası oluştu. Satır numarasını ve değişken adlarını kontrol et.";
@@ -1925,7 +2132,15 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
       if (!pyodide) { out.textContent = "Python motoru yükleniyor, birkaç saniye bekleyin..."; return; }
 
       try {
-        pyodide.runPython("import sys, io\nsys.stdout = io.StringIO()\nsys.stderr = io.StringIO()");
+        // input() çağrılarının tarayıcıyı kilitlememesi için akıllı sanal girdi tanımla
+        pyodide.runPython(`
+import sys, io, builtins
+sys.stdout = io.StringIO()
+sys.stderr = io.StringIO()
+def _mock_input(prompt=""):
+    return "25" if "Sayı" in str(prompt) else "Python"
+builtins.input = _mock_input
+        `);
         await pyodide.runPythonAsync(code);
         const result = pyodide.runPython("sys.stdout.getvalue()").trim();
         out.style.color = "var(--text-primary)";
@@ -2012,11 +2227,8 @@ print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
       });
     }
 
-    makeResizable('resizer-1', 'pane-left', 210, 400);
+    makeResizable('resizer-1', 'pane-left', 220, 420);
     makeResizable('resizer-2', 'pane-mid', 290, 580);
-
-    renderSidebar();
-    renderTask();
   </script>
 </body>
 </html>
