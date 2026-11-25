@@ -7,44 +7,41 @@
   <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
   <style>
     :root {
-      --bg-main: #090d16;
-      --bg-panel: #111827;
-      --bg-elevated: #1a2234;
+      --bg-main: #080c14;
+      --bg-panel: #0f1624;
+      --bg-elevated: #161f33;
       --bg-editor: #060911;
       --text-primary: #f1f5f9;
       --text-secondary: #94a3b8;
-      --border-subtle: rgba(148, 163, 184, 0.14);
-      --accent-gold: #d4af37;
-      --accent-gold-soft: rgba(212, 175, 55, 0.14);
+      --border-line: rgba(139, 92, 246, 0.22);
+      --panel-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+      --accent-gold: #eab308;
+      --accent-purple: #8b5cf6;
       --accent-emerald: #10b981;
-      --accent-amber: #f59e0b;
-      --accent-amber-bg: rgba(245, 158, 11, 0.12);
-      --freecode-bg: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-      --shadow-luxury: 0 12px 32px rgba(0, 0, 0, 0.45);
+      --yellow-vault-bg: rgba(234, 179, 8, 0.08);
+      --yellow-vault-border: rgba(234, 179, 8, 0.35);
+      --freecode-bg: linear-gradient(135deg, #6366f1 0%, #9333ea 100%);
     }
 
+    /* Beyaz - Mor Şık Açık Tema */
     [data-theme="light"] {
-      --bg-main: #f4f6f9;
+      --bg-main: #f5f3ff;
       --bg-panel: #ffffff;
-      --bg-elevated: #f8fafc;
-      --bg-editor: #f1f5f9;
-      --text-primary: #0f172a;
-      --text-secondary: #475569;
-      --border-subtle: rgba(15, 23, 42, 0.1);
-      --accent-gold: #b45309;
-      --accent-gold-soft: rgba(180, 83, 9, 0.1);
+      --bg-elevated: #faf8ff;
+      --bg-editor: #f8f7fc;
+      --text-primary: #1e1b4b;
+      --text-secondary: #5b5480;
+      --border-line: rgba(124, 58, 237, 0.35);
+      --panel-shadow: 0 8px 26px rgba(124, 58, 237, 0.14);
+      --accent-gold: #d97706;
+      --accent-purple: #7c3aed;
       --accent-emerald: #059669;
-      --accent-amber: #d97706;
-      --accent-amber-bg: rgba(245, 158, 11, 0.14);
-      --freecode-bg: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-      --shadow-luxury: 0 10px 28px rgba(15, 23, 42, 0.08);
+      --yellow-vault-bg: #fefce8;
+      --yellow-vault-border: #facc15;
+      --freecode-bg: linear-gradient(135deg, #6d28d9 0%, #9333ea 100%);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -57,11 +54,11 @@
       transition: background 0.3s ease, color 0.3s ease;
     }
 
-    /* Karşılama Ekranı (Splash Screen) */
+    /* Giriş Karşılama Animasyonu */
     #welcome-splash {
       position: fixed;
       inset: 0;
-      background: radial-gradient(circle at top right, #1e293b, #060911 75%);
+      background: radial-gradient(circle at top right, #1e1b4b, #060911 75%);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -76,32 +73,33 @@
     }
     #welcome-splash h1 {
       color: #f8fafc;
-      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-size: clamp(2.5rem, 5vw, 4.2rem);
       font-weight: 800;
       letter-spacing: -0.03em;
       opacity: 0;
       transform: translateY(22px);
-      animation: fadeSlide 0.65s ease forwards 0.15s;
+      animation: fadeSlide 0.65s ease forwards 0.12s;
     }
     #welcome-splash p {
-      color: #d4af37;
-      font-size: 1rem;
-      letter-spacing: 0.18em;
+      color: #c084fc;
+      font-size: 0.95rem;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       margin-top: 10px;
       opacity: 0;
       transform: translateY(14px);
-      animation: fadeSlide 0.65s ease forwards 0.35s;
+      animation: fadeSlide 0.65s ease forwards 0.3s;
     }
     @keyframes fadeSlide {
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Üst Bar (Header) */
+    /* Üst Header */
     header {
-      height: 58px;
+      height: 60px;
       background: var(--bg-panel);
-      border-bottom: 1px solid var(--border-subtle);
+      border-bottom: 1.5px solid var(--border-line);
+      box-shadow: var(--panel-shadow);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -114,19 +112,20 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-weight: 700;
-      font-size: 1.05rem;
+      font-weight: 800;
+      font-size: 1.08rem;
       letter-spacing: -0.02em;
     }
-    .brand-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 2px;
-      background: var(--accent-gold);
+    .brand-gem {
+      width: 11px;
+      height: 11px;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-gold));
       transform: rotate(45deg);
+      border-radius: 2px;
+      box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
     }
 
-    /* Üst Sekmeler & Eğik Serbest Kod Butonu */
+    /* Üst Sekmeler */
     .nav-tabs {
       display: flex;
       align-items: center;
@@ -138,7 +137,7 @@
       color: var(--text-secondary);
       border: 1px solid transparent;
       padding: 7px 14px;
-      border-radius: 6px;
+      border-radius: 7px;
       font-size: 0.84rem;
       font-weight: 600;
       cursor: pointer;
@@ -147,28 +146,29 @@
     .tab-btn:hover {
       color: var(--text-primary);
       background: var(--bg-elevated);
+      border-color: var(--border-line);
     }
     .tab-btn.active {
-      color: var(--accent-gold);
-      background: var(--accent-gold-soft);
-      border-color: rgba(212, 175, 55, 0.3);
+      color: var(--accent-purple);
+      background: rgba(139, 92, 246, 0.12);
+      border-color: var(--accent-purple);
+      box-shadow: 0 2px 10px rgba(139, 92, 246, 0.18);
     }
 
-    /* Sağa Hafif Eğik (Skew) Elit Serbest Kod Butonu */
+    /* Sağa Hafif Eğik (Skew) Elit Serbest Kod Kutusu */
     .freecode-skew-btn {
       background: var(--freecode-bg);
       color: #ffffff;
-      border: none;
+      border: 1px solid rgba(255, 255, 255, 0.25);
       padding: 7px 18px;
       font-size: 0.82rem;
       font-weight: 700;
-      letter-spacing: 0.02em;
       cursor: pointer;
       transform: skewX(-14deg);
-      border-radius: 4px;
+      border-radius: 5px;
       margin-left: 6px;
-      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
+      transition: all 0.2s ease;
     }
     .freecode-skew-btn span {
       display: inline-block;
@@ -176,59 +176,59 @@
     }
     .freecode-skew-btn:hover {
       transform: skewX(-14deg) translateY(-1px);
-      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+      box-shadow: 0 6px 22px rgba(124, 58, 237, 0.6);
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     #engine-status {
       font-size: 0.76rem;
+      font-weight: 600;
       color: var(--text-secondary);
       background: var(--bg-elevated);
-      padding: 4px 10px;
-      border-radius: 4px;
-      border: 1px solid var(--border-subtle);
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-line);
     }
 
     .theme-toggle {
       background: var(--bg-elevated);
       color: var(--text-primary);
-      border: 1px solid var(--border-subtle);
+      border: 1.5px solid var(--border-line);
       padding: 6px 12px;
-      border-radius: 6px;
+      border-radius: 7px;
       font-size: 0.8rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      box-shadow: 0 2px 8px rgba(124, 58, 237, 0.12);
       transition: all 0.2s ease;
     }
     .theme-toggle:hover {
-      border-color: var(--accent-gold);
+      border-color: var(--accent-purple);
     }
 
-    /* Ana Çalışma Alanı (3 Panel + Sürüklenebilir Çizgiler) */
+    /* Ana 3 Panelli Çalışma Alanı */
     .workspace {
       flex: 1;
       display: flex;
       overflow: hidden;
-      padding: 10px;
+      padding: 12px;
       gap: 0;
     }
 
-    /* Sol İnce Elit Sidebar */
+    /* Sol Klasör / Akordeon Menü */
     .sidebar {
-      width: 235px;
-      min-width: 170px;
-      max-width: 340px;
+      width: 265px;
+      min-width: 200px;
+      max-width: 380px;
       background: var(--bg-panel);
-      border: 1px solid var(--border-subtle);
-      border-radius: 8px;
+      border: 1.5px solid var(--border-line);
+      border-radius: 10px;
+      box-shadow: var(--panel-shadow);
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -236,15 +236,17 @@
     }
 
     .sidebar-header {
-      padding: 12px 14px;
-      font-size: 0.75rem;
-      font-weight: 700;
+      padding: 12px 15px;
+      font-size: 0.76rem;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-secondary);
-      border-bottom: 1px solid var(--border-subtle);
+      letter-spacing: 0.07em;
+      color: var(--accent-purple);
+      background: var(--bg-elevated);
+      border-bottom: 1.5px solid var(--border-line);
       display: flex;
       justify-content: space-between;
+      align-items: center;
     }
 
     .topic-list {
@@ -253,38 +255,80 @@
       padding: 8px;
     }
 
-    .topic-item {
-      padding: 9px 11px;
-      border-radius: 6px;
-      margin-bottom: 4px;
+    /* Klasör Başlığı */
+    .folder-group {
+      margin-bottom: 6px;
+      border: 1px solid var(--border-line);
+      border-radius: 8px;
+      background: var(--bg-elevated);
+      overflow: hidden;
+    }
+
+    .folder-header {
+      padding: 10px 12px;
       cursor: pointer;
-      border: 1px solid transparent;
-      transition: all 0.18s ease;
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 0.83rem;
+      font-weight: 700;
+      transition: background 0.15s;
     }
-    .topic-item:hover {
-      background: var(--bg-elevated);
+    .folder-header:hover {
+      background: rgba(139, 92, 246, 0.1);
     }
-    .topic-item.active {
-      background: var(--accent-gold-soft);
-      border-color: rgba(212, 175, 55, 0.35);
-      color: var(--accent-gold);
-      font-weight: 600;
-    }
-    .topic-badge {
-      font-size: 0.7rem;
-      padding: 2px 6px;
-      border-radius: 4px;
-      background: var(--bg-elevated);
-      color: var(--text-secondary);
+    .folder-header.active-folder {
+      color: var(--accent-purple);
+      border-bottom: 1px solid var(--border-line);
     }
 
-    /* Sürükleme Çubukları (Resizer) */
+    .folder-arrow {
+      font-size: 0.78rem;
+      transition: transform 0.2s ease;
+      color: var(--accent-purple);
+    }
+    .folder-group.open .folder-arrow {
+      transform: rotate(180deg);
+    }
+
+    /* Klasör İçindeki Alt Sorular Listesi */
+    .folder-items {
+      display: none;
+      flex-direction: column;
+      padding: 4px 6px 6px 6px;
+      background: var(--bg-panel);
+      gap: 3px;
+    }
+    .folder-group.open .folder-items {
+      display: flex;
+    }
+
+    .sub-question-item {
+      padding: 7px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+    }
+    .sub-question-item:hover {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+    }
+    .sub-question-item.selected {
+      background: rgba(139, 92, 246, 0.14);
+      border-color: var(--accent-purple);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* Mor Vurgulu Sürükleme Çubuğu */
     .resizer-x {
-      width: 8px;
+      width: 10px;
       cursor: col-resize;
       display: flex;
       align-items: center;
@@ -295,23 +339,25 @@
     .resizer-x::after {
       content: "";
       width: 2px;
-      height: 36px;
-      background: var(--border-subtle);
-      border-radius: 2px;
-      transition: background 0.2s, height 0.2s;
+      height: 44px;
+      background: var(--border-line);
+      border-radius: 3px;
+      transition: all 0.2s;
     }
     .resizer-x:hover::after, .resizer-x.active::after {
-      background: var(--accent-gold);
-      height: 64px;
+      background: var(--accent-purple);
+      height: 80px;
+      box-shadow: 0 0 8px var(--accent-purple);
     }
 
-    /* Orta Soru / Proje Açıklama Paneli */
+    /* Orta Panel */
     .task-pane {
-      width: 340px;
-      min-width: 240px;
+      width: 370px;
+      min-width: 260px;
       background: var(--bg-panel);
-      border: 1px solid var(--border-subtle);
-      border-radius: 8px;
+      border: 1.5px solid var(--border-line);
+      border-radius: 10px;
+      box-shadow: var(--panel-shadow);
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -320,7 +366,7 @@
 
     .pane-top {
       padding: 12px 16px;
-      border-bottom: 1px solid var(--border-subtle);
+      border-bottom: 1.5px solid var(--border-line);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -330,14 +376,13 @@
     .difficulty-pill {
       font-size: 0.72rem;
       font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 4px;
+      padding: 3px 9px;
+      border-radius: 5px;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
     }
-    .diff-kolay { background: rgba(16, 185, 129, 0.15); color: #10b981; }
-    .diff-orta { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
-    .diff-zor { background: rgba(244, 63, 94, 0.15); color: #f43f5e; }
+    .diff-kolay { background: rgba(16, 185, 129, 0.16); color: #10b981; }
+    .diff-orta { background: rgba(245, 158, 11, 0.16); color: #f59e0b; }
+    .diff-zor { background: rgba(244, 63, 94, 0.16); color: #f43f5e; }
 
     .task-body {
       padding: 16px;
@@ -345,11 +390,11 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 13px;
     }
 
     .task-title {
-      font-size: 1.02rem;
+      font-size: 1.03rem;
       font-weight: 700;
       line-height: 1.4;
     }
@@ -363,34 +408,78 @@
 
     .expected-box {
       background: var(--bg-elevated);
-      border: 1px solid var(--border-subtle);
-      border-radius: 6px;
+      border: 1px solid var(--border-line);
+      border-radius: 7px;
       padding: 10px 12px;
       font-family: 'Consolas', monospace;
-      font-size: 0.8rem;
+      font-size: 0.81rem;
     }
 
-    /* Sarı Bildirim & İpucu / Hata Telafi Kutusu */
-    .yellow-notice-box {
-      background: var(--accent-amber-bg);
-      border: 1px solid rgba(245, 158, 11, 0.45);
-      border-left: 4px solid var(--accent-amber);
-      border-radius: 6px;
+    /* Sarı Komut Deposu (Konu İlerledikçe Yanan Dinamik Kutu) */
+    .yellow-vault {
+      background: var(--yellow-vault-bg);
+      border: 1.5px solid var(--yellow-vault-border);
+      border-left: 4px solid #eab308;
+      border-radius: 8px;
       padding: 11px 13px;
-      font-size: 0.82rem;
-      line-height: 1.5;
-      color: var(--text-primary);
-      margin-top: auto;
+      transition: all 0.3s ease;
     }
-    .yellow-notice-box strong {
-      color: var(--accent-amber);
-      display: block;
-      margin-bottom: 4px;
+    .yellow-vault.lit {
+      box-shadow: 0 0 18px rgba(234, 179, 8, 0.28);
+      border-color: #eab308;
+    }
+    .vault-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #eab308;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .vault-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .cmd-chip {
+      font-family: 'Consolas', monospace;
+      font-size: 0.77rem;
+      padding: 4px 8px;
+      border-radius: 5px;
+      border: 1px solid rgba(234, 179, 8, 0.3);
+      background: rgba(234, 179, 8, 0.06);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .cmd-chip.unlocked {
+      background: rgba(234, 179, 8, 0.24);
+      border-color: #eab308;
+      color: var(--text-primary);
+      font-weight: 700;
+      box-shadow: 0 0 10px rgba(234, 179, 8, 0.35);
+    }
+    .cmd-chip.unlocked:hover {
+      transform: translateY(-1px);
+    }
+
+    /* Sarı Bildirim / İpucu Kutusu */
+    .yellow-notice {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      border-left: 4px solid #f59e0b;
+      border-radius: 7px;
+      padding: 10px 12px;
+      font-size: 0.81rem;
+      line-height: 1.5;
     }
 
     .question-nav {
       padding: 10px 14px;
-      border-top: 1px solid var(--border-subtle);
+      border-top: 1.5px solid var(--border-line);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -400,24 +489,26 @@
     .nav-small-btn {
       background: var(--bg-panel);
       color: var(--text-primary);
-      border: 1px solid var(--border-subtle);
-      padding: 5px 11px;
-      border-radius: 5px;
-      font-size: 0.78rem;
+      border: 1px solid var(--border-line);
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.79rem;
       font-weight: 600;
       cursor: pointer;
     }
     .nav-small-btn:hover {
-      border-color: var(--accent-gold);
+      border-color: var(--accent-purple);
+      color: var(--accent-purple);
     }
 
-    /* Sağ Editör + Çıktı Paneli */
+    /* Sağ Kod Editörü + Konsol */
     .editor-pane {
       flex: 1;
       min-width: 280px;
       background: var(--bg-panel);
-      border: 1px solid var(--border-subtle);
-      border-radius: 8px;
+      border: 1.5px solid var(--border-line);
+      border-radius: 10px;
+      box-shadow: var(--panel-shadow);
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -425,37 +516,32 @@
 
     .editor-toolbar {
       padding: 10px 16px;
-      border-bottom: 1px solid var(--border-subtle);
+      border-bottom: 1.5px solid var(--border-line);
       display: flex;
       justify-content: space-between;
       align-items: center;
       background: var(--bg-elevated);
     }
 
-    .btn-group {
-      display: flex;
-      gap: 8px;
-    }
+    .btn-group { display: flex; gap: 8px; }
 
     .run-btn {
       background: var(--accent-emerald);
       color: #ffffff;
       border: none;
       padding: 6px 15px;
-      border-radius: 5px;
+      border-radius: 6px;
       font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
-      transition: opacity 0.2s;
     }
-    .run-btn:hover { opacity: 0.9; }
 
     .check-btn {
-      background: var(--accent-gold);
-      color: #090d16;
+      background: linear-gradient(135deg, var(--accent-purple), #6d28d9);
+      color: #ffffff;
       border: none;
       padding: 6px 15px;
-      border-radius: 5px;
+      border-radius: 6px;
       font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
@@ -476,7 +562,7 @@
 
     .console-area {
       height: 185px;
-      border-top: 1px solid var(--border-subtle);
+      border-top: 1.5px solid var(--border-line);
       background: var(--bg-elevated);
       display: flex;
       flex-direction: column;
@@ -488,8 +574,8 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: var(--text-secondary);
-      border-bottom: 1px solid var(--border-subtle);
+      color: var(--accent-purple);
+      border-bottom: 1px solid var(--border-line);
       display: flex;
       justify-content: space-between;
     }
@@ -504,53 +590,79 @@
       line-height: 1.5;
     }
 
+    /* Konu Anlatımı Görünümü */
+    #lecture-view {
+      display: none;
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    #lecture-view.active {
+      display: block;
+    }
+    .lecture-grid {
+      max-width: 1050px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 16px;
+    }
+    .lecture-card {
+      background: var(--bg-panel);
+      border: 1.5px solid var(--border-line);
+      border-radius: 10px;
+      padding: 18px;
+      box-shadow: var(--panel-shadow);
+    }
+    .lecture-card h3 {
+      color: var(--accent-purple);
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+    .lecture-card p {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+    .lecture-code {
+      background: var(--bg-editor);
+      border: 1px solid var(--border-line);
+      padding: 10px;
+      border-radius: 6px;
+      font-family: 'Consolas', monospace;
+      font-size: 0.8rem;
+      white-space: pre-wrap;
+    }
+
     /* Serbest Kod Modalı */
     #freecode-modal {
       display: none;
       position: fixed;
       inset: 28px;
       background: var(--bg-panel);
-      border: 1px solid rgba(139, 92, 246, 0.5);
-      border-radius: 10px;
+      border: 2px solid var(--accent-purple);
+      border-radius: 12px;
       z-index: 9990;
       flex-direction: column;
-      box-shadow: var(--shadow-luxury);
+      box-shadow: 0 20px 50px rgba(124, 58, 237, 0.35);
       overflow: hidden;
     }
     #freecode-modal.open { display: flex; }
 
-    .modal-body {
-      flex: 1;
-      display: flex;
-      overflow: hidden;
-    }
-    .modal-col {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 14px;
-      gap: 10px;
-    }
-    #free-editor {
+    .modal-body { flex: 1; display: flex; overflow: hidden; }
+    .modal-col { flex: 1; display: flex; flex-direction: column; padding: 14px; gap: 10px; }
+    #free-editor, #free-output {
       flex: 1;
       background: var(--bg-editor);
       color: var(--text-primary);
-      border: 1px solid var(--border-subtle);
-      border-radius: 6px;
+      border: 1.5px solid var(--border-line);
+      border-radius: 8px;
       padding: 14px;
       font-family: 'Consolas', monospace;
       font-size: 14px;
       resize: none;
       outline: none;
-    }
-    #free-output {
-      flex: 1;
-      background: var(--bg-editor);
-      border: 1px solid var(--border-subtle);
-      border-radius: 6px;
-      padding: 14px;
-      font-family: 'Consolas', monospace;
-      font-size: 0.85rem;
       white-space: pre-wrap;
       overflow-y: auto;
     }
@@ -558,7 +670,7 @@
 </head>
 <body>
 
-  <!-- Karşılama Ekranı -->
+  <!-- Açılış Ekranı -->
   <div id="welcome-splash">
     <h1>Merhaba 👋</h1>
     <p>pythonhazırlık stüdyo</p>
@@ -567,11 +679,12 @@
   <!-- Üst Menü -->
   <header>
     <div class="brand">
-      <span class="brand-dot"></span>
+      <span class="brand-gem"></span>
       <span>pythonhazırlık</span>
     </div>
 
     <div class="nav-tabs">
+      <button class="tab-btn" id="mode-lecture" onclick="switchMode('lecture')">📖 Konu Anlatımı</button>
       <button class="tab-btn active" id="mode-topics" onclick="switchMode('topics')">Konu Alıştırmaları</button>
       <button class="tab-btn" id="mode-projects" onclick="switchMode('projects')">Kapsamlı Projeler (7)</button>
       <button class="freecode-skew-btn" onclick="openFreeModal()"><span>⚡ Serbest Kod</span></button>
@@ -579,16 +692,21 @@
 
     <div class="header-actions">
       <span id="engine-status">Python Yükleniyor...</span>
-      <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">☀️ Açık Tema</button>
+      <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">☀️ Beyaz-Mor Tema</button>
     </div>
   </header>
 
-  <!-- Ana Çalışma Ekranı -->
+  <!-- Konu Anlatımı Ekranı -->
+  <section id="lecture-view">
+    <div class="lecture-grid" id="lecture-grid"></div>
+  </section>
+
+  <!-- Ana 3 Panelli Çalışma Alanı -->
   <div class="workspace" id="workspace">
-    <!-- Sol Panel -->
+    <!-- Sol Klasör Menü -->
     <aside class="sidebar" id="pane-left">
       <div class="sidebar-header">
-        <span id="sidebar-title">Konular</span>
+        <span id="sidebar-title">Konu Klasörleri</span>
         <span id="progress-counter">0 / 0</span>
       </div>
       <div class="topic-list" id="sidebar-list"></div>
@@ -596,10 +714,10 @@
 
     <div class="resizer-x" id="resizer-1"></div>
 
-    <!-- Orta Panel (Soru / Proje Detayı + Sarı Bildirim Kutusu) -->
+    <!-- Orta Panel -->
     <section class="task-pane" id="pane-mid">
       <div class="pane-top">
-        <span id="task-category" style="font-size:0.78rem; font-weight:600; color:var(--text-secondary);">Bölüm</span>
+        <span id="task-category" style="font-size:0.78rem; font-weight:700; color:var(--accent-purple);">Bölüm</span>
         <span class="difficulty-pill diff-kolay" id="task-diff">Kolay</span>
       </div>
 
@@ -608,20 +726,29 @@
         <p class="task-desc" id="task-desc"></p>
 
         <div>
-          <div style="font-size:0.75rem; font-weight:700; color:var(--text-secondary); margin-bottom:5px;">BEKLENEN ÇIKTI / HEDEF:</div>
+          <div style="font-size:0.74rem; font-weight:700; color:var(--text-secondary); margin-bottom:5px;">BEKLENEN ÇIKTI:</div>
           <div class="expected-box" id="task-expected"></div>
         </div>
 
-        <!-- Sarı Bildirim / İpucu & Hata Telafi Kutusu -->
-        <div class="yellow-notice-box" id="yellow-box">
-          <strong>💡 İpucu & Bildirim</strong>
-          <span id="yellow-text">Kodunu yazdıktan sonra "Çalıştır" veya "Kontrol Et" butonuna basabilirsin.</span>
+        <!-- Sarı Komut Deposu (İlerledikçe Yanan Kutu) -->
+        <div class="yellow-vault" id="yellow-vault">
+          <div class="vault-header">
+            <span>⚡ Sarı Komut Deposu</span>
+            <span id="vault-status">0 / 4 Aktif</span>
+          </div>
+          <div class="vault-chips" id="vault-chips"></div>
+        </div>
+
+        <!-- Sarı Bildirim & İpucu Kutusu -->
+        <div class="yellow-notice" id="yellow-notice">
+          <strong style="color:#f59e0b; display:block; margin-bottom:3px;">💡 Bildirim & İpucu</strong>
+          <span id="yellow-text">Soruyu çözüp "Kontrol Et" dediğinde Sarı Komut Deposu parlayarak yeni komutları açar.</span>
         </div>
       </div>
 
       <div class="question-nav">
         <button class="nav-small-btn" onclick="prevItem()">← Önceki</button>
-        <span id="item-indicator" style="font-size:0.78rem; font-weight:600; color:var(--text-secondary);">1 / 6</span>
+        <span id="item-indicator" style="font-size:0.78rem; font-weight:700; color:var(--text-secondary);">1 / 6</span>
         <button class="nav-small-btn" onclick="nextItem()">Sonraki →</button>
       </div>
     </section>
@@ -631,7 +758,7 @@
     <!-- Sağ Panel (Editör + Konsol) -->
     <main class="editor-pane" id="pane-right">
       <div class="editor-toolbar">
-        <span style="font-size:0.8rem; font-weight:600; color:var(--text-secondary);">main.py</span>
+        <span style="font-size:0.8rem; font-weight:700; color:var(--accent-purple);">main.py</span>
         <div class="btn-group">
           <button class="nav-small-btn" onclick="resetEditor()">Sıfırla</button>
           <button class="run-btn" onclick="runMainCode(false)">▶ Çalıştır</button>
@@ -654,7 +781,7 @@
   <!-- Serbest Kod Penceresi -->
   <div id="freecode-modal">
     <div class="editor-toolbar">
-      <span style="font-weight:700; color:#8b5cf6;">⚡ Serbest Kod Laboratuvarı (Bağımsız Alan)</span>
+      <span style="font-weight:800; color:var(--accent-purple);">⚡ Serbest Kod Laboratuvarı (Bağımsız Alan)</span>
       <div class="btn-group">
         <button class="run-btn" onclick="runFreeCode()">▶ Kodu Çalıştır</button>
         <button class="nav-small-btn" onclick="closeFreeModal()">✕ Kapat</button>
@@ -662,90 +789,105 @@
     </div>
     <div class="modal-body">
       <div class="modal-col">
-        <textarea id="free-editor" spellcheck="false"># Görevlerden bağımsız dilediğin Python kodunu burada dene!
-urunler = ["Laptop", "Klavye", "Monitör"]
-for sira, urun in enumerate(urunler, 1):
-    print(f"{sira}. {urun}")</textarea>
+        <textarea id="free-editor" spellcheck="false"># Görevlerden bağımsız istediğin Python kodunu burada dene!
+for i in range(1, 5):
+    print(f"{i}. Satır test ediliyor...")</textarea>
       </div>
       <div class="modal-col">
         <div id="free-output">Çıktı burada görünecek...</div>
-        <div class="yellow-notice-box" id="free-yellow-box">
-          <strong>⚠️ Bildirim & Hata Telafi</strong>
-          <span id="free-yellow-text">Herhangi bir hata yaparsan burada nasıl düzelteceğin gösterilir.</span>
+        <div class="yellow-notice">
+          <strong style="color:#f59e0b; display:block; margin-bottom:3px;">⚠️ Hata Telafi & Bildirim</strong>
+          <span id="free-yellow-text">Hata yaparsan burada nasıl düzelteceğin gösterilir.</span>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    // 1. Konu Alıştırmaları (Her Konu İçin 6-7 Dengeli Soru: Kolay - Orta - Zor)
+    // Konu Anlatımı Kartları
+    const LECTURES_DATA = [
+      { title: "1. Değişkenler ve Veri Tipleri", desc: "Python'da verileri saklamak için değişkenler kullanılır. Metinler (str) tırnak içinde, tam sayılar (int) ve ondalıklı sayılar (float) doğrudan yazılır.", code: 'isim = "Ahmet"\nyas = 21\nprint(f"{isim} {yas} yaşında")' },
+      { title: "2. Koşul Blokları (if / elif / else)", desc: "Programın farklı durumlara göre karar vermesini sağlar. Koşul satırının sonuna iki nokta (:) konur ve alt satır 4 boşluk içeriden yazılır.", code: 'puan = 75\nif puan >= 50:\n    print("Geçti")\nelse:\n    print("Kaldı")' },
+      { title: "3. Döngüler (for ve while)", desc: "Tekrarlayan işlemleri otomatikleştirir. range(1, 6) ifadesi 1'den başlayıp 5'e kadar sayar.", code: 'for i in range(1, 4):\n    print("Adım:", i)' },
+      { title: "4. Listeler ve Sözlükler", desc: "Listeler [] köşeli parantezle birden fazla veriyi sıralı tutar. Sözlükler {} ise anahtar-değer eşleşmesi yapar.", code: 'notlar = [80, 90, 100]\nnotlar.append(95)\nprint(len(notlar))' },
+      { title: "5. Fonksiyonlar (def & return)", desc: "Belirli bir görevi yapan kod bloklarını def ile paketleyip her yerde tekrar çağırabiliriz.", code: 'def topla(a, b):\n    return a + b\n\nprint(topla(4, 6))' },
+      { title: "6. String (Metin) İşlemleri", desc: "Metinleri büyütmek (.upper()), küçültmek (.lower()) veya bölmek (.split()) için hazır metotlar kullanılır.", code: 'metin = "python"\nprint(metin.upper())' }
+    ];
+
+    // Konu Klasörleri ve Her Konunun 6-7 Alt Sorusu + Sarı Komut Deposu
     const TOPICS_DATA = [
       {
         name: "1. Değişkenler & Çıktı",
+        commands: ["print()", "int()", "str()", "f-string", "type()"],
         questions: [
-          { diff: "Kolay", title: "İlk Mesajını Yazdır", desc: "Ekrana tam olarak Python Hazırlık Başladı yazdıran kodu yaz.", expected: "Python Hazırlık Başladı", starter: 'print("")', hint: "print() fonksiyonunun içine çift tırnak kullanarak metni yazmalısın." },
-          { diff: "Kolay", title: "Değişken Tanımlama", desc: "sehir adlı bir değişken oluşturup içine Samsun değerini ata ve ekrana yazdır.", expected: "Samsun", starter: 'sehir = ""\nprint(sehir)', hint: "Metin değerlerini tırnak içinde yazmayı unutma." },
-          { diff: "Kolay", title: "İki Sayının Toplamı", desc: "a = 18 ve b = 24 değişkenlerini tanımla, toplamlarını ekrana yazdır.", expected: "42", starter: "a = 18\nb = 24\n", hint: "print(a + b) komutu iki sayıyı toplayıp ekrana yazar." },
-          { diff: "Orta", title: "f-String ile Biçimli Çıktı", desc: "ad = 'Can' ve yas = 20 değişkenlerini kullanarak ekrana 'Can 20 yasindadir' yazdır.", expected: "Can 20 yasindadir", starter: 'ad = "Can"\nyas = 20\nprint(f"")', hint: 'f"{ad} {yas} yasindadir" yapısını kullanabilirsin.' },
-          { diff: "Orta", title: "Değer Takası (Swap)", desc: "x = 10 ve y = 99 değerlerini birbirleriyle değiştirip aralarında boşlukla yazdır (99 10).", expected: "99 10", starter: "x = 10\ny = 99\n# Değerleri takas et\nprint(x, y)", hint: "Python'da x, y = y, x yazarak tek satırda takas yapabilirsin." },
-          { diff: "Zor", title: "KDV Dahil Fiyat Hesabı", desc: "fiyat = 250 olan ürüne %20 KDV ekleyerek sonucu tam sayı (int) olarak ekrana yazdır.", expected: "300", starter: "fiyat = 250\n", hint: "int(fiyat * 1.20) ile sonucu ondalıksız tam sayıya çevirebilirsin." }
+          { diff: "Kolay", title: "İlk Mesajını Yazdır", desc: "Ekrana tam olarak Python Hazırlık Başladı yazdıran kodu yaz.", expected: "Python Hazırlık Başladı", starter: 'print("")', hint: "print() içine çift tırnak kullanarak metni yaz." },
+          { diff: "Kolay", title: "Değişken Tanımlama", desc: "sehir adlı değişkene Samsun değerini ata ve ekrana yazdır.", expected: "Samsun", starter: 'sehir = ""\nprint(sehir)', hint: "Metinleri tırnak içinde yazmalısın." },
+          { diff: "Kolay", title: "İki Sayının Toplamı", desc: "a = 18 ve b = 24 değişkenlerinin toplamını ekrana yazdır.", expected: "42", starter: "a = 18\nb = 24\n", hint: "print(a + b) kullan." },
+          { diff: "Orta", title: "f-String Biçimli Çıktı", desc: "ad = 'Can' ve yas = 20 kullanarak 'Can 20 yasindadir' yazdır.", expected: "Can 20 yasindadir", starter: 'ad = "Can"\nyas = 20\nprint(f"")', hint: 'f"{ad} {yas} yasindadir" yapısını kullan.' },
+          { diff: "Orta", title: "Değer Takası (Swap)", desc: "x = 10 ve y = 99 değerlerini değiştirip aralarında boşlukla yazdır (99 10).", expected: "99 10", starter: "x = 10\ny = 99\nprint(x, y)", hint: "x, y = y, x yazarak takas yapabilirsin." },
+          { diff: "Zor", title: "KDV Dahil Fiyat", desc: "fiyat = 250 olan ürüne %20 KDV ekleyip tam sayı (int) olarak yazdır.", expected: "300", starter: "fiyat = 250\n", hint: "int(fiyat * 1.20) kullan." }
         ]
       },
       {
-        name: "2. Koşul Yapıları (if-else)",
+        name: "2. Koşullar (if - else)",
+        commands: ["if :", "elif :", "else:", "and / or", "% (mod)"],
         questions: [
-          { diff: "Kolay", title: "Pozitif mi Negatif mi?", desc: "sayi = 15 için sayı 0'dan büyükse ekrana Pozitif yazdır.", expected: "Pozitif", starter: "sayi = 15\nif :\n    print('Pozitif')", hint: "if sayi > 0: satırının sonundaki iki noktayı (:) unutma." },
+          { diff: "Kolay", title: "Pozitif Kontrolü", desc: "sayi = 15 için sayı 0'dan büyükse ekrana Pozitif yazdır.", expected: "Pozitif", starter: "sayi = 15\nif :\n    print('Pozitif')", hint: "if sayi > 0: yazmalısın." },
           { diff: "Kolay", title: "Sınav Geçme Durumu", desc: "puan = 65 için 50 ve üzeriyse Geçti, değilse Kaldı yazdır.", expected: "Geçti", starter: "puan = 65\n", hint: "if puan >= 50: şartını kontrol et." },
-          { diff: "Orta", title: "Tek mi Çift mi?", desc: "n = 28 sayısının 2'ye bölümünden kalan 0 ise Çift, değilse Tek yazdır.", expected: "Çift", starter: "n = 28\n", hint: "Mod alma operatörü % kullanılır: if n % 2 == 0:" },
-          { diff: "Orta", title: "Harf Notu Hesaplama", desc: "not_ort = 82 için 85+ ise AA, 70-84 arası ise BB, altı ise CC yazdır.", expected: "BB", starter: "not_ort = 82\n", hint: "if, elif ve else bloklarını sırasıyla kur." },
-          { diff: "Orta", title: "Şifre ve Kullanıcı Doğrulama", desc: "user = 'admin' ve sifre = '1234' ise Giriş Başarılı yazdır.", expected: "Giriş Başarılı", starter: 'user = "admin"\nsifre = "1234"\n', hint: "İki şartı aynı anda bağlamak için and operatörünü kullan." },
-          { diff: "Zor", title: "Üç Sayının En Büyüğü", desc: "a = 14, b = 29, c = 21 sayılarından en büyüğünü if-elif-else kullanarak ekrana yazdır.", expected: "29", starter: "a, b, c = 14, 29, 21\n", hint: "a >= b and a >= c mantığıyla karşılaştırma yapabilirsin." }
+          { diff: "Orta", title: "Tek mi Çift mi?", desc: "n = 28 sayısının 2'ye bölümünden kalan 0 ise Çift, değilse Tek yazdır.", expected: "Çift", starter: "n = 28\n", hint: "if n % 2 == 0: kullan." },
+          { diff: "Orta", title: "Harf Notu Hesabı", desc: "not_ort = 82 için 85+ AA, 70-84 BB, altı CC yazdır.", expected: "BB", starter: "not_ort = 82\n", hint: "if, elif ve else bloklarını kur." },
+          { diff: "Orta", title: "Giriş Doğrulama", desc: "user = 'admin' ve sifre = '1234' ise Giriş Başarılı yazdır.", expected: "Giriş Başarılı", starter: 'user = "admin"\nsifre = "1234"\n', hint: "and operatörü ile iki şartı birleştir." },
+          { diff: "Zor", title: "Üç Sayının En Büyüğü", desc: "a = 14, b = 29, c = 21 sayılarından en büyüğünü if-elif-else ile yazdır.", expected: "29", starter: "a, b, c = 14, 29, 21\n", hint: "a >= b and a >= c mantığını kullan." }
         ]
       },
       {
         name: "3. Döngüler (for & while)",
+        commands: ["for i in", "range()", "while :", "break", "+= / -="],
         questions: [
-          { diff: "Kolay", title: "1'den 5'e Kadar Yazdır", desc: "for döngüsü ve range() kullanarak 1'den 5'e kadar (5 dahil) sayıları alt alta yazdır.", expected: "1\n2\n3\n4\n5", starter: "for i in range():\n    print(i)", hint: "range(1, 6) 1'den başlar ve 5'te durur." },
-          { diff: "Kolay", title: "Çift Sayıları Listele", desc: "2'den 10'a kadar (10 dahil) çift sayıları alt alta yazdır.", expected: "2\n4\n6\n8\n10", starter: "for i in range(2, 11, 2):\n    ", hint: "range(başlangıç, bitiş, artış) üçüncü parametre artış miktarıdır." },
-          { diff: "Orta", title: "1'den 10'a Kadar Toplam", desc: "1'den 10'a kadar olan sayıların toplamını döngüyle bulup ekrana yazdır.", expected: "55", starter: "toplam = 0\nfor i in range(1, 11):\n    \nprint(toplam)", hint: "Döngü içinde toplam += i yazarak her sayıyı ekleyebilirsin." },
-          { diff: "Orta", title: "While ile Geri Sayım", desc: "sayac = 3 iken while döngüsüyle 3, 2, 1 yazdırıp döngü bitince Başla! yazdır.", expected: "3\n2\n1\nBaşla!", starter: "sayac = 3\nwhile sayac > 0:\n    \nprint('Başla!')", hint: "Döngü içinde sayac -= 1 yapmazsan sonsuz döngüye girer." },
-          { diff: "Orta", title: "Kelimedeki Sesli Harf Sayısı", desc: "kelime = 'programlama' içindeki 'a' harflerinin toplam sayısını ekrana yazdır.", expected: "3", starter: 'kelime = "programlama"\nsayac = 0\n', hint: "for harf in kelime: ile her harfi kontrol et." },
-          { diff: "Zor", title: "Faktöriyel Hesabı", desc: "5! (5 faktöriyel) sonucunu döngü kullanarak hesapla ve ekrana yazdır.", expected: "120", starter: "sonuc = 1\nfor i in range(1, 6):\n    \nprint(sonuc)", hint: "sonuc *= i işlemi 1*2*3*4*5 çarpımını hesaplar." },
-          { diff: "Zor", title: "3'e ve 5'e Bölünenler", desc: "1 ile 30 arasındaki (30 dahil) hem 3'e hem 5'e bölünebilen sayıları alt alta yazdır.", expected: "15\n30", starter: "for i in range(1, 31):\n    ", hint: "i % 3 == 0 and i % 5 == 0 şartını kullan." }
+          { diff: "Kolay", title: "1'den 5'e Kadar", desc: "for döngüsü ile 1'den 5'e kadar (5 dahil) alt alta yazdır.", expected: "1\n2\n3\n4\n5", starter: "for i in range():\n    print(i)", hint: "range(1, 6) kullan." },
+          { diff: "Kolay", title: "Çift Sayıları Listele", desc: "2'den 10'a kadar çift sayıları alt alta yazdır.", expected: "2\n4\n6\n8\n10", starter: "for i in range(2, 11, 2):\n    ", hint: "print(i) yazman yeterli." },
+          { diff: "Orta", title: "1'den 10'a Toplam", desc: "1'den 10'a kadar olan sayıların toplamını döngüyle bul.", expected: "55", starter: "toplam = 0\nfor i in range(1, 11):\n    \nprint(toplam)", hint: "toplam += i satırını ekle." },
+          { diff: "Orta", title: "While Geri Sayım", desc: "sayac = 3 iken 3, 2, 1 yazdırıp bitince Başla! yazdır.", expected: "3\n2\n1\nBaşla!", starter: "sayac = 3\nwhile sayac > 0:\n    \nprint('Başla!')", hint: "print(sayac) ve sayac -= 1 yaz." },
+          { diff: "Orta", title: "Harf Sayacı", desc: "kelime = 'programlama' içindeki 'a' harflerinin sayısını yazdır.", expected: "3", starter: 'kelime = "programlama"\nsayac = 0\n', hint: "for h in kelime: if h == 'a': sayac += 1" },
+          { diff: "Zor", title: "Faktöriyel Hesabı", desc: "5! sonucunu döngüyle hesaplayıp yazdır.", expected: "120", starter: "sonuc = 1\nfor i in range(1, 6):\n    \nprint(sonuc)", hint: "sonuc *= i kullan." },
+          { diff: "Zor", title: "Ortak Bölünenler", desc: "1 ile 30 arasındaki hem 3'e hem 5'e bölünen sayıları alt alta yazdır.", expected: "15\n30", starter: "for i in range(1, 31):\n    ", hint: "i % 3 == 0 and i % 5 == 0" }
         ]
       },
       {
         name: "4. Listeler & Sözlükler",
+        commands: [".append()", "len()", "max()", "sum()", ".values()"],
         questions: [
-          { diff: "Kolay", title: "Listeye Eleman Ekleme", desc: "diller = ['Python', 'C'] listesine 'Java' ekleyip listeyi yazdır.", expected: "['Python', 'C', 'Java']", starter: 'diller = ["Python", "C"]\n\nprint(diller)', hint: "diller.append('Java') metodunu kullan." },
-          { diff: "Kolay", title: "Liste Uzunluğu ve İlk Eleman", desc: "notlar = [70, 85, 90, 60] listesinin eleman sayısını ekrana yazdır.", expected: "4", starter: "notlar = [70, 85, 90, 60]\n", hint: "len(notlar) listenin uzunluğunu verir." },
-          { diff: "Orta", title: "Listedeki En Büyük Sayı", desc: "sayilar = [12, 45, 7, 89, 34] listesindeki en büyük sayıyı yazdır.", expected: "89", starter: "sayilar = [12, 45, 7, 89, 34]\n", hint: "max(sayilar) fonksiyonunu kullanabilirsin." },
-          { diff: "Orta", title: "Sözlükten Veri Okuma", desc: "arac = {'marka': 'Volvo', 'yil': 2024} sözlüğünden marka değerini yazdır.", expected: "Volvo", starter: 'arac = {"marka": "Volvo", "yil": 2024}\n', hint: 'print(arac["marka"]) ile anahtara karşılık gelen değere ulaşılır.' },
-          { diff: "Orta", title: "Liste Filtreleme", desc: "sayilar = [5, 12, 18, 3, 25] listesinden 10'dan büyük olanları yeni listede yazdır.", expected: "[12, 18, 25]", starter: "sayilar = [5, 12, 18, 3, 25]\n", hint: "[x for x in sayilar if x > 10] liste üretecini kullanabilirsin." },
-          { diff: "Zor", title: "Sözlük Değerlerini Toplama", desc: "sepet = {'kalem': 15, 'defter': 45, 'silgi': 10} toplam tutarını yazdır.", expected: "70", starter: 'sepet = {"kalem": 15, "defter": 45, "silgi": 10}\n', hint: "sum(sepet.values()) tüm fiyatları toplar." }
+          { diff: "Kolay", title: "Listeye Eleman Ekle", desc: "diller = ['Python', 'C'] listesine 'Java' ekleyip yazdır.", expected: "['Python', 'C', 'Java']", starter: 'diller = ["Python", "C"]\n\nprint(diller)', hint: "diller.append('Java')" },
+          { diff: "Kolay", title: "Liste Uzunluğu", desc: "notlar = [70, 85, 90, 60] listesinin eleman sayısını yazdır.", expected: "4", starter: "notlar = [70, 85, 90, 60]\n", hint: "print(len(notlar))" },
+          { diff: "Orta", title: "En Büyük Eleman", desc: "sayilar = [12, 45, 7, 89, 34] listesindeki en büyük sayıyı yazdır.", expected: "89", starter: "sayilar = [12, 45, 7, 89, 34]\n", hint: "print(max(sayilar))" },
+          { diff: "Orta", title: "Sözlükten Veri Çekme", desc: "arac = {'marka': 'Volvo', 'yil': 2024} sözlüğünden marka değerini yazdır.", expected: "Volvo", starter: 'arac = {"marka": "Volvo", "yil": 2024}\n', hint: 'print(arac["marka"])' },
+          { diff: "Orta", title: "Liste Filtreleme", desc: "sayilar = [5, 12, 18, 3, 25] listesinden 10'dan büyükleri yeni listede yazdır.", expected: "[12, 18, 25]", starter: "sayilar = [5, 12, 18, 3, 25]\n", hint: "print([x for x in sayilar if x > 10])" },
+          { diff: "Zor", title: "Sepet Toplamı", desc: "sepet = {'kalem': 15, 'defter': 45, 'silgi': 10} toplam tutarını yazdır.", expected: "70", starter: 'sepet = {"kalem": 15, "defter": 45, "silgi": 10}\n', hint: "print(sum(sepet.values()))" }
         ]
       },
       {
         name: "5. Fonksiyonlar (def)",
+        commands: ["def :", "return", "parametre", "varsayılan", "çağırma()"],
         questions: [
-          { diff: "Kolay", title: "Selamlama Fonksiyonu", desc: "selamla() adında bir fonksiyon tanımla ve çağrıldığında Merhaba Python yazdırsın.", expected: "Merhaba Python", starter: "def selamla():\n    \nselamla()", hint: "Fonksiyonu tanımladıktan sonra en altta selamla() yazarak çağırmalısın." },
-          { diff: "Kolay", title: "Kare Alma Fonksiyonu", desc: "kare(x) fonksiyonu verilen sayının karesini return etsin. kare(6) sonucunu yazdır.", expected: "36", starter: "def kare(x):\n    \nprint(kare(6))", hint: "return x ** 2 ifadesini kullan." },
-          { diff: "Orta", title: "Dikdörtgen Alanı", desc: "alan(kisa, uzun) fonksiyonu ile 5 ve 8 kenarlı dikdörtgenin alanını yazdır.", expected: "40", starter: "def alan(kisa, uzun):\n    \nprint(alan(5, 8))", hint: "return kisa * uzun" },
-          { diff: "Orta", title: "Varsayılan Parametre", desc: "us_al(sayi, us=2) fonksiyonu yaz. print(us_al(4)) çağrıldığında 16 döndürsün.", expected: "16", starter: "def us_al(sayi, us=2):\n    \nprint(us_al(4))", hint: "return sayi ** us" },
-          { diff: "Orta", title: "Liste Ortalaması Fonksiyonu", desc: "ortalama(liste) fonksiyonu [10, 20, 30] için 20.0 döndürsün.", expected: "20.0", starter: "def ortalama(liste):\n    \nprint(ortalama([10, 20, 30]))", hint: "return sum(liste) / len(liste)" },
-          { diff: "Zor", title: "Asal Sayı Kontrolü", desc: "asal_mi(n) fonksiyonu n=17 için True döndürsün ve ekrana yazdır.", expected: "True", starter: "def asal_mi(n):\n    if n < 2: return False\n    for i in range(2, n):\n        if n % i == 0: return False\n    return True\n\nprint(asal_mi(17))", hint: "Kodu incele ve asal_mi(17) çağrısının sonucunu çalıştırarak doğrula." }
+          { diff: "Kolay", title: "Selamlama Fonksiyonu", desc: "selamla() fonksiyonu tanımla ve Merhaba Python yazdırsın.", expected: "Merhaba Python", starter: "def selamla():\n    \nselamla()", hint: "print('Merhaba Python') yaz." },
+          { diff: "Kolay", title: "Kare Alma", desc: "kare(x) fonksiyonu x'in karesini döndürsün. kare(6) sonucunu yazdır.", expected: "36", starter: "def kare(x):\n    \nprint(kare(6))", hint: "return x ** 2" },
+          { diff: "Orta", title: "Dikdörtgen Alanı", desc: "alan(kisa, uzun) fonksiyonu ile 5 ve 8 için alanı yazdır.", expected: "40", starter: "def alan(kisa, uzun):\n    \nprint(alan(5, 8))", hint: "return kisa * uzun" },
+          { diff: "Orta", title: "Varsayılan Üs Alma", desc: "us_al(sayi, us=2) fonksiyonunu yaz. print(us_al(4)) 16 döndürsün.", expected: "16", starter: "def us_al(sayi, us=2):\n    \nprint(us_al(4))", hint: "return sayi ** us" },
+          { diff: "Orta", title: "Liste Ortalaması", desc: "ortalama(liste) fonksiyonu [10, 20, 30] için 20.0 döndürsün.", expected: "20.0", starter: "def ortalama(liste):\n    \nprint(ortalama([10, 20, 30]))", hint: "return sum(liste) / len(liste)" },
+          { diff: "Zor", title: "Asal Sayı Kontrolü", desc: "asal_mi(17) çağrısını çalıştırarak True sonucunu doğrula.", expected: "True", starter: "def asal_mi(n):\n    if n < 2: return False\n    for i in range(2, n):\n        if n % i == 0: return False\n    return True\n\nprint(asal_mi(17))", hint: "Kodu doğrudan çalıştırıp kontrol edebilirsin." }
         ]
       }
     ];
 
-    // 2. Kapsamlı Projeler (7 Çeşit Gerçek Hayat Projesi - 40-50 Satır Ölçeğinde)
+    // 7 Kapsamlı Proje
     const PROJECTS_DATA = [
       {
         diff: "Proje 1",
-        title: "🏦 Banka ATM & Hesap Yönetimi Sistemi",
-        desc: "Bakiye sorgulama, para yatırma, para çekme ve işlem geçmişi tutan kapsamlı bir ATM simülasyonu.\n\nGörev: Başlangıç bakiyesi 1500 TL olan hesaba önce 750 TL yatır, ardından 400 TL çek ve son bakiyeyi 'Güncel Bakiye: 1850 TL' formatında yazdır.",
+        title: "🏦 Banka ATM & Hesap Yönetimi",
+        desc: "Başlangıç bakiyesi 1500 TL olan hesaba 750 TL yatır, 400 TL çek ve son bakiyeyi 'Güncel Bakiye: 1850 TL' olarak yazdır.",
         expected: "Güncel Bakiye: 1850 TL",
-        hint: "bakiye değişkenini fonksiyonlarla güncelleyip en sonda istenen formatta print() ile yazdır.",
+        commands: ["class", "__init__", "self.bakiye", "append()"],
+        hint: "hesap.para_yatir(750) ve hesap.para_cek(400) satırlarını ekle.",
         starter: `class BankaHesabi:
     def __init__(self, sahip, bakiye=1500):
         self.sahip = sahip
@@ -755,167 +897,146 @@ for sira, urun in enumerate(urunler, 1):
     def para_yatir(self, miktar):
         if miktar > 0:
             self.bakiye += miktar
-            self.gecmis.append(f"+{miktar} TL yatırıldı")
+            self.gecmis.append(f"+{miktar} TL")
 
     def para_cek(self, miktar):
         if 0 < miktar <= self.bakiye:
             self.bakiye -= miktar
-            self.gecmis.append(f"-{miktar} TL çekildi")
-        else:
-            print("Yetersiz bakiye!")
+            self.gecmis.append(f"-{miktar} TL")
 
 hesap = BankaHesabi("Kullanıcı", 1500)
-# Buraya 750 TL yatırma ve 400 TL çekme komutlarını ekle:
+# 750 TL yatır ve 400 TL çek:
 
 print(f"Güncel Bakiye: {hesap.bakiye} TL")`
       },
       {
         diff: "Proje 2",
-        title: "🛒 E-Ticaret Sepet & İndirim Motoru",
-        desc: "Ürünleri sepete ekleyen, toplam tutar 500 TL'yi geçtiğinde %10 indirim uygulayan mağaza modülü.\n\nGörev: Sepete 350 TL'lik Kulaklık ve 250 TL'lik Mouse ekle. %10 indirim sonrası ödenecek tutarı 'Ödenecek Tutar: 540.0 TL' olarak yazdır.",
+        title: "🛒 E-Ticaret Sepet & İndirim Sistemi",
+        desc: "Sepete 350 TL'lik Kulaklık ve 250 TL'lik Mouse ekle. 500 TL üzeri %10 indirimle 'Ödenecek Tutar: 540.0 TL' yazdır.",
         expected: "Ödenecek Tutar: 540.0 TL",
-        hint: "350 + 250 = 600 TL eder. 500 TL üzeri olduğu için %10 indirim uygulanır (600 * 0.90 = 540.0).",
+        commands: ["dict", "sum()", "if >= 500", "* 0.90"],
+        hint: "urun_ekle('Mouse', 250, 1) satırını ekleyip çalıştır.",
         starter: `sepet = []
 
 def urun_ekle(ad, fiyat, adet=1):
     sepet.append({"ad": ad, "fiyat": fiyat, "adet": adet})
 
 def toplam_hesapla():
-    ham_toplam = sum(u["fiyat"] * u["adet"] for u in sepet)
-    if ham_toplam >= 500:
-        return ham_toplam * 0.90
-    return float(ham_toplam)
+    ham = sum(u["fiyat"] * u["adet"] for u in sepet)
+    return ham * 0.90 if ham >= 500 else float(ham)
 
-# Ürünleri ekle:
 urun_ekle("Kulaklık", 350, 1)
+# Mouse ürününü ekle:
 
-son_tutar = toplam_hesapla()
-print(f"Ödenecek Tutar: {son_tutar} TL")`
+print(f"Ödenecek Tutar: {toplam_hesapla()} TL")`
       },
       {
         diff: "Proje 3",
-        title: "📚 Akıllı Kütüphane & Kitap Takip Sistemi",
-        desc: "Kitapların ödünç verilme ve iade durumlarını yöneten kütüphane otomasyonu.\n\nGörev: 'Suç ve Ceza' kitabını ödünç al (durumunu False yap) ve rafta kalan müsait kitap sayısını 'Müsait Kitap Sayısı: 2' olarak yazdır.",
+        title: "📚 Akıllı Kütüphane Kitap Takibi",
+        desc: "'Suç ve Ceza' kitabını ödünç al ve rafta kalan müsait kitap sayısını 'Müsait Kitap Sayısı: 2' olarak yazdır.",
         expected: "Müsait Kitap Sayısı: 2",
-        hint: "kitap_odunc_al('Suç ve Ceza') fonksiyonunu çağırdıktan sonra müsait kitapları saydır.",
+        commands: ["for kitap", "bool", "sum()", "return"],
+        hint: "kitap_odunc_al('Suç ve Ceza') fonksiyonunu çağır.",
         starter: `kutuphane = [
     {"ad": "Suç ve Ceza", "musait": True},
     {"ad": "1984", "musait": True},
     {"ad": "Simyacı", "musait": True}
 ]
 
-def kitap_odunc_al(kitap_adi):
-    for kitap in kutuphane:
-        if kitap["ad"] == kitap_adi and kitap["musait"]:
-            kitap["musait"] = False
-            return True
-    return False
+def kitap_odunc_al(ad):
+    for k in kutuphane:
+        if k["ad"] == ad and k["musait"]:
+            k["musait"] = False
 
 # Suç ve Ceza kitabını ödünç al:
 
-musait_sayisi = sum(1 for k in kutuphane if k["musait"])
-print(f"Müsait Kitap Sayısı: {musait_sayisi}")`
+musait = sum(1 for k in kutuphane if k["musait"])
+print(f"Müsait Kitap Sayısı: {musait}")`
       },
       {
         diff: "Proje 4",
-        title: "🎓 Öğrenci Not & Başarı Analiz Otomasyonu",
-        desc: "Vize (%40) ve Final (%60) notlarına göre dönem sonu ortalamasını ve sınıf birincisini bulan sistem.\n\nGörev: Zeynep'in (Vize: 80, Final: 90) ortalamasını hesaplayıp 'Zeynep Ortalama: 86.0' şeklinde yazdır.",
+        title: "🎓 Öğrenci Not & Başarı Otomasyonu",
+        desc: "Vize (%40) ve Final (%60) ağırlığına göre Zeynep'in ortalamasını 'Zeynep Ortalama: 86.0' olarak yazdır.",
         expected: "Zeynep Ortalama: 86.0",
-        hint: "80 * 0.4 + 90 * 0.6 = 32 + 54 = 86.0 sonucunu verir.",
+        commands: ["dict{}", "float", "return", "f-string"],
+        hint: "Kodu doğrudan çalıştırıp sonucu kontrol edebilirsin.",
         starter: `ogrenciler = {
     "Ali": {"vize": 60, "final": 70},
-    "Zeynep": {"vize": 80, "final": 90},
-    "Mert": {"vize": 50, "final": 65}
+    "Zeynep": {"vize": 80, "final": 90}
 }
 
 def ortalama_bul(isim):
-    veri = ogrenciler[isim]
-    return veri["vize"] * 0.40 + veri["final"] * 0.60
+    v = ogrenciler[isim]
+    return v["vize"] * 0.40 + v["final"] * 0.60
 
-ort = ortalama_bul("Zeynep")
-print(f"Zeynep Ortalama: {ort}")`
+print(f"Zeynep Ortalama: {ortalama_bul('Zeynep')}")`
       },
       {
         diff: "Proje 5",
-        title: "🚗 Akıllı Otopark Ücretlendirme Sistemi",
-        desc: "Araç tipine (Otomobil, SUV, Motosiklet) ve park süresine göre otomatik ücret hesaplayan sistem.\n\nGörev: 'SUV' tipi bir aracın 4 saatlik park ücretini (saatlik 40 TL) hesaplayıp 'Toplam Ücret: 160 TL' yazdır.",
+        title: "🚗 Akıllı Otopark Ücretlendirme",
+        desc: "SUV tipi aracın 4 saatlik park ücretini hesaplayıp 'Toplam Ücret: 160 TL' yazdır.",
         expected: "Toplam Ücret: 160 TL",
-        hint: "ucret_hesapla('SUV', 4) fonksiyonunu çağırıp sonucu yazdır.",
-        starter: `TARIFELER = {
-    "Motosiklet": 15,
-    "Otomobil": 25,
-    "SUV": 40
-}
+        commands: [".get()", "if saat", "return", "int()"],
+        hint: "ucret_hesapla('SUV', 4) sonucunu yazdır.",
+        starter: `TARIFELER = {"Motosiklet": 15, "Otomobil": 25, "SUV": 40}
 
-def ucret_hesapla(arac_tipi, saat):
-    birim = TARIFELER.get(arac_tipi, 25)
-    if saat > 10:
-        return int(birim * saat * 0.85)
+def ucret_hesapla(tip, saat):
+    birim = TARIFELER.get(tip, 25)
     return birim * saat
 
-tutar = ucret_hesapla("SUV", 4)
-print(f"Toplam Ücret: {tutar} TL")`
+print(f"Toplam Ücret: {ucret_hesapla('SUV', 4)} TL")`
       },
       {
         diff: "Proje 6",
-        title: "🎬 Sinema Bilet & Koltuk Rezervasyonu",
-        desc: "Salon koltuk doluluğunu kontrol eden ve rezervasyon yapan gişe uygulaması.\n\nGörev: A1 ve A2 koltuklarını rezerve et, ardından boş kalan koltuk sayısını 'Boş Koltuk: 3' olarak yazdır.",
+        title: "🎬 Sinema Koltuk Rezervasyonu",
+        desc: "A1 ve A2 koltuklarını rezerve edip boş koltuk sayısını 'Boş Koltuk: 3' olarak yazdır.",
         expected: "Boş Koltuk: 3",
-        hint: "A1, A2, A3, A4, A5 olmak üzere 5 koltuktan 2'si dolunca 3 boş koltuk kalır.",
+        commands: ["dict", "not", ".values()", ".count()"],
+        hint: "rezerve_et('A1') ve rezerve_et('A2') çağrılarını çalıştır.",
         starter: `salon = {"A1": False, "A2": False, "A3": False, "A4": False, "A5": False}
 
 def rezerve_et(koltuk):
-    if koltuk in salon and not salon[koltuk]:
+    if koltuk in salon:
         salon[koltuk] = True
-        return True
-    return False
 
 rezerve_et("A1")
 rezerve_et("A2")
-
-bos_sayisi = list(salon.values()).count(False)
-print(f"Boş Koltuk: {bos_sayisi}")`
+print(f"Boş Koltuk: {list(salon.values()).count(False)}")`
       },
       {
         diff: "Proje 7",
-        title: "🔐 Siber Güvenlik Parola Güç Analizörü",
-        desc: "Girilen parolanın uzunluğunu, rakam ve büyük harf içerip içermediğini denetleyen güvenlik modülü.\n\nGörev: 'Python2026!' parolasını analiz ettirip 'Güvenlik Seviyesi: Güçlü' çıktısını al.",
+        title: "🔐 Siber Güvenlik Parola Analizörü",
+        desc: "'Python2026!' parolasını denetleyip 'Güvenlik Seviyesi: Güçlü' çıktısını al.",
         expected: "Güvenlik Seviyesi: Güçlü",
-        hint: "Uzunluk >= 8, en az 1 büyük harf ve 1 rakam içeriyorsa 'Güçlü' döner.",
-        starter: `def parola_analiz(parola):
-    uzun_mu = len(parola) >= 8
-    buyuk_var = any(c.isupper() for c in parola)
-    rakam_var = any(c.isdigit() for c in parola)
-
-    if uzun_mu and buyuk_var and rakam_var:
+        commands: ["any()", ".isupper()", ".isdigit()", "len()"],
+        hint: "Uzunluk, büyük harf ve rakam kontrolünü çalıştır.",
+        starter: `def parola_analiz(p):
+    if len(p) >= 8 and any(c.isupper() for c in p) and any(c.isdigit() for c in p):
         return "Güçlü"
-    elif uzun_mu:
-        return "Orta"
     return "Zayıf"
 
-seviye = parola_analiz("Python2026!")
-print(f"Güvenlik Seviyesi: {seviye}")`
+print(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`
       }
     ];
 
-    // Durum Değişkenleri
-    let currentMode = 'topics'; // 'topics' | 'projects'
+    let currentMode = 'topics';
     let topicIndex = 0;
     let questionIndex = 0;
     let projectIndex = 0;
+    let openFolders = new Set([0]); // İlk klasör varsayılan açık
     let completedSet = new Set();
     let pyodide = null;
 
-    // Karşılama Animasyonu
+    // Açılış Ekranı
     window.addEventListener('load', () => {
       const splash = document.getElementById('welcome-splash');
       setTimeout(() => {
         splash.classList.add('hide-splash');
         setTimeout(() => splash.remove(), 850);
-      }, 1150);
+      }, 1100);
     });
 
-    // Pyodide Başlatma
+    // Python Motoru
     (async function initPython() {
       const statusEl = document.getElementById('engine-status');
       try {
@@ -927,29 +1048,54 @@ print(f"Güvenlik Seviyesi: {seviye}")`
       }
     })();
 
-    // Tema Değiştirici (Koyu / Açık Mod)
+    // Tema Değiştirici (Koyu <-> Beyaz-Mor Şık Tema)
     function toggleTheme() {
       const html = document.documentElement;
       const btn = document.getElementById('theme-btn');
       if (html.getAttribute('data-theme') === 'dark') {
         html.setAttribute('data-theme', 'light');
-        btn.textContent = "🌙 Koyu Tema";
+        btn.textContent = "🌙 Koyu Elit Tema";
       } else {
         html.setAttribute('data-theme', 'dark');
-        btn.textContent = "☀️ Açık Tema";
+        btn.textContent = "☀️ Beyaz-Mor Tema";
       }
     }
 
-    // Mod Değiştirme (Konular <-> Kapsamlı Projeler)
-    function switchMode(mode) {
-      currentMode = mode;
-      document.getElementById('mode-topics').classList.toggle('active', mode === 'topics');
-      document.getElementById('mode-projects').classList.toggle('active', mode === 'projects');
-      renderSidebar();
-      renderTask();
+    // Konu Anlatımı Kartlarını Oluştur
+    function renderLectures() {
+      const grid = document.getElementById('lecture-grid');
+      grid.innerHTML = LECTURES_DATA.map(item => `
+        <div class="lecture-card">
+          <h3>${item.title}</h3>
+          <p>${item.desc}</p>
+          <div class="lecture-code">${item.code}</div>
+        </div>
+      `).join('');
     }
 
-    // Sol Sidebar Çizimi
+    // Üst Sekme Değişimi
+    function switchMode(mode) {
+      currentMode = mode;
+      document.getElementById('mode-lecture').classList.toggle('active', mode === 'lecture');
+      document.getElementById('mode-topics').classList.toggle('active', mode === 'topics');
+      document.getElementById('mode-projects').classList.toggle('active', mode === 'projects');
+
+      const lectureView = document.getElementById('lecture-view');
+      const workspace = document.getElementById('workspace');
+
+      if (mode === 'lecture') {
+        lectureView.classList.add('active');
+        workspace.style.display = 'none';
+        renderLectures();
+      } else {
+        lectureView.classList.remove('active');
+        workspace.style.display = 'flex';
+        renderSidebar();
+        renderTask();
+      }
+    }
+
+    // Sol Klasör / Akordeon Menü Çizimi
     function renderSidebar() {
       const list = document.getElementById('sidebar-list');
       const title = document.getElementById('sidebar-title');
@@ -957,30 +1103,57 @@ print(f"Güvenlik Seviyesi: {seviye}")`
       list.innerHTML = '';
 
       if (currentMode === 'topics') {
-        title.textContent = "Konu Başlıkları";
-        const totalQ = TOPICS_DATA.reduce((acc, t) => acc + t.questions.length, 0);
+        title.textContent = "Konu Klasörleri";
+        const totalQ = TOPICS_DATA.reduce((a, b) => a + b.questions.length, 0);
         counter.textContent = `${completedSet.size} / ${totalQ}`;
 
-        TOPICS_DATA.forEach((topic, idx) => {
-          const div = document.createElement('div');
-          div.className = `topic-item ${idx === topicIndex ? 'active' : ''}`;
-          div.innerHTML = `<span>${topic.name}</span><span class="topic-badge">${topic.questions.length} Soru</span>`;
-          div.onclick = () => {
-            topicIndex = idx;
-            questionIndex = 0;
+        TOPICS_DATA.forEach((topic, tIdx) => {
+          const isOpen = openFolders.has(tIdx);
+          const group = document.createElement('div');
+          group.className = `folder-group ${isOpen ? 'open' : ''}`;
+
+          const header = document.createElement('div');
+          header.className = `folder-header ${tIdx === topicIndex ? 'active-folder' : ''}`;
+          header.innerHTML = `<span>📁 ${topic.name}</span><span class="folder-arrow">▾</span>`;
+          header.onclick = () => {
+            if (openFolders.has(tIdx)) openFolders.delete(tIdx);
+            else openFolders.add(tIdx);
+            topicIndex = tIdx;
             renderSidebar();
-            renderTask();
           };
-          list.appendChild(div);
+
+          const itemsDiv = document.createElement('div');
+          itemsDiv.className = 'folder-items';
+
+          topic.questions.forEach((q, qIdx) => {
+            const sub = document.createElement('div');
+            const isSelected = (tIdx === topicIndex && qIdx === questionIndex);
+            const isDone = completedSet.has(`${tIdx}-${qIdx}`);
+            sub.className = `sub-question-item ${isSelected ? 'selected' : ''}`;
+            sub.innerHTML = `<span>${qIdx + 1}. ${q.title}</span><span>${isDone ? '✅' : '›'}</span>`;
+            sub.onclick = (e) => {
+              e.stopPropagation();
+              topicIndex = tIdx;
+              questionIndex = qIdx;
+              openFolders.add(tIdx);
+              renderSidebar();
+              renderTask();
+            };
+            itemsDiv.appendChild(sub);
+          });
+
+          group.appendChild(header);
+          group.appendChild(itemsDiv);
+          list.appendChild(group);
         });
       } else {
-        title.textContent = "Kapsamlı Projeler";
+        title.textContent = "Proje Klasörleri";
         counter.textContent = `${PROJECTS_DATA.length} Proje`;
 
         PROJECTS_DATA.forEach((proj, idx) => {
           const div = document.createElement('div');
-          div.className = `topic-item ${idx === projectIndex ? 'active' : ''}`;
-          div.innerHTML = `<span>${proj.title}</span>`;
+          div.className = `folder-group`;
+          div.innerHTML = `<div class="folder-header ${idx === projectIndex ? 'active-folder' : ''}"><span>${proj.title}</span></div>`;
           div.onclick = () => {
             projectIndex = idx;
             renderSidebar();
@@ -991,7 +1164,29 @@ print(f"Güvenlik Seviyesi: {seviye}")`
       }
     }
 
-    // Orta Görev ve Editör İçeriğini Güncelleme
+    // Sarı Komut Deposunu Güncelle (İlerledikçe Yanan Mantık)
+    function renderYellowVault(commands, unlockedCount) {
+      const vault = document.getElementById('yellow-vault');
+      const status = document.getElementById('vault-status');
+      const chips = document.getElementById('vault-chips');
+
+      const activeCount = Math.min(commands.length, unlockedCount);
+      status.textContent = `${activeCount} / ${commands.length} Aktif`;
+      vault.classList.toggle('lit', activeCount > 0);
+
+      chips.innerHTML = commands.map((cmd, idx) => {
+        const isUnlocked = idx < activeCount;
+        return `<span class="cmd-chip ${isUnlocked ? 'unlocked' : ''}" title="Editöre eklemek için tıkla" onclick="insertCommand('${cmd}')">${isUnlocked ? '⚡ ' : '🔒 '}${cmd}</span>`;
+      }).join('');
+    }
+
+    function insertCommand(cmd) {
+      const editor = document.getElementById('code-editor');
+      editor.value += `\n# ${cmd}`;
+      editor.focus();
+    }
+
+    // Orta Görev ve Editör İçeriğini Yükle
     function renderTask() {
       const catEl = document.getElementById('task-category');
       const diffEl = document.getElementById('task-diff');
@@ -1014,9 +1209,16 @@ print(f"Güvenlik Seviyesi: {seviye}")`
         yellowText.textContent = q.hint;
         indicator.textContent = `${questionIndex + 1} / ${topic.questions.length}`;
         editor.value = q.starter;
+
+        // Konudaki ilerlemeye göre Sarı Komut Deposu ışıklarını yak
+        let solvedInTopic = 0;
+        topic.questions.forEach((_, idx) => {
+          if (completedSet.has(`${topicIndex}-${idx}`)) solvedInTopic++;
+        });
+        renderYellowVault(topic.commands, Math.max(questionIndex + 1, solvedInTopic + 1));
       } else {
         const p = PROJECTS_DATA[projectIndex];
-        catEl.textContent = "Kapsamlı Uygulama";
+        catEl.textContent = "Kapsamlı Proje";
         diffEl.textContent = p.diff;
         diffEl.className = "difficulty-pill diff-orta";
         titleEl.textContent = p.title;
@@ -1025,6 +1227,7 @@ print(f"Güvenlik Seviyesi: {seviye}")`
         yellowText.textContent = p.hint;
         indicator.textContent = `${projectIndex + 1} / ${PROJECTS_DATA.length}`;
         editor.value = p.starter;
+        renderYellowVault(p.commands, p.commands.length);
       }
       document.getElementById('console-output').textContent = "Hazır.";
     }
@@ -1034,10 +1237,8 @@ print(f"Güvenlik Seviyesi: {seviye}")`
     function prevItem() {
       if (currentMode === 'topics') {
         if (questionIndex > 0) questionIndex--;
-        else if (topicIndex > 0) { topicIndex--; questionIndex = TOPICS_DATA[topicIndex].questions.length - 1; }
-      } else {
-        if (projectIndex > 0) projectIndex--;
-      }
+        else if (topicIndex > 0) { topicIndex--; openFolders.add(topicIndex); questionIndex = TOPICS_DATA[topicIndex].questions.length - 1; }
+      } else if (projectIndex > 0) projectIndex--;
       renderSidebar();
       renderTask();
     }
@@ -1046,40 +1247,33 @@ print(f"Güvenlik Seviyesi: {seviye}")`
       if (currentMode === 'topics') {
         const maxQ = TOPICS_DATA[topicIndex].questions.length - 1;
         if (questionIndex < maxQ) questionIndex++;
-        else if (topicIndex < TOPICS_DATA.length - 1) { topicIndex++; questionIndex = 0; }
-      } else {
-        if (projectIndex < PROJECTS_DATA.length - 1) projectIndex++;
-      }
+        else if (topicIndex < TOPICS_DATA.length - 1) { topicIndex++; openFolders.add(topicIndex); questionIndex = 0; }
+      } else if (projectIndex < PROJECTS_DATA.length - 1) projectIndex++;
       renderSidebar();
       renderTask();
     }
 
-    // Türkçe Hata Analizi
     function explainError(errStr) {
       if (errStr.includes("SyntaxError")) return "Yazım Hatası (SyntaxError): Satır sonundaki iki noktayı (:), tırnakları veya parantezleri kontrol et.";
-      if (errStr.includes("IndentationError")) return "Girinti Hatası: if, for veya def satırından sonraki satırı 4 boşluk (Tab) içeriden başlatmalısın.";
-      if (errStr.includes("NameError")) return "Tanımsız Değişken: Kullandığın değişken adını yanlış yazmış veya henüz tanımlamamış olabilirsin.";
+      if (errStr.includes("IndentationError")) return "Girinti Hatası: if, for veya def satırından sonraki satırı 4 boşluk içeriden başlatmalısın.";
+      if (errStr.includes("NameError")) return "Tanımsız İsim: Kullandığın değişkeni veya fonksiyonu yanlış yazmış olabilirsin.";
       if (errStr.includes("TypeError")) return "Tür Uyuşmazlığı: Metin (str) ile sayıyı (int) doğrudan birleştirmeye çalışıyor olabilirsin.";
-      return "Kodunda bir çalışma hatası oluştu. Satır numarasını ve değişken değerlerini kontrol et.";
+      return "Kodunda bir çalışma hatası oluştu. Satır numarasını kontrol et.";
     }
 
-    // Ana Editör Kodunu Çalıştırma ve Kontrol Etme
     async function runMainCode(checkAnswer) {
       const out = document.getElementById('console-output');
       const yellowText = document.getElementById('yellow-text');
       const code = document.getElementById('code-editor').value;
 
-      if (!pyodide) {
-        out.textContent = "Python motoru henüz yükleniyor, birkaç saniye bekleyin...";
-        return;
-      }
+      if (!pyodide) { out.textContent = "Python motoru yükleniyor, birkaç saniye bekleyin..."; return; }
 
       try {
         pyodide.runPython("import sys, io\nsys.stdout = io.StringIO()\nsys.stderr = io.StringIO()");
         await pyodide.runPythonAsync(code);
         const result = pyodide.runPython("sys.stdout.getvalue()").trim();
         out.style.color = "var(--text-primary)";
-        out.textContent = result || "(Kod çalıştı, ekrana çıktı verilmedi)";
+        out.textContent = result || "(Çıktı yok)";
 
         if (checkAnswer) {
           const expected = currentMode === 'topics'
@@ -1087,13 +1281,14 @@ print(f"Güvenlik Seviyesi: {seviye}")`
             : PROJECTS_DATA[projectIndex].expected.trim();
 
           if (result === expected) {
-            yellowText.innerHTML = `<span style="color:#10b981; font-weight:700;">✔ Tebrikler! Doğru çıktıyı elde ettin. Sonraki soruya geçebilirsin.</span>`;
+            yellowText.innerHTML = `<span style="color:#10b981; font-weight:700;">✔ Harika! Soru tamamlandı ve Sarı Komut Deposu güncellendi.</span>`;
             if (currentMode === 'topics') {
               completedSet.add(`${topicIndex}-${questionIndex}`);
               renderSidebar();
+              renderTask();
             }
           } else {
-            yellowText.textContent = `Çıktın beklenen sonuçla tam eşleşmedi. Beklenen: "${expected}" — Senin çıktın: "${result}"`;
+            yellowText.textContent = `Çıktın tam eşleşmedi. Beklenen: "${expected}" — Senin çıktın: "${result}"`;
           }
         }
       } catch (err) {
@@ -1103,7 +1298,6 @@ print(f"Güvenlik Seviyesi: {seviye}")`
       }
     }
 
-    // Serbest Kod Modal Kontrolleri
     function openFreeModal() { document.getElementById('freecode-modal').classList.add('open'); }
     function closeFreeModal() { document.getElementById('freecode-modal').classList.remove('open'); }
 
@@ -1118,7 +1312,7 @@ print(f"Güvenlik Seviyesi: {seviye}")`
         await pyodide.runPythonAsync(code);
         out.style.color = "var(--text-primary)";
         out.textContent = pyodide.runPython("sys.stdout.getvalue()") || "(Çıktı yok)";
-        yText.textContent = "Kod hatasız şekilde çalıştırıldı.";
+        yText.textContent = "Kod hatasız çalıştırıldı.";
       } catch (err) {
         out.style.color = "#f43f5e";
         out.textContent = err.toString();
@@ -1126,7 +1320,6 @@ print(f"Güvenlik Seviyesi: {seviye}")`
       }
     }
 
-    // Tab Tuşu Desteği
     ['code-editor', 'free-editor'].forEach(id => {
       document.getElementById(id).addEventListener('keydown', e => {
         if (e.key === 'Tab') {
@@ -1139,28 +1332,22 @@ print(f"Güvenlik Seviyesi: {seviye}")`
       });
     });
 
-    // Sürüklenebilir Panel Ayırıcıları (Resizers)
     function makeResizable(resizerId, leftPaneId, minW, maxW) {
       const resizer = document.getElementById(resizerId);
       const pane = document.getElementById(leftPaneId);
       let dragging = false;
-
       resizer.addEventListener('mousedown', () => {
         dragging = true;
         resizer.classList.add('active');
         document.body.style.cursor = 'col-resize';
         document.body.style.userSelect = 'none';
       });
-
       document.addEventListener('mousemove', e => {
         if (!dragging) return;
         const rect = pane.getBoundingClientRect();
         const newW = e.clientX - rect.left;
-        if (newW >= minW && newW <= maxW) {
-          pane.style.width = newW + 'px';
-        }
+        if (newW >= minW && newW <= maxW) pane.style.width = newW + 'px';
       });
-
       document.addEventListener('mouseup', () => {
         if (!dragging) return;
         dragging = false;
@@ -1170,10 +1357,9 @@ print(f"Güvenlik Seviyesi: {seviye}")`
       });
     }
 
-    makeResizable('resizer-1', 'pane-left', 170, 340);
-    makeResizable('resizer-2', 'pane-mid', 240, 560);
+    makeResizable('resizer-1', 'pane-left', 200, 380);
+    makeResizable('resizer-2', 'pane-mid', 260, 560);
 
-    // Başlangıç Çizimi
     renderSidebar();
     renderTask();
   </script>
