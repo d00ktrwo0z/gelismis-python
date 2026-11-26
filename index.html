@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="tr" data-theme="dark">
 <head>
-  <meta name="google-site-verification" content="tixGt-V-Jh6xytr_HM8XT8A6Hrs4eJebqK2-xM1UP5I" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-site-verification" content="tixgt-V-Jh6xytr_HM8XT8A6Hrs4eJebqK2-xM1UP5I" />
   <title>pythonhazırlık — Enes Altın | Elit Python Çalışma Stüdyosu</title>
-  <meta name="description" content="Enes Altın tarafından geliştirilen pythonhazırlık; etkileşimli Python alıştırmaları, 15 dakikalık mini sınavlar ve Turtle çizim stüdyosu sunar." />
+  <meta name="description" content="Enes Altın tarafından geliştirilen pythonhazırlık; etkileşimli Python alıştırmaları, 15 dakikalık mini sınavlar, NPC videolu dersler ve Turtle çizim stüdyosu sunar." />
   <meta name="keywords" content="pythonhazırlık, Enes Altın, python dersleri, python alıştırmaları, python editör, turtle çizim" />
   <meta name="author" content="Enes Altın" />
   <meta name="robots" content="index, follow" />
@@ -29,2327 +31,2027 @@
     "description": "Enes Altın tarafından geliştirilen etkileşimli Python eğitim, sınav ve çizim platformu."
   }
   </script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
   <style>
     :root {
-      --bg-main: #080c14;
-      --bg-panel: #0f1624;
-      --bg-elevated: #161f33;
-      --bg-editor: #060911;
-      --text-primary: #f1f5f9;
-      --text-secondary: #94a3b8;
-      --border-line: rgba(139, 92, 246, 0.25);
-      --panel-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+      --bg-main: #090b12;
+      --bg-panel: #111522;
+      --bg-card: #171c2e;
+      --bg-input: #0c0f19;
+      --border: rgba(168, 85, 247, 0.22);
+      --border-soft: rgba(255, 255, 255, 0.08);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent-purple: #a855f7;
+      --accent-purple-dark: #7e22ce;
       --accent-gold: #eab308;
-      --accent-purple: #8b5cf6;
-      --accent-emerald: #10b981;
-      --yellow-vault-bg: rgba(234, 179, 8, 0.08);
-      --yellow-vault-border: rgba(234, 179, 8, 0.35);
-      --freecode-bg: linear-gradient(135deg, #6366f1 0%, #9333ea 100%);
+      --accent-gold-soft: rgba(234, 179, 8, 0.16);
+      --accent-green: #22c55e;
+      --accent-red: #ef4444;
+      --shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
     }
 
     [data-theme="light"] {
-      --bg-main: #f5f3ff;
+      --bg-main: #f8f7fc;
       --bg-panel: #ffffff;
-      --bg-elevated: #faf8ff;
-      --bg-editor: #f8f7fc;
-      --text-primary: #1e1b4b;
-      --text-secondary: #5b5480;
-      --border-line: rgba(124, 58, 237, 0.35);
-      --panel-shadow: 0 8px 26px rgba(124, 58, 237, 0.14);
-      --accent-gold: #d97706;
-      --accent-purple: #7c3aed;
-      --accent-emerald: #059669;
-      --yellow-vault-bg: #fefce8;
-      --yellow-vault-border: #facc15;
-      --freecode-bg: linear-gradient(135deg, #6d28d9 0%, #9333ea 100%);
+      --bg-card: #f3effb;
+      --bg-input: #ffffff;
+      --border: rgba(126, 34, 206, 0.28);
+      --border-soft: rgba(126, 34, 206, 0.14);
+      --text-main: #1e1b2e;
+      --text-muted: #5b5470;
+      --accent-purple: #7e22ce;
+      --accent-purple-dark: #6b21a8;
+      --accent-gold: #ca8a04;
+      --accent-gold-soft: rgba(234, 179, 8, 0.2);
+      --shadow: 0 10px 28px rgba(126, 34, 206, 0.12);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
 
     body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background: var(--bg-main);
-      color: var(--text-primary);
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
       position: relative;
-      transition: background 0.3s ease, color 0.3s ease;
     }
 
-    /* Koyu Tema Özel: En En Arkada Hafif Beyaz & Mor Gölgeli Çapraz Şeritler */
-    .dark-diagonal-backdrop {
+    /* Koyu Tema Arka Plan Çapraz Şeritler */
+    [data-theme="dark"] body::before {
+      content: "";
       position: fixed;
       inset: 0;
       z-index: 0;
       pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.4s ease;
       background-image: repeating-linear-gradient(
-        -38deg,
-        transparent 0px,
+        -35deg,
+        transparent,
         transparent 68px,
-        rgba(139, 92, 246, 0.08) 68px,
-        rgba(139, 92, 246, 0.16) 72px,
-        rgba(255, 255, 255, 0.055) 72px,
-        rgba(255, 255, 255, 0.055) 74px,
-        rgba(139, 92, 246, 0.14) 74px,
-        rgba(139, 92, 246, 0.04) 80px,
-        transparent 80px,
-        transparent 148px
+        rgba(255, 255, 255, 0.025) 69px,
+        rgba(168, 85, 247, 0.055) 71px
       );
-      filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.25));
-    }
-    [data-theme="dark"] .dark-diagonal-backdrop {
-      opacity: 1;
     }
 
-    /* Özel Giriş Ekranı (Splash) */
-    #welcome-splash {
+    /* Açılış / Giriş Ekranı (Splash Screen) */
+    #splash-screen {
       position: fixed;
       inset: 0;
-      background: radial-gradient(circle at top right, #1e1b4b, #060911 75%);
+      z-index: 9999;
+      background: radial-gradient(circle at top, #1b122e 0%, #090b12 75%);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 99999;
-      transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
+      padding: 24px;
+      text-align: center;
+      transition: opacity 0.65s ease, visibility 0.65s ease;
     }
-    #welcome-splash.hide-splash {
-      transform: translateY(-100%);
+    #splash-screen.hidden {
       opacity: 0;
+      visibility: hidden;
       pointer-events: none;
     }
-    .splash-main-title {
-      font-size: clamp(2.4rem, 5vw, 4rem);
+    .splash-title-top {
+      font-size: clamp(2.1rem, 4.5vw, 3.4rem);
       font-weight: 800;
       font-style: italic;
-      transform: skewX(-6deg) translateY(22px);
-      letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #c4b5fd 0%, #9333ea 55%, #6b21a8 100%);
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #c084fc 0%, #9333ea 55%, #6b21a8 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 6px 20px rgba(126, 34, 206, 0.38));
-      padding: 4px 16px;
-      opacity: 0;
-      animation: fadeSlideMain 0.65s ease forwards 0.12s;
+      filter: drop-shadow(0 6px 18px rgba(147, 51, 234, 0.35));
+      margin-bottom: 6px;
+      animation: fadeSlideDown 0.8s ease forwards;
     }
-    .splash-sub-gold {
-      color: #eab308;
-      font-size: clamp(1.35rem, 2.8vw, 2.1rem);
+    .splash-title-bottom {
+      font-size: clamp(1.7rem, 3.5vw, 2.6rem);
       font-weight: 800;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      margin-top: 8px;
-      text-shadow: 0 4px 18px rgba(234, 179, 8, 0.35);
-      opacity: 0;
-      transform: translateY(14px);
-      animation: fadeSlideSub 0.65s ease forwards 0.3s;
+      color: #eab308;
+      text-shadow: 0 4px 20px rgba(234, 179, 8, 0.35);
+      margin-bottom: 26px;
+      animation: fadeSlideUp 0.9s ease forwards;
     }
-    @keyframes fadeSlideMain {
-      to { opacity: 1; transform: skewX(-6deg) translateY(0); }
+    .splash-name-box {
+      background: rgba(23, 28, 46, 0.92);
+      border: 1px solid rgba(168, 85, 247, 0.45);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.6);
+      border-radius: 16px;
+      padding: 22px 26px;
+      width: 100%;
+      max-width: 400px;
+      animation: fadeSlideUp 1s ease forwards;
     }
-    @keyframes fadeSlideSub {
+    .splash-name-box p {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+    .splash-name-row {
+      display: flex;
+      gap: 8px;
+    }
+    .splash-name-row input {
+      flex: 1;
+      padding: 11px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(168, 85, 247, 0.5);
+      background: #0c0f19;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .splash-name-row input:focus {
+      border-color: #eab308;
+    }
+    .splash-name-row button {
+      padding: 11px 18px;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(135deg, #9333ea, #eab308);
+      color: #090b12;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .splash-name-row button:hover { transform: scale(1.03); }
+
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(-18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(18px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Üst Menü (Header) — Taşma ve Beyaz Çizgi Olmadan Tam Hizalı */
+    /* Üst Menü Bar (Kaydırma Çubuğu Olmadan Tek Satır Uyumlu) */
     header {
-      height: 58px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
       background: var(--bg-panel);
-      border-bottom: 1.5px solid var(--border-line);
-      box-shadow: var(--panel-shadow);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 12px;
-      flex-shrink: 0;
-      z-index: 20;
-      position: relative;
-      gap: 6px;
-      overflow: hidden;
+      flex-wrap: wrap;
+      gap: 10px;
+      box-shadow: var(--shadow);
     }
-
     .brand {
       display: flex;
       align-items: center;
-      gap: 7px;
-      font-weight: 800;
+      gap: 10px;
+    }
+    .brand-logo {
+      background: linear-gradient(135deg, #9333ea, #eab308);
+      color: #090b12;
+      font-weight: 900;
+      padding: 6px 11px;
+      border-radius: 10px;
       font-size: 0.95rem;
-      letter-spacing: -0.02em;
-      flex-shrink: 0;
     }
-    .brand-gem {
-      width: 10px;
-      height: 10px;
-      background: linear-gradient(135deg, var(--accent-purple), var(--accent-gold));
-      transform: rotate(45deg);
-      border-radius: 2px;
-      box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+    .brand-title {
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: 0.3px;
     }
+    .brand-title span { color: var(--accent-gold); }
 
     .nav-tabs {
       display: flex;
       align-items: center;
-      gap: 4px;
-      flex-shrink: 1;
-      overflow: visible;
+      flex-wrap: wrap;
+      gap: 6px;
     }
-    .nav-tabs::-webkit-scrollbar { display: none; }
-
-    .tab-btn {
-      background: transparent;
-      color: var(--text-secondary);
-      border: 1px solid transparent;
-      padding: 5px 8px;
-      border-radius: 6px;
-      font-size: 0.74rem;
+    .nav-btn {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border-soft);
+      padding: 7px 12px;
+      border-radius: 9px;
+      font-size: 0.84rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
-      white-space: nowrap;
+      transition: all 0.2s;
     }
-    .tab-btn:hover {
-      color: var(--text-primary);
-      background: var(--bg-elevated);
-      border-color: var(--border-line);
-    }
-    .tab-btn.active {
-      color: var(--accent-purple);
-      background: rgba(139, 92, 246, 0.14);
+    .nav-btn:hover, .nav-btn.active {
+      background: var(--accent-purple);
+      color: #fff;
       border-color: var(--accent-purple);
-      box-shadow: 0 2px 10px rgba(139, 92, 246, 0.18);
+    }
+    .nav-btn.slant-btn {
+      transform: skewX(-10deg);
+      background: linear-gradient(135deg, rgba(234, 179, 8, 0.22), rgba(168, 85, 247, 0.25));
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
+    .nav-btn.slant-btn span { display: inline-block; transform: skewX(10deg); }
+    .nav-btn.slant-btn.active, .nav-btn.slant-btn:hover {
+      background: var(--accent-gold);
+      color: #090b12;
     }
 
-    .exam-tab-btn {
-      border-color: rgba(234, 179, 8, 0.4);
-      color: #eab308;
-    }
-    .exam-tab-btn.active {
-      background: rgba(234, 179, 8, 0.16);
-      border-color: #eab308;
-      color: #eab308;
-    }
-
-    .freecode-skew-btn {
-      background: var(--freecode-bg);
-      color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      padding: 5px 11px;
-      font-size: 0.73rem;
-      font-weight: 700;
-      cursor: pointer;
-      transform: skewX(-12deg);
-      border-radius: 5px;
-      margin-left: 2px;
-      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
-      transition: all 0.2s ease;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .freecode-skew-btn span { display: inline-block; transform: skewX(12deg); }
-    .freecode-skew-btn:hover {
-      transform: skewX(-12deg) translateY(-1px);
-      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.6);
-    }
-
-    .header-actions {
+    .top-actions {
       display: flex;
       align-items: center;
-      gap: 4px;
-      flex-shrink: 0;
-    }
-
-    .action-pill-btn {
-      background: var(--bg-elevated);
-      color: var(--text-primary);
-      border: 1px solid var(--border-line);
-      padding: 4px 7px;
-      border-radius: 5px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-    }
-    .action-pill-btn:hover { border-color: var(--accent-purple); color: var(--accent-purple); }
-    .action-pill-btn.save-btn:hover { border-color: var(--accent-emerald); color: var(--accent-emerald); }
-    .action-pill-btn.export-btn:hover { border-color: #eab308; color: #eab308; }
-    .action-pill-btn.reset-all-btn:hover { border-color: #f43f5e; color: #f43f5e; }
-
-    #engine-status {
-      font-size: 0.69rem;
-      font-weight: 700;
-      color: var(--text-secondary);
-      background: var(--bg-elevated);
-      padding: 4px 7px;
-      border-radius: 5px;
-      border: 1px solid var(--border-line);
-      white-space: nowrap;
-    }
-
-    .theme-toggle {
-      background: var(--bg-elevated);
-      color: var(--text-primary);
-      border: 1.5px solid var(--border-line);
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 0.7rem;
-      font-weight: 700;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    /* Ana Çalışma Alanı */
-    .workspace {
-      flex: 1;
-      display: flex;
-      overflow: hidden;
-      padding: 12px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .sidebar {
-      width: 295px;
-      min-width: 220px;
-      max-width: 420px;
-      background: var(--bg-panel);
-      border: 1.5px solid var(--border-line);
-      border-radius: 10px;
-      box-shadow: var(--panel-shadow);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-
-    .sidebar-header {
-      padding: 12px 15px;
-      font-size: 0.76rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: var(--accent-purple);
-      background: var(--bg-elevated);
-      border-bottom: 1.5px solid var(--border-line);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .topic-list { flex: 1; overflow-y: auto; padding: 8px; }
-
-    .folder-group {
-      margin-bottom: 7px;
-      border: 1px solid var(--border-line);
-      border-radius: 8px;
-      background: var(--bg-elevated);
-      overflow: hidden;
-    }
-
-    .folder-header {
-      padding: 9px 10px;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-wrap: wrap;
       gap: 6px;
+    }
+    .tool-btn {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .tool-btn:hover { border-color: var(--accent-gold); }
+
+    .user-pill {
+      background: rgba(168, 85, 247, 0.16);
+      border: 1px solid var(--accent-purple);
+      color: var(--text-main);
+      padding: 5px 10px;
+      border-radius: 999px;
       font-size: 0.8rem;
       font-weight: 700;
-      transition: background 0.15s;
+      cursor: pointer;
     }
-    .folder-header:hover { background: rgba(139, 92, 246, 0.1); }
-    .folder-header.active-folder {
-      color: var(--accent-purple);
-      border-bottom: 1px solid var(--border-line);
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.14);
+      color: #22c55e;
+      border: 1px solid rgba(34, 197, 94, 0.35);
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #eab308;
+    }
+    .status-dot.ready { background: #22c55e; }
+
+    /* Ana Düzen */
+    .workspace {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 310px 1fr 410px;
+      gap: 14px;
+      padding: 14px 16px;
+      max-width: 1680px;
+      margin: 0 auto;
+    }
+    @media (max-width: 1180px) {
+      .workspace { grid-template-columns: 1fr; }
     }
 
-    .yellow-round-btn {
-      width: 23px;
-      height: 23px;
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Sol Menü: Konu Klasörleri & Yuvarlak Sarı f Kutusu */
+    .topic-group {
+      border: 1px solid var(--border-soft);
+      border-radius: 10px;
+      background: var(--bg-card);
+      overflow: hidden;
+    }
+    .topic-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 11px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.87rem;
+      gap: 8px;
+    }
+    .topic-header:hover { background: rgba(168, 85, 247, 0.1); }
+    .formula-pill {
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
-      background: rgba(234, 179, 8, 0.18);
-      border: 1.5px solid #eab308;
-      color: #eab308;
-      font-family: 'Consolas', monospace;
-      font-size: 0.72rem;
+      background: var(--accent-gold);
+      color: #090b12;
       font-weight: 900;
+      font-style: italic;
+      font-size: 0.8rem;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      border: none;
       cursor: pointer;
       flex-shrink: 0;
-      transition: all 0.2s ease;
     }
-    .yellow-round-btn:hover, .yellow-round-btn.active {
-      background: #eab308;
-      color: #090d16;
-      box-shadow: 0 0 12px rgba(234, 179, 8, 0.75);
-      transform: scale(1.08);
-    }
-
     .formula-drawer {
       display: none;
-      background: var(--yellow-vault-bg);
-      border-bottom: 1px solid rgba(234, 179, 8, 0.45);
+      background: var(--accent-gold-soft);
+      border-top: 1px solid rgba(234, 179, 8, 0.4);
+      border-bottom: 1px solid rgba(234, 179, 8, 0.4);
       padding: 9px 11px;
-      font-size: 0.77rem;
-      line-height: 1.5;
-      color: var(--text-primary);
+      font-size: 0.8rem;
+      line-height: 1.45;
+      color: var(--text-main);
     }
     .formula-drawer.open { display: block; }
-    .formula-drawer-title {
-      font-weight: 800;
-      font-size: 0.71rem;
-      color: #eab308;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-      display: block;
-    }
-    .formula-drawer code {
-      display: inline-block;
-      background: var(--bg-panel);
-      border: 1px solid rgba(234, 179, 8, 0.4);
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin: 2px 3px 2px 0;
-      font-family: 'Consolas', monospace;
-      font-size: 0.73rem;
-      color: #eab308;
-    }
-
-    .folder-arrow {
-      font-size: 0.78rem;
-      transition: transform 0.2s ease;
-      color: var(--accent-purple);
-    }
-    .folder-group.open .folder-arrow { transform: rotate(180deg); }
-
-    .folder-items {
+    .question-list {
       display: none;
       flex-direction: column;
-      padding: 4px 6px 6px 6px;
-      background: var(--bg-panel);
-      gap: 3px;
+      padding: 6px;
+      gap: 4px;
+      background: var(--bg-input);
     }
-    .folder-group.open .folder-items { display: flex; }
-
-    .sub-question-item {
-      padding: 7px 10px;
-      border-radius: 6px;
-      font-size: 0.78rem;
-      color: var(--text-secondary);
-      cursor: pointer;
+    .question-list.open { display: flex; }
+    .q-item {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      padding: 6px 9px;
+      border-radius: 7px;
+      font-size: 0.81rem;
+      cursor: pointer;
+      color: var(--text-muted);
       border: 1px solid transparent;
     }
-    .sub-question-item:hover { background: var(--bg-elevated); color: var(--text-primary); }
-    .sub-question-item.selected {
-      background: rgba(139, 92, 246, 0.15);
+    .q-item:hover, .q-item.active {
+      background: rgba(168, 85, 247, 0.16);
+      color: var(--text-main);
       border-color: var(--accent-purple);
-      color: var(--text-primary);
-      font-weight: 600;
+    }
+    .q-item.solved { color: var(--accent-green); font-weight: 600; }
+
+    /* Sarı Komut Deposu */
+    .cmd-bank-title {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--accent-gold);
+      font-weight: 800;
+    }
+    .cmd-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .cmd-chip {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-family: Consolas, monospace;
+      font-size: 0.77rem;
+      background: var(--bg-input);
+      color: var(--text-muted);
+      border: 1px solid var(--border-soft);
+      opacity: 0.42;
+      transition: all 0.25s;
+    }
+    .cmd-chip.lit {
+      opacity: 1;
+      background: var(--accent-gold-soft);
+      color: var(--accent-gold);
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 12px rgba(234, 179, 8, 0.35);
+      font-weight: 700;
     }
 
-    .resizer-x {
-      width: 10px;
-      cursor: col-resize;
+    /* Orta Panel: Soru & Kod Editörü */
+    .q-top-bar {
       display: flex;
       align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      user-select: none;
-    }
-    .resizer-x::after {
-      content: "";
-      width: 2px;
-      height: 44px;
-      background: var(--border-line);
-      border-radius: 3px;
-      transition: all 0.2s;
-    }
-    .resizer-x:hover::after, .resizer-x.active::after {
-      background: var(--accent-purple);
-      height: 80px;
-      box-shadow: 0 0 8px var(--accent-purple);
-    }
-
-    .task-pane {
-      width: 400px;
-      min-width: 280px;
-      background: var(--bg-panel);
-      border: 1.5px solid var(--border-line);
-      border-radius: 10px;
-      box-shadow: var(--panel-shadow);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-
-    .pane-top {
-      padding: 10px 14px;
-      border-bottom: 1.5px solid var(--border-line);
-      display: flex;
       justify-content: space-between;
-      align-items: center;
+      flex-wrap: wrap;
       gap: 8px;
-      background: var(--bg-elevated);
     }
-
-    .pane-top-right { display: flex; align-items: center; gap: 7px; }
-
-    .skeleton-btn {
-      background: rgba(139, 92, 246, 0.15);
+    .badge-diff {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      background: rgba(168, 85, 247, 0.2);
       color: var(--accent-purple);
       border: 1px solid var(--accent-purple);
-      padding: 3px 9px;
-      border-radius: 5px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s ease;
     }
-    .skeleton-btn:hover { background: var(--accent-purple); color: #ffffff; }
-
-    .difficulty-pill {
-      font-size: 0.71rem;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 5px;
-      text-transform: uppercase;
-    }
-    .diff-kolay { background: rgba(16, 185, 129, 0.16); color: #10b981; }
-    .diff-orta { background: rgba(245, 158, 11, 0.16); color: #f59e0b; }
-    .diff-zor { background: rgba(244, 63, 94, 0.16); color: #f43f5e; }
-
-    .task-body {
-      padding: 15px;
-      overflow-y: auto;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .task-title { font-size: 1.02rem; font-weight: 700; line-height: 1.4; }
-    .task-desc { font-size: 0.85rem; line-height: 1.6; color: var(--text-secondary); white-space: pre-line; }
-
-    .expected-box {
-      background: var(--bg-elevated);
-      border: 1px solid var(--border-line);
-      border-radius: 7px;
-      padding: 9px 12px;
-      font-family: 'Consolas', monospace;
-      font-size: 0.81rem;
-    }
-
-    .yellow-vault {
-      background: var(--yellow-vault-bg);
-      border: 1.5px solid var(--yellow-vault-border);
-      border-left: 4px solid #eab308;
+    .skeleton-btn {
+      background: var(--accent-gold-soft);
+      color: var(--accent-gold);
+      border: 1px solid var(--accent-gold);
+      padding: 5px 11px;
       border-radius: 8px;
-      padding: 11px 12px;
-    }
-    .vault-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.75rem;
-      font-weight: 800;
-      color: #eab308;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-    }
-    .vault-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-    .cmd-chip {
-      font-family: 'Consolas', monospace;
-      font-size: 0.75rem;
-      padding: 4px 8px;
-      border-radius: 5px;
-      border: 1px solid rgba(148, 163, 184, 0.22);
-      background: rgba(15, 23, 42, 0.35);
-      color: var(--text-secondary);
-      opacity: 0.42;
-      transition: all 0.25s ease;
-    }
-    [data-theme="light"] .cmd-chip { background: #f1f5f9; opacity: 0.5; }
-    .cmd-chip.lit-now {
-      opacity: 1;
-      background: rgba(234, 179, 8, 0.24);
-      border-color: #eab308;
-      color: var(--text-primary);
-      font-weight: 800;
-      box-shadow: 0 0 12px rgba(234, 179, 8, 0.45);
-      cursor: pointer;
-    }
-
-    #three-split-helper {
-      display: none;
-      flex-direction: column;
-      gap: 8px;
-      background: var(--yellow-vault-bg);
-      border: 1.5px solid #eab308;
-      border-radius: 8px;
-      padding: 10px;
-      box-shadow: 0 6px 20px rgba(234, 179, 8, 0.2);
-    }
-    #three-split-helper.visible { display: flex; }
-
-    .split-grid { display: grid; grid-template-columns: 1fr; gap: 7px; }
-    .split-card {
-      background: var(--bg-panel);
-      border: 1px solid rgba(234, 179, 8, 0.45);
-      border-radius: 6px;
-      padding: 8px 10px;
-      font-size: 0.79rem;
-      line-height: 1.45;
-    }
-    .split-card-title {
-      font-weight: 800;
-      font-size: 0.73rem;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-      display: block;
-    }
-    .split-code {
-      font-family: 'Consolas', monospace;
-      background: var(--bg-editor);
-      padding: 6px 8px;
-      border-radius: 4px;
-      margin-top: 4px;
-      white-space: pre-wrap;
-      font-size: 0.76rem;
-      border: 1px solid var(--border-line);
-    }
-
-    .yellow-notice {
-      background: rgba(245, 158, 11, 0.1);
-      border: 1px solid rgba(245, 158, 11, 0.4);
-      border-left: 4px solid #f59e0b;
-      border-radius: 7px;
-      padding: 9px 12px;
       font-size: 0.8rem;
-      line-height: 1.45;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .skeleton-btn:hover { background: var(--accent-gold); color: #090b12; }
+
+    .question-box {
+      background: var(--bg-card);
+      border-left: 4px solid var(--accent-purple);
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      line-height: 1.55;
     }
 
-    .question-nav {
-      padding: 10px 14px;
-      border-top: 1.5px solid var(--border-line);
+    textarea#code-editor {
+      width: 100%;
+      min-height: 290px;
+      background: var(--bg-input);
+      color: #e2e8f0;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      font-family: 'Fira Code', Consolas, monospace;
+      font-size: 0.94rem;
+      line-height: 1.55;
+      resize: vertical;
+      outline: none;
+    }
+    [data-theme="light"] textarea#code-editor {
+      color: #1e1b2e;
+      background: #fcfbff;
+    }
+    textarea#code-editor:focus { border-color: var(--accent-gold); }
+
+    .editor-actions {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--bg-elevated);
+      gap: 10px;
+      flex-wrap: wrap;
     }
-
-    .nav-small-btn {
-      background: var(--bg-panel);
-      color: var(--text-primary);
-      border: 1px solid var(--border-line);
-      padding: 5px 12px;
-      border-radius: 6px;
-      font-size: 0.79rem;
+    .run-btn {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .check-btn {
+      background: linear-gradient(135deg, #9333ea, #7e22ce);
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .clear-code-btn {
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 1px solid var(--border-soft);
+      padding: 10px 14px;
+      border-radius: 10px;
       font-weight: 600;
       cursor: pointer;
     }
-    .nav-small-btn:hover { border-color: var(--accent-purple); color: var(--accent-purple); }
 
-    .editor-pane {
-      flex: 1;
-      min-width: 280px;
-      background: var(--bg-panel);
-      border: 1.5px solid var(--border-line);
-      border-radius: 10px;
-      box-shadow: var(--panel-shadow);
+    /* Sağ Panel: İnteraktif Terminal & Turtle Tuvali */
+    .terminal-wrap {
+      background: #07090f;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
+      height: 360px;
       overflow: hidden;
     }
-
-    .editor-toolbar {
-      padding: 10px 16px;
-      border-bottom: 1.5px solid var(--border-line);
+    .terminal-header {
+      background: #121626;
+      padding: 8px 12px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      background: var(--bg-elevated);
-    }
-
-    .btn-group { display: flex; gap: 8px; }
-
-    .run-btn {
-      background: var(--accent-emerald);
-      color: #ffffff;
-      border: none;
-      padding: 6px 15px;
-      border-radius: 6px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .check-btn {
-      background: linear-gradient(135deg, var(--accent-purple), #6d28d9);
-      color: #ffffff;
-      border: none;
-      padding: 6px 15px;
-      border-radius: 6px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    #code-editor {
-      flex: 1;
-      background: var(--bg-editor);
-      color: var(--text-primary);
-      border: none;
-      padding: 16px;
-      font-family: 'JetBrains Mono', 'Consolas', monospace;
-      font-size: 14px;
-      line-height: 1.6;
-      resize: none;
-      outline: none;
-    }
-
-    .bottom-output-split {
-      height: 215px;
-      border-top: 1.5px solid var(--border-line);
-      background: var(--bg-elevated);
-      display: flex;
-    }
-
-    .console-area {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-width: 160px;
-    }
-
-    .console-header {
-      padding: 7px 14px;
-      font-size: 0.74rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--accent-purple);
-      border-bottom: 1px solid var(--border-line);
-      display: flex;
       justify-content: space-between;
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
-
     #console-output {
       flex: 1;
-      padding: 12px 14px;
-      font-family: 'Consolas', monospace;
-      font-size: 0.84rem;
-      white-space: pre-wrap;
+      padding: 12px;
       overflow-y: auto;
+      font-family: Consolas, monospace;
+      font-size: 0.88rem;
       line-height: 1.5;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .term-line-sys { color: #94a3b8; }
+    .term-line-out { color: #f8fafc; }
+    .term-line-in { color: #eab308; font-weight: 700; }
+    .term-line-err { color: #f87171; }
+    .term-line-ok { color: #4ade80; font-weight: 700; }
+
+    .terminal-input-bar {
+      display: flex;
+      align-items: center;
+      background: #0e1220;
+      border-top: 1px solid rgba(168, 85, 247, 0.35);
+      padding: 6px 10px;
+      gap: 8px;
+    }
+    .terminal-input-bar.waiting-input {
+      background: rgba(234, 179, 8, 0.16);
+      border-top-color: #eab308;
+    }
+    #term-prompt-label {
+      font-family: Consolas, monospace;
+      font-weight: 900;
+      color: #eab308;
+      font-size: 0.9rem;
+    }
+    #terminal-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-family: Consolas, monospace;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    #terminal-send-btn {
+      background: #eab308;
+      color: #090b12;
+      border: none;
+      padding: 5px 11px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 0.78rem;
+      cursor: pointer;
     }
 
-    .turtle-stage {
-      width: 240px;
-      border-left: 1.5px solid var(--border-line);
-      display: flex;
-      flex-direction: column;
-      background: var(--bg-editor);
-      flex-shrink: 0;
+    /* Turtle Çizim Alanı */
+    .turtle-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
     }
-    .turtle-stage-header {
-      padding: 7px 10px;
-      font-size: 0.72rem;
-      font-weight: 800;
-      color: #eab308;
-      background: var(--bg-elevated);
-      border-bottom: 1px solid var(--border-line);
+    .turtle-box-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--accent-gold);
     }
-    .turtle-canvas-wrap {
-      flex: 1;
+    canvas#turtle-canvas {
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      width: 100%;
+      max-width: 360px;
+      height: 220px;
+    }
+
+    /* Sekme Görünümleri (Konu Özeti - 2 Kutu, Projeler, Mini Sınav) */
+    .full-view {
+      position: relative;
+      z-index: 1;
+      max-width: 1280px;
+      margin: 18px auto;
+      padding: 0 16px;
+      display: none;
+    }
+    .full-view.active { display: block; }
+
+    /* Konu Özeti 2 Seçenekli Kutu Ekranı */
+    .summary-choice-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 20px;
+      margin-top: 12px;
+    }
+    .choice-card {
+      background: var(--bg-panel);
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      padding: 28px 24px;
+      cursor: pointer;
+      transition: all 0.25s;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .choice-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-gold);
+    }
+    .choice-icon {
+      font-size: 2.5rem;
+    }
+    .choice-card h2 {
+      font-size: 1.35rem;
+      color: var(--accent-gold);
+    }
+    .choice-card p {
+      color: var(--text-muted);
+      line-height: 1.55;
+      font-size: 0.94rem;
+    }
+
+    /* NPC Video Anlatım Stüdyosu */
+    .npc-studio {
+      display: none;
+      grid-template-columns: 280px 1fr;
+      gap: 18px;
+      margin-top: 16px;
+    }
+    .npc-studio.active { display: grid; }
+    @media (max-width: 900px) {
+      .npc-studio { grid-template-columns: 1fr; }
+    }
+
+    .npc-topic-list {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .npc-topic-btn {
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 9px;
+      border: 1px solid var(--border-soft);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .npc-topic-btn:hover, .npc-topic-btn.active {
+      background: var(--accent-purple);
+      color: #fff;
+      border-color: var(--accent-purple);
+    }
+
+    .npc-player-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+    .npc-stage {
+      background: radial-gradient(circle at 25% 25%, #261742 0%, #0b0e18 85%);
+      min-height: 360px;
+      padding: 22px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    /* Sağ Üst Köşe Ufak Altyazı / Metin Tuşu */
+    .transcript-toggle-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 10;
+      background: rgba(234, 179, 8, 0.22);
+      border: 1px solid #eab308;
+      color: #eab308;
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .transcript-toggle-btn:hover { background: #eab308; color: #090b12; }
+
+    .transcript-overlay {
+      display: none;
+      position: absolute;
+      top: 48px;
+      right: 14px;
+      width: min(360px, 88%);
+      max-height: 240px;
+      overflow-y: auto;
+      z-index: 12;
+      background: rgba(9, 11, 18, 0.95);
+      border: 1px solid #eab308;
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: #f8fafc;
+      font-size: 0.83rem;
+      line-height: 1.5;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.7);
+    }
+    .transcript-overlay.open { display: block; }
+
+    .npc-stage-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding-right: 110px;
+    }
+    .npc-avatar {
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #9333ea, #eab308);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 6px;
+      font-size: 2.2rem;
+      flex-shrink: 0;
+      box-shadow: 0 0 24px rgba(168, 85, 247, 0.55);
+      border: 3px solid #eab308;
     }
-    #turtle-canvas {
-      background: #0b1120;
-      border: 1px solid rgba(139, 92, 246, 0.35);
-      border-radius: 6px;
+    .npc-avatar.talking {
+      animation: npcBounce 0.55s infinite alternate ease-in-out;
     }
-    [data-theme="light"] #turtle-canvas {
-      background: #ffffff;
+    @keyframes npcBounce {
+      from { transform: scale(1) translateY(0); }
+      to { transform: scale(1.06) translateY(-4px); }
     }
-
-    /* Konu Özeti Görünümü */
-    #lecture-view {
-      display: none;
+    .npc-speech-bubble {
+      background: rgba(23, 28, 46, 0.92);
+      border: 1px solid rgba(168, 85, 247, 0.5);
+      border-radius: 14px;
+      padding: 14px 16px;
+      color: #f1f5f9;
+      font-size: 0.96rem;
+      line-height: 1.55;
       flex: 1;
-      padding: 22px;
-      overflow-y: auto;
-      position: relative;
-      z-index: 1;
     }
-    #lecture-view.active { display: block; }
-    .lecture-container { max-width: 1140px; margin: 0 auto; }
-    .lecture-banner {
-      background: var(--bg-panel);
-      border: 1.5px solid var(--border-line);
-      border-radius: 12px;
-      padding: 18px 22px;
-      margin-bottom: 18px;
-      box-shadow: var(--panel-shadow);
-    }
-    .lecture-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 18px;
-    }
-    .lecture-card {
-      background: var(--bg-panel);
-      border: 1.5px solid var(--border-line);
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: var(--panel-shadow);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .lecture-card-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-    .lecture-card h3 { color: var(--accent-purple); font-size: 1.02rem; }
-    .lecture-card p { font-size: 0.85rem; line-height: 1.65; color: var(--text-secondary); }
-    .lecture-rule {
-      background: rgba(139, 92, 246, 0.09);
-      border-left: 3px solid var(--accent-purple);
-      padding: 8px 10px;
-      border-radius: 5px;
-      font-size: 0.8rem;
-    }
-    .lecture-code {
-      background: var(--bg-editor);
-      border: 1px solid var(--border-line);
-      padding: 11px;
-      border-radius: 7px;
-      font-family: 'Consolas', monospace;
-      font-size: 0.8rem;
-      white-space: pre-wrap;
-      line-height: 1.5;
-    }
-
-    /* 📝 Mini Sınavlar Modülü Görünümü */
-    #exam-view {
-      display: none;
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-      position: relative;
-      z-index: 1;
-    }
-    #exam-view.active { display: flex; flex-direction: column; align-items: center; }
-
-    .exam-box {
-      width: 100%;
-      max-width: 980px;
-      background: var(--bg-panel);
-      border: 1.5px solid var(--border-line);
-      border-radius: 12px;
-      box-shadow: var(--panel-shadow);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .exam-setup-panel {
-      padding: 26px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .diff-select-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-
-    .diff-card-btn {
-      background: var(--bg-elevated);
-      border: 1.5px solid var(--border-line);
-      border-radius: 10px;
-      padding: 16px;
-      cursor: pointer;
-      text-align: left;
-      color: var(--text-primary);
-      transition: all 0.2s ease;
-    }
-    .diff-card-btn:hover { transform: translateY(-2px); border-color: var(--accent-purple); }
-    .diff-card-btn.selected {
-      border-color: #eab308;
-      background: rgba(234, 179, 8, 0.12);
-      box-shadow: 0 0 18px rgba(234, 179, 8, 0.22);
-    }
-
-    .exam-active-header {
-      padding: 12px 18px;
-      background: var(--bg-elevated);
-      border-bottom: 1.5px solid var(--border-line);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .timer-badge {
-      font-family: 'Consolas', monospace;
-      font-size: 1.05rem;
+    .npc-speech-name {
+      font-size: 0.76rem;
       font-weight: 800;
-      padding: 5px 12px;
-      border-radius: 7px;
-      background: rgba(234, 179, 8, 0.16);
-      border: 1.5px solid #eab308;
       color: #eab308;
-    }
-    .timer-badge.danger {
-      background: rgba(244, 63, 94, 0.2);
-      border-color: #f43f5e;
-      color: #f43f5e;
+      text-transform: uppercase;
+      margin-bottom: 4px;
     }
 
-    .exam-q-pills {
-      display: flex;
-      gap: 6px;
-      padding: 10px 18px;
-      border-bottom: 1px solid var(--border-line);
-      background: var(--bg-panel);
-      flex-wrap: wrap;
-    }
-    .exam-pill {
-      padding: 5px 11px;
-      border-radius: 6px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      border: 1px solid var(--border-line);
-      background: var(--bg-elevated);
-      color: var(--text-secondary);
-      cursor: pointer;
-    }
-    .exam-pill.active { border-color: var(--accent-purple); color: var(--accent-purple); }
-    .exam-pill.passed { background: rgba(16, 185, 129, 0.18); border-color: #10b981; color: #10b981; }
-
-    #freecode-modal {
-      display: none;
-      position: fixed;
-      inset: 28px;
-      background: var(--bg-panel);
-      border: 2px solid var(--accent-purple);
+    .npc-board {
+      background: #07090f;
+      border: 1px solid rgba(234, 179, 8, 0.35);
       border-radius: 12px;
-      z-index: 9990;
-      flex-direction: column;
-      box-shadow: 0 20px 50px rgba(124, 58, 237, 0.35);
+      padding: 14px 16px;
+      font-family: Consolas, monospace;
+      font-size: 0.9rem;
+      color: #4ade80;
+      white-space: pre-wrap;
+      min-height: 120px;
+    }
+
+    .npc-controls {
+      background: var(--bg-card);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      border-top: 1px solid var(--border);
+    }
+    .npc-progress-bar {
+      flex: 1;
+      min-width: 140px;
+      height: 8px;
+      background: var(--bg-input);
+      border-radius: 999px;
       overflow: hidden;
     }
-    #freecode-modal.open { display: flex; }
-    .modal-body { flex: 1; display: flex; overflow: hidden; }
-    .modal-col { flex: 1; display: flex; flex-direction: column; padding: 14px; gap: 10px; }
-    #free-editor, #free-output {
-      flex: 1;
-      background: var(--bg-editor);
-      color: var(--text-primary);
-      border: 1.5px solid var(--border-line);
+    .npc-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #9333ea, #eab308);
+      transition: width 0.3s;
+    }
+
+    /* Klasik Konu Özeti Kartları */
+    .classic-summary-grid {
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .classic-summary-grid.active { display: grid; }
+    .summary-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .summary-card h3 { color: var(--accent-gold); margin-bottom: 8px; font-size: 1rem; }
+    .summary-card pre {
+      background: var(--bg-input);
+      padding: 10px;
       border-radius: 8px;
-      padding: 14px;
-      font-family: 'Consolas', monospace;
-      font-size: 14px;
-      resize: none;
-      outline: none;
-      white-space: pre-wrap;
-      overflow-y: auto;
+      font-family: Consolas, monospace;
+      font-size: 0.82rem;
+      margin-top: 8px;
+      overflow-x: auto;
+      color: #a855f7;
+    }
+
+    /* Projeler ve Mini Sınav */
+    .grid-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 14px;
+    }
+    .card-box {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .exam-header {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .timer-pill {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--accent-gold);
+      background: var(--accent-gold-soft);
+      padding: 6px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--accent-gold);
     }
   </style>
 </head>
 <body>
 
-  <!-- En En Arkada Koyu Tema Özel Beyaz-Mor Gölgeli Çapraz Şerit Katmanı -->
-  <div class="dark-diagonal-backdrop"></div>
-
-  <!-- Özel Giriş Ekranı -->
-  <div id="welcome-splash">
-    <h1 class="splash-main-title">Python Stüdyoya</h1>
-    <p class="splash-sub-gold">Hoşgeldiniz</p>
+  <!-- GİRİŞ EKRANI & İSİM SORMA -->
+  <div id="splash-screen">
+    <div class="splash-title-top">Python Stüdyoya</div>
+    <div class="splash-title-bottom">Hoşgeldiniz</div>
+    <div class="splash-name-box">
+      <p>Sana isminle hitap edebilmem ve dersleri kişiselleştirmem için adını yazar mısın?</p>
+      <div class="splash-name-row">
+        <input type="text" id="student-name-input" placeholder="Adın (ör. Enes)..." maxlength="28" />
+        <button onclick="saveStudentName()">Başla</button>
+      </div>
+    </div>
   </div>
 
+  <!-- ÜST MENÜ -->
   <header>
     <div class="brand">
-      <span class="brand-gem"></span>
-      <span>pythonhazırlık</span>
+      <div class="brand-logo">PY</div>
+      <div class="brand-title">python<span>hazırlık</span></div>
     </div>
 
     <div class="nav-tabs">
-      <button class="tab-btn" id="mode-lecture" onclick="switchMode('lecture')">📖 Konu Özeti</button>
-      <button class="tab-btn active" id="mode-topics" onclick="switchMode('topics')">Konu Alıştırmaları</button>
-      <button class="tab-btn" id="mode-projects" onclick="switchMode('projects')">Projeler (7)</button>
-      <button class="tab-btn exam-tab-btn" id="mode-exam" onclick="switchMode('exam')">📝 Mini Sınavlar</button>
-      <button class="freecode-skew-btn" onclick="openFreeModal()"><span>⚡ Serbest Kod</span></button>
+      <button class="nav-btn active" onclick="switchTab('practice', this)">Konu Alıştırmaları</button>
+      <button class="nav-btn" onclick="switchTab('summary', this)">📖 Konu Özeti</button>
+      <button class="nav-btn" onclick="switchTab('projects', this)">🚀 Kapsamlı Projeler (7)</button>
+      <button class="nav-btn" onclick="switchTab('exam', this)">📝 Mini Sınavlar</button>
+      <button class="nav-btn slant-btn" onclick="openFreeCode(this)"><span>⚡ Serbest Kod</span></button>
     </div>
 
-    <div class="header-actions">
-      <button class="action-pill-btn save-btn" onclick="saveProgress()" title="Tarayıcıya kaydeder">💾 Kaydet</button>
-      <button class="action-pill-btn export-btn" onclick="exportBackupFile()" title="İlerlemeni dosya olarak bilgisayarına indirir">📤 Dışa Aktar</button>
-      <button class="action-pill-btn export-btn" onclick="document.getElementById('import-file-input').click()" title="İndirdiğin yedek dosyasını yükler">📥 İçe Aktar</button>
-      <input type="file" id="import-file-input" accept=".json" style="display:none;" onchange="importBackupFile(event)" />
-      <button class="action-pill-btn reset-all-btn" onclick="resetAllProgress()" title="Tüm ilerlemeyi sıfırlar">🗑️ Sıfırla</button>
-      <span id="engine-status">Python Yükleniyor...</span>
-      <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">☀️ Beyaz-Mor</button>
+    <div class="top-actions">
+      <span class="user-pill" id="display-user-name" onclick="promptRenameUser()" title="İsmini değiştirmek için tıkla">👤 Öğrenci</span>
+      <button class="tool-btn" onclick="saveProgress()">💾 Kaydet</button>
+      <button class="tool-btn" onclick="exportBackup()">📤 Dışa Aktar</button>
+      <button class="tool-btn" onclick="document.getElementById('import-file').click()">📥 İçe Aktar</button>
+      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importBackup(event)" />
+      <button class="tool-btn" onclick="resetProgress()">🗑️ Sıfırla</button>
+      <div class="status-badge">
+        <span class="status-dot" id="py-dot"></span>
+        <span id="py-status-text">Python Yükleniyor...</span>
+      </div>
+      <button class="tool-btn" onclick="toggleTheme()">🌓 Tema</button>
     </div>
   </header>
 
-  <!-- 1. Konu Özeti & Anlatım -->
-  <section id="lecture-view">
-    <div class="lecture-container">
-      <div class="lecture-banner">
-        <h2 style="color:var(--accent-purple); margin-bottom:6px;">📚 Python Konu Özeti ve Formül Rehberi</h2>
-        <p style="font-size:0.88rem; color:var(--text-secondary); line-height:1.6;">
-          Tüm konuların (Turtle Grafik Çizimi dahil) mantığı, altın kuralları ve örnek kalıpları aşağıdadır. Alıştırmalar ekranında her konunun yanındaki yuvarlak sarı <b>ƒ</b> butonuna basarak da formüllere anında erişebilirsin.
-        </p>
-      </div>
-      <div class="lecture-grid" id="lecture-grid"></div>
-    </div>
-  </section>
+  <!-- 1. ANA ÇALIŞMA ALANI (ALIŞTIRMALAR & SERBEST KOD) -->
+  <main class="workspace" id="view-practice">
+    <!-- Sol Panel: Konular & Sarı Komut Deposu -->
+    <aside class="panel">
+      <div style="font-weight:800; font-size:0.95rem; color:var(--accent-gold);">📚 Konu Klasörleri (10)</div>
+      <div id="topics-container" style="display:flex; flex-direction:column; gap:8px;"></div>
 
-  <!-- 2. 📝 Mini Sınavlar Modülü -->
-  <section id="exam-view">
-    <div class="exam-box" id="exam-setup-box">
-      <div class="exam-setup-panel">
-        <div>
-          <h2 style="color:#eab308; margin-bottom:6px;">📝 Modül Sonu Mini Değerlendirme Sınavı</h2>
-          <p style="font-size:0.86rem; color:var(--text-secondary); line-height:1.5;">
-            Modülünü ve zorluk seviyeni seç. Sınav süresi <b>15 dakikadır</b>; süre dolduğunda sınav otomatik kapanır, istersen erken bitirebilir ve istediğin zaman yeniden girebilirsin.
-          </p>
-        </div>
-
-        <div>
-          <label style="display:block; font-size:0.78rem; font-weight:800; color:var(--accent-purple); margin-bottom:6px; text-transform:uppercase;">1. Sınav Modülünü Seç:</label>
-          <select id="exam-module-select" style="width:100%; padding:10px 12px; border-radius:8px; background:var(--bg-elevated); color:var(--text-primary); border:1.5px solid var(--border-line); font-size:0.88rem; font-weight:600; outline:none;"></select>
-        </div>
-
-        <div>
-          <label style="display:block; font-size:0.78rem; font-weight:800; color:var(--accent-purple); margin-bottom:8px; text-transform:uppercase;">2. Zorluk Seviyesini Seç (Soru detayları ve kapsamı değişir):</label>
-          <div class="diff-select-grid">
-            <button type="button" class="diff-card-btn selected" id="exam-diff-kolay" onclick="selectExamDifficulty('kolay')">
-              <div style="font-weight:800; color:#10b981; margin-bottom:4px;">🟢 Kolay Seviye</div>
-              <div style="font-size:0.78rem; color:var(--text-secondary);">6 Soruluk temel kavram ve doğrudan sözdizimi ölçümü.</div>
-            </button>
-            <button type="button" class="diff-card-btn" id="exam-diff-orta" onclick="selectExamDifficulty('orta')">
-              <div style="font-weight:800; color:#f59e0b; margin-bottom:4px;">🟡 Orta Seviye</div>
-              <div style="font-size:0.78rem; color:var(--text-secondary);">7 Soruluk çok adımlı mantık ve birleşik kullanım ölçümü.</div>
-            </button>
-            <button type="button" class="diff-card-btn" id="exam-diff-zor" onclick="selectExamDifficulty('zor')">
-              <div style="font-weight:800; color:#f43f5e; margin-bottom:4px;">🔴 Zor Seviye</div>
-              <div style="font-size:0.78rem; color:var(--text-secondary);">8 Soruluk detaylı algoritma, kenar durum ve karmaşık çıktı ölçümü.</div>
-            </button>
-          </div>
-        </div>
-
-        <div style="display:flex; justify-content:flex-end; margin-top:4px;">
-          <button class="check-btn" style="padding:10px 24px; font-size:0.9rem;" onclick="startMiniExam()">⏱️ 15 Dakikalık Sınavı Başlat</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Aktif Sınav Ekranı -->
-    <div class="exam-box" id="exam-active-box" style="display:none;">
-      <div class="exam-active-header">
-        <div>
-          <div id="exam-active-title" style="font-weight:800; font-size:0.96rem; color:var(--accent-purple);">Modül Sınavı</div>
-          <div id="exam-active-sub" style="font-size:0.76rem; color:var(--text-secondary);">Zorluk: Kolay • 6 Soru</div>
-        </div>
-        <div style="display:flex; align-items:center; gap:10px;">
-          <div class="timer-badge" id="exam-timer-display">⏱️ 15:00</div>
-          <button class="action-pill-btn reset-all-btn" onclick="finishMiniExam(false)">🏁 Sınavı Erken Bitir</button>
-        </div>
-      </div>
-
-      <div class="exam-q-pills" id="exam-q-pills"></div>
-
-      <div style="padding:18px; display:flex; flex-direction:column; gap:12px;">
-        <div style="font-weight:700; font-size:0.98rem;" id="exam-q-title">Soru 1</div>
-        <div style="font-size:0.86rem; color:var(--text-secondary); line-height:1.6;" id="exam-q-desc"></div>
-        <div class="expected-box" id="exam-q-expected"></div>
-
-        <textarea id="exam-code-editor" style="height:175px; background:var(--bg-editor); color:var(--text-primary); border:1.5px solid var(--border-line); border-radius:8px; padding:12px; font-family:Consolas,monospace; font-size:14px; outline:none; resize:vertical;" placeholder="# Sınav kodunu buraya yaz..." spellcheck="false"></textarea>
-
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-          <div style="display:flex; gap:8px;">
-            <button class="nav-small-btn" onclick="prevExamQ()">← Önceki Soru</button>
-            <button class="nav-small-btn" onclick="nextExamQ()">Sonraki Soru →</button>
-          </div>
-          <button class="run-btn" onclick="checkExamQuestion()">✓ Kodu Çalıştır ve Cevabı Onayla</button>
-        </div>
-
-        <div id="exam-feedback" style="background:var(--bg-elevated); border:1px solid var(--border-line); border-radius:7px; padding:10px 12px; font-family:Consolas,monospace; font-size:0.82rem;">Sınav başladı. Soruları çözüp onaylayabilirsin.</div>
-      </div>
-    </div>
-
-    <!-- Sınav Sonuç Ekranı -->
-    <div class="exam-box" id="exam-result-box" style="display:none;">
-      <div style="padding:28px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:14px;">
-        <div style="font-size:2.4rem;">🏆</div>
-        <h2 id="exam-result-heading" style="color:#eab308;">Sınav Tamamlandı!</h2>
-        <p id="exam-result-summary" style="font-size:0.95rem; color:var(--text-secondary); max-width:520px; line-height:1.6;"></p>
-        <div style="display:flex; gap:10px; margin-top:6px;">
-          <button class="check-btn" onclick="resetExamToSetup()">🔄 Yeniden Sınava Gir / Başka Modül Seç</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3. Ana Çalışma Alanı (Konu Alıştırmaları & Projeler) -->
-  <div class="workspace" id="workspace">
-    <aside class="sidebar" id="pane-left">
-      <div class="sidebar-header">
-        <span id="sidebar-title">Konu Klasörleri</span>
-        <span id="progress-counter">0 / 60</span>
-      </div>
-      <div class="topic-list" id="sidebar-list"></div>
+      <hr style="border:none; border-top:1px solid var(--border-soft); margin:4px 0;">
+      <div class="cmd-bank-title">⚡ Sarı Komut Deposu</div>
+      <div class="cmd-bank" id="command-bank"></div>
     </aside>
 
-    <div class="resizer-x" id="resizer-1"></div>
-
-    <section class="task-pane" id="pane-mid">
-      <div class="pane-top">
-        <span id="task-category" style="font-size:0.76rem; font-weight:700; color:var(--accent-purple);">Konu</span>
-        <div class="pane-top-right">
-          <button class="skeleton-btn" onclick="loadSkeleton()" title="Çözüm iskeletini boşluklu olarak editöre yerleştirir">🧩 Örnek Başlangıç</button>
-          <span class="difficulty-pill diff-kolay" id="task-diff">Kolay</span>
+    <!-- Orta Panel: Soru ve Editör -->
+    <section class="panel">
+      <div class="q-top-bar">
+        <h2 id="current-q-title" style="font-size:1.05rem;">1.1 — Ekrana İlk Mesaj</h2>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="badge-diff" id="current-q-diff">Kolay</span>
+          <button class="skeleton-btn" id="skeleton-btn" onclick="insertSkeleton()">🧩 Örnek Başlangıç</button>
         </div>
       </div>
 
-      <div class="task-body">
-        <h2 class="task-title" id="task-title">Yükleniyor...</h2>
-        <p class="task-desc" id="task-desc"></p>
-
-        <div>
-          <div style="font-size:0.74rem; font-weight:700; color:var(--text-secondary); margin-bottom:5px;">BEKLENEN ÇIKTI / ÇİZİM SONUCU:</div>
-          <div class="expected-box" id="task-expected"></div>
-        </div>
-
-        <div class="yellow-vault" id="yellow-vault">
-          <div class="vault-header">
-            <span>⚡ Bu Soruda Kullanılacak Komutlar</span>
-            <span id="vault-status">Aktif</span>
-          </div>
-          <div class="vault-chips" id="vault-chips"></div>
-        </div>
-
-        <div id="three-split-helper">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <strong style="color:#eab308; font-size:0.8rem;">🛠️ 3 Adımlı Hata & Çözüm Analizi</strong>
-            <button onclick="closeThreeSplit()" style="background:none; border:none; color:#eab308; cursor:pointer; font-weight:bold; font-size:0.78rem;">Komut Deposuna Dön ✕</button>
-          </div>
-          <div class="split-grid">
-            <div class="split-card">
-              <span class="split-card-title" style="color:#f43f5e;">1. Neyin Yanlış Olduğu:</span>
-              <div id="split-wrong"></div>
-            </div>
-            <div class="split-card">
-              <span class="split-card-title" style="color:#38bdf8;">2. Benzer Örnek Kullanım:</span>
-              <div class="split-code" id="split-example"></div>
-            </div>
-            <div class="split-card">
-              <span class="split-card-title" style="color:#10b981;">3. Doğru Çözüm Kodu:</span>
-              <div class="split-code" id="split-solution"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="yellow-notice" id="yellow-notice">
-          <strong style="color:#f59e0b; display:block; margin-bottom:3px;">💡 Bildirim & İpucu</strong>
-          <span id="yellow-text">Editör boş başlar. İstersen sağ üstteki "🧩 Örnek Başlangıç" butonuna basıp boşlukları doldurabilirsin.</span>
-        </div>
+      <div class="question-box" id="current-q-desc">
+        Ekrana <b>Merhaba Python</b> yazdıran kodu yazıp çalıştır.
       </div>
 
-      <div class="question-nav">
-        <button class="nav-small-btn" onclick="prevItem()">← Önceki</button>
-        <span id="item-indicator" style="font-size:0.78rem; font-weight:700; color:var(--text-secondary);">1 / 6</span>
-        <button class="nav-small-btn" onclick="nextItem()">Sonraki →</button>
+      <textarea id="code-editor" spellcheck="false" placeholder="# Python kodunu buraya yaz..."></textarea>
+
+      <div class="editor-actions">
+        <button class="run-btn" onclick="runUserCode()">▶ Çalıştır</button>
+        <button class="check-btn" id="verify-btn" onclick="verifySolution()">✓ Cevabı Kontrol Et</button>
+        <button class="clear-code-btn" onclick="document.getElementById('code-editor').value=''">Temizle</button>
       </div>
     </section>
 
-    <div class="resizer-x" id="resizer-2"></div>
-
-    <main class="editor-pane" id="pane-right">
-      <div class="editor-toolbar">
-        <span style="font-size:0.8rem; font-weight:700; color:var(--accent-purple);">main.py</span>
-        <div class="btn-group">
-          <button class="nav-small-btn" onclick="resetEditor()">Temizle</button>
-          <button class="run-btn" onclick="runMainCode(false)">▶ Çalıştır</button>
-          <button class="check-btn" onclick="runMainCode(true)">✓ Kontrol Et</button>
+    <!-- Sağ Panel: Gerçek İnteraktif Konsol & Turtle Tuvali -->
+    <section class="panel">
+      <div class="terminal-wrap">
+        <div class="terminal-header">
+          <span>💻 İnteraktif Python Konsolu (input() Destekli)</span>
+          <button onclick="clearConsole()" style="background:none;border:none;color:#94a3b8;cursor:pointer;font-size:0.76rem;">Konsolu Temizle</button>
+        </div>
+        <div id="console-output"><span class="term-line-sys">Python motoru hazırlanıyor... Kodunda input() kullandığında aşağıdaki satırdan cevap yazabilirsin.\n</span></div>
+        <div class="terminal-input-bar" id="terminal-input-bar">
+          <span id="term-prompt-label">&gt;&gt;&gt;</span>
+          <input type="text" id="terminal-input" placeholder="Komut yaz veya input() cevabı girip Enter'a bas..." autocomplete="off" />
+          <button id="terminal-send-btn" onclick="submitTerminalInput()">Gönder</button>
         </div>
       </div>
 
-      <textarea id="code-editor" placeholder="# Kodunu buraya yaz veya yukarıdaki '🧩 Örnek Başlangıç' butonunu kullan..." spellcheck="false"></textarea>
-
-      <div class="bottom-output-split">
-        <div class="console-area">
-          <div class="console-header">
-            <span>Çıktı Konsolu</span>
-            <span style="cursor:pointer;" onclick="document.getElementById('console-output').textContent=''">Temizle</span>
-          </div>
-          <div id="console-output">Hazır. Kodunu yazıp Çalıştır'a basabilirsin.</div>
+      <div class="turtle-box">
+        <div class="turtle-box-header">
+          <span>🎨 Turtle Grafik Çizim Ekranı</span>
+          <button onclick="clearTurtleCanvas()" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:0.75rem;">Tuvali Temizle</button>
         </div>
-
-        <div class="turtle-stage">
-          <div class="turtle-stage-header">
-            <span>🐢 Turtle Çizim Tuvali</span>
-            <span style="cursor:pointer; font-weight:normal;" onclick="clearTurtleCanvas()">Sil</span>
-          </div>
-          <div class="turtle-canvas-wrap">
-            <canvas id="turtle-canvas" width="215" height="162"></canvas>
-          </div>
-        </div>
+        <canvas id="turtle-canvas" width="360" height="220"></canvas>
       </div>
-    </main>
-  </div>
+    </section>
+  </main>
 
-  <!-- Serbest Kod Penceresi -->
-  <div id="freecode-modal">
-    <div class="editor-toolbar">
-      <span style="font-weight:800; color:var(--accent-purple);">⚡ Serbest Kod & Turtle Çizim Laboratuvarı</span>
-      <div class="btn-group">
-        <button class="run-btn" onclick="runFreeCode()">▶ Kodu Çalıştır & Çiz</button>
-        <button class="nav-small-btn" onclick="closeFreeModal()">✕ Kapat</button>
+  <!-- 2. KONU ÖZETİ SEKMESİ (İKİ KUTULU SEÇİM + NPC VİDEO STÜDYOSU) -->
+  <section class="full-view" id="view-summary">
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+      <h1 style="font-size:1.35rem;">📖 Konu Özeti ve Etkileşimli Ders Merkezi</h1>
+      <button class="tool-btn" id="summary-back-btn" style="display:none;" onclick="resetSummaryChoice()">← Seçim Ekranına Dön</button>
+    </div>
+
+    <!-- İki Kutu Seçim Ekranı -->
+    <div class="summary-choice-grid" id="summary-choice-cards">
+      <div class="choice-card" onclick="openClassicSummary()">
+        <div class="choice-icon">📄</div>
+        <h2>1. Klasik Konu Özeti</h2>
+        <p>Tüm Python konularının kurallarını, sözdizimini (syntax) ve hazır formül kartlarını tek ekranda hızlıca incele.</p>
+      </div>
+
+      <div class="choice-card" onclick="openNpcVideoStudio()">
+        <div class="choice-icon">🎬</div>
+        <h2>2. NPC Videolu Konu Anlatımı</h2>
+        <p>Eğitmen NPC <b>Kaptan Py</b>, ismine özel hitaplarla ve canlı kod animasyonlarıyla tüm konuları kısa minik örneklerle anlatsın.</p>
       </div>
     </div>
-    <div class="modal-body">
-      <div class="modal-col">
-        <textarea id="free-editor" spellcheck="false"># İstediğin Python veya Turtle çizim kodunu burada dene!
-import turtle
 
-t = turtle.Turtle()
-t.color("#eab308")
-for i in range(5):
-    t.forward(70)
-    t.right(144)</textarea>
-      </div>
-      <div class="modal-col">
-        <div style="display:flex; gap:10px; flex:1;">
-          <div id="free-output" style="flex:1;">Çıktı burada görünecek...</div>
-          <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--bg-editor); border:1.5px solid var(--border-line); border-radius:8px; padding:8px;">
-            <span style="font-size:0.72rem; font-weight:800; color:#eab308; margin-bottom:6px;">🐢 ÇİZİM ALANI</span>
-            <canvas id="free-turtle-canvas" width="230" height="230" style="background:#0b1120; border-radius:6px; border:1px solid rgba(139,92,246,0.4);"></canvas>
+    <!-- Kutu 1 İçeriği: Klasik Konu Özeti -->
+    <div class="classic-summary-grid" id="classic-summary-area"></div>
+
+    <!-- Kutu 2 İçeriği: NPC Videolu Konu Anlatımı -->
+    <div class="npc-studio" id="npc-video-area">
+      <div class="npc-topic-list" id="npc-topic-buttons"></div>
+
+      <div class="npc-player-card">
+        <div class="npc-stage">
+          <!-- Sağ Üst Köşe Ufak Altyazı / Metin Tuşu -->
+          <button class="transcript-toggle-btn" onclick="toggleTranscript()">💬 Altyazı / Metin</button>
+          <div class="transcript-overlay" id="npc-transcript-box"></div>
+
+          <div class="npc-stage-top">
+            <div class="npc-avatar" id="npc-avatar">🤖</div>
+            <div class="npc-speech-bubble">
+              <div class="npc-speech-name" id="npc-lesson-title">Kaptan Py — Ders Hazır</div>
+              <div id="npc-speech-text">Sol taraftan bir konu başlığı seç ve Oynat tuşuna bas!</div>
+            </div>
           </div>
+
+          <div class="npc-board" id="npc-code-board"># Canlı kod tahtası burada görünecek...</div>
         </div>
-        <div class="yellow-notice">
-          <strong style="color:#f59e0b; display:block; margin-bottom:3px;">⚠️ Hata Telafi & Bildirim</strong>
-          <span id="free-yellow-text">Hata yaparsan burada nasıl düzelteceğin gösterilir.</span>
+
+        <div class="npc-controls">
+          <button class="run-btn" id="npc-play-btn" onclick="toggleNpcPlay()">▶ Oynat</button>
+          <button class="tool-btn" onclick="prevNpcSlide()">⏮ Önceki Sahne</button>
+          <button class="tool-btn" onclick="nextNpcSlide()">⏭ Sonraki Sahne</button>
+          <div class="npc-progress-bar">
+            <div class="npc-progress-fill" id="npc-progress-fill"></div>
+          </div>
+          <span id="npc-step-indicator" style="font-size:0.8rem; font-weight:700; color:var(--accent-gold);">0 / 0</span>
         </div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- 3. KAPSAMLI PROJELER (7) -->
+  <section class="full-view" id="view-projects">
+    <h1 style="font-size:1.35rem; margin-bottom:14px;">🚀 Kapsamlı Uygulama Projeleri (7)</h1>
+    <div class="grid-cards" id="projects-grid"></div>
+  </section>
+
+  <!-- 4. MİNİ SINAVLAR (15 DK SAYAÇLI) -->
+  <section class="full-view" id="view-exam">
+    <div class="exam-header">
+      <div>
+        <h1 style="font-size:1.25rem;">📝 15 Dakikalık Python Mini Sınavı</h1>
+        <p style="font-size:0.85rem; color:var(--text-muted);">Zorluk seçip sınavı başlat; süren bitmeden tüm soruları tamamla.</p>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+        <select id="exam-diff-select" class="tool-btn" style="padding:8px 12px;">
+          <option value="Kolay">Kolay Seviye</option>
+          <option value="Orta">Orta Seviye</option>
+          <option value="Zor">Zor Seviye</option>
+        </select>
+        <button class="run-btn" onclick="startMiniExam()">Sınavı Başlat</button>
+        <button class="tool-btn" onclick="finishMiniExam()">Erken Bitir</button>
+        <div class="timer-pill" id="exam-timer">15:00</div>
+      </div>
+    </div>
+    <div id="exam-questions-container" class="grid-cards"></div>
+  </section>
 
   <script>
-    const LECTURES_DATA = [
+    /* ================= KULLANICI İSMİ & GİRİŞ EKRANI ================= */
+    let studentName = localStorage.getItem("py_student_name") || "";
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const inp = document.getElementById("student-name-input");
+      if (studentName) {
+        inp.value = studentName;
+        updateUserBadge();
+      }
+      inp.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") saveStudentName();
+      });
+      initAppUI();
+      initPyodideEngine();
+    });
+
+    function saveStudentName() {
+      const val = document.getElementById("student-name-input").value.trim();
+      studentName = val || "Enes";
+      localStorage.setItem("py_student_name", studentName);
+      updateUserBadge();
+      document.getElementById("splash-screen").classList.add("hidden");
+      if (currentNpcTopicIndex !== null) {
+        loadNpcLesson(currentNpcTopicIndex, false);
+      }
+    }
+
+    function promptRenameUser() {
+      const yeni = prompt("Yeni ismini gir:", studentName || "Enes");
+      if (yeni && yeni.trim()) {
+        studentName = yeni.trim();
+        localStorage.setItem("py_student_name", studentName);
+        updateUserBadge();
+        if (currentNpcTopicIndex !== null) {
+          loadNpcLesson(currentNpcTopicIndex, false);
+        }
+      }
+    }
+
+    function updateUserBadge() {
+      document.getElementById("display-user-name").textContent = "👤 " + (studentName || "Öğrenci");
+    }
+
+    /* ================= 10 KONU & SORU VERİTABANI ================= */
+    const ALL_COMMANDS = [
+      "print()", "input()", "int()", "float()", "str()", "type()",
+      "if", "elif", "else", "for", "while", "range()",
+      "list", "append()", "len()", "tuple", "dict", "set",
+      "def", "return", "try", "except", "turtle", "forward()", "right()", "circle()"
+    ];
+
+    const TOPICS = [
       {
         title: "1. Python'a Giriş ve Çıktı (print)",
-        badge: "print() | sep | \\n",
-        desc: "Python'da kullanıcıya mesaj göstermek veya hesaplama sonuçlarını ekrana basmak için print() fonksiyonu kullanılır. Metinler tek (' ') veya çift (\" \") tırnak içinde yazılır.",
-        rule: "Altın Kural: print() içine virgülle birden fazla değer yazarsan aralarına otomatik boşluk koyar; sep='-' ile ayırıcıyı değiştirebilirsin.",
-        code: 'print("Python Dünyasına Hoş Geldin")\nprint("2026", "Python", "Eğitimi", sep="-")'
+        formula: "print('Metin') ekrana yazı yazar. Virgül ile birden fazla değer yazdırılır.",
+        summary: "Ekrana bilgi yazdırmak için print() fonksiyonu kullanılır. Metinler tırnak içinde yazılır.",
+        exampleCode: 'print("Merhaba Python")\nprint("Toplam:", 10 + 5)',
+        questions: [
+          { id: "1.1", title: "1.1 — İlk Merhaba", diff: "Kolay", desc: "Ekrana tam olarak <b>Merhaba Python</b> yazdır.", cmds: ["print()"], skeleton: 'print("___")', expected: "Merhaba Python" },
+          { id: "1.2", title: "1.2 — İki Satır Çıktı", diff: "Kolay", desc: "İlk satıra <b>Python</b>, ikinci satıra <b>Harika</b> yazdır.", cmds: ["print()"], skeleton: 'print("Python")\nprint("___")', expected: "Python\nHarika" },
+          { id: "1.3", title: "1.3 — Basit Toplama Çıktısı", diff: "Kolay", desc: "25 ile 17 toplamını print() ile ekrana yazdır.", cmds: ["print()"], skeleton: 'print(25 + ___)', expected: "42" }
+        ]
       },
       {
         title: "2. Değişkenler ve Veri Tipleri",
-        badge: "int | float | str | f\"{}\"",
-        desc: "Değişkenler verileri saklayan isimlerdir. Tam sayılar (int), ondalıklı sayılar (float) ve metinler (str) en temel veri tipleridir.",
-        rule: "Altın Kural: Metin ile sayıyı birleştirirken f\"Metin {degisken}\" (f-string) veya tip dönüşümü int() / float() kullanılır.",
-        code: 'ad = "Samsun"\nplaka = 55\nprint(f"{ad} plaka kodu: {plaka}")'
+        formula: "degisken = deger | int (tam sayı), float (ondalık), str (metin)",
+        summary: "Verileri hafızada tutmak için değişkenler kullanılır. type() veri tipini gösterir.",
+        exampleCode: 'ad = "Enes"\nyas = 18\nprint(ad, yas)',
+        questions: [
+          { id: "2.1", title: "2.1 — Değişken Tanımlama", diff: "Kolay", desc: "<b>sehir</b> adlı değişkene <b>Samsun</b> atayıp ekrana yazdır.", cmds: ["print()"], skeleton: 'sehir = "___"\nprint(sehir)', expected: "Samsun" },
+          { id: "2.2", title: "2.2 — Sayısal İşlem", diff: "Kolay", desc: "a = 8 ve b = 5 tanımla, çarpımlarını ekrana yazdır.", cmds: ["print()"], skeleton: 'a = 8\nb = ___\nprint(a * b)', expected: "40" },
+          { id: "2.3", title: "2.3 — Tip Dönüşümü", diff: "Orta", desc: "Metin olarak verilen '15' sayısını int() ile tam sayıya çevirip 5 ekle ve yazdır.", cmds: ["int()", "print()"], skeleton: 'sayi = int("15")\nprint(sayi + ___)', expected: "20" }
+        ]
       },
       {
-        title: "3. Operatörler ve Kullanıcı Girdisi (input)",
-        badge: "// | % | ** | input()",
-        desc: "Matematiksel operatörler (// tam bölme, % mod alma, ** üs alma) hesaplama yapar. input() fonksiyonu ise kullanıcıdan veri alır.",
-        rule: "Altın Kural: input() her zaman metin (str) döndürür; sayısal işlem yapacaksan int(input()) şeklinde tam sayıya çevirmelisin.",
-        code: 'sayi = int(input("Sayı gir: "))\nprint("Karesi:", sayi ** 2)'
+        title: "3. Operatörler ve Girdi (input)",
+        formula: "ad = input('Soru: ') | sayi = int(input('Sayı: '))",
+        summary: "Kullanıcıdan klavye ile veri almak için input() kullanılır ve her zaman metin (str) döndürür.",
+        exampleCode: 'isim = input("Adın ne? ")\nprint("Hoş geldin", isim)',
+        questions: [
+          { id: "3.1", title: "3.1 — Kullanıcıya Selam", diff: "Kolay", desc: "input() ile kullanıcıdan isim al ve başına <b>Selam </b> ekleyerek yazdır.", cmds: ["input()", "print()"], skeleton: 'isim = input("Adın: ")\nprint("Selam", ___)', freeCheck: true },
+          { id: "3.2", title: "3.2 — İki Katını Hesapla", diff: "Orta", desc: "input() ile bir sayı al, int() ile çevirip 2 katını yazdır.", cmds: ["input()", "int()", "print()"], skeleton: 's = int(input("Sayı: "))\nprint(s * ___)', freeCheck: true },
+          { id: "3.3", title: "3.3 — Kalan Bulma (%)", diff: "Orta", desc: "17 sayısının 5'e bölümünden kalanı (%) operatörü ile ekrana yazdır.", cmds: ["print()"], skeleton: 'print(17 % ___)', expected: "2" }
+        ]
       },
       {
         title: "4. Karar Yapıları (if - elif - else)",
-        badge: "if : | elif : | else:",
-        desc: "Programın koşullara göre farklı yollar izlemesini sağlar. Karşılaştırma ve mantıksal bağlaçlar (and, or) ile şartlar kurulur.",
-        rule: "Altın Kural: Şart satırının sonuna mutlaka iki nokta (:) koy ve alt satırı 4 boşluk içeriden başlat.",
-        code: 'notu = 82\nif notu >= 85:\n    print("Pekiyi")\nelif notu >= 50:\n    print("Geçti")\nelse:\n    print("Kaldı")'
+        formula: "if kosul: ... elif diger_kosul: ... else: ...",
+        summary: "Koşullara göre programın akışını yönlendirmek için if, elif ve else blokları kullanılır.",
+        exampleCode: 'notu = 85\nif notu >= 50:\n    print("Geçti")\nelse:\n    print("Kaldı")',
+        questions: [
+          { id: "4.1", title: "4.1 — Pozitif Kontrolü", diff: "Kolay", desc: "sayi = 12 değişkeni 0'dan büyükse ekrana <b>Pozitif</b> yazdır.", cmds: ["if", "print()"], skeleton: 'sayi = 12\nif sayi > 0:\n    print("___")', expected: "Pozitif" },
+          { id: "4.2", title: "4.2 — Ehliyet Yaşı", diff: "Orta", desc: "yas = 16 ise 18'den küçük olduğu için ekrana <b>Bekle</b> yazdır.", cmds: ["if", "else", "print()"], skeleton: 'yas = 16\nif yas >= 18:\n    print("Alabilir")\nelse:\n    print("___")', expected: "Bekle" }
+        ]
       },
       {
         title: "5. Döngüler (for ve while)",
-        badge: "for | range() | while",
-        desc: "Tekrarlayan işlemleri otomatikleştirir. for döngüsü belirli bir aralıkta, while döngüsü ise koşul doğru olduğu sürece çalışır.",
-        rule: "Altın Kural: range(1, 6) 1'den 5'e kadar sayı üretir (bitiş değeri dahil değildir). while döngüsünde sayacı güncellemeyi unutma.",
-        code: 'toplam = 0\nfor i in range(1, 6):\n    toplam += i\nprint("Toplam:", toplam)'
+        formula: "for i in range(n): ... | while kosul: ...",
+        summary: "Tekrarlayan işlemleri otomatikleştirmek için for ve while döngüleri kullanılır.",
+        exampleCode: 'for i in range(1, 4):\n    print(i)',
+        questions: [
+          { id: "5.1", title: "5.1 — 1'den 3'e Sayılar", diff: "Kolay", desc: "for döngüsü ve range(1, 4) kullanarak 1, 2, 3 sayılarını alt alta yazdır.", cmds: ["for", "range()", "print()"], skeleton: 'for i in range(1, ___):\n    print(i)', expected: "1\n2\n3" },
+          { id: "5.2", title: "5.2 — While Geri Sayım", diff: "Orta", desc: "while döngüsü ile 3'ten başlayıp 1'e kadar geri saydır.", cmds: ["while", "print()"], skeleton: 's = 3\nwhile s > 0:\n    print(s)\n    s -= ___', expected: "3\n2\n1" }
+        ]
       },
       {
         title: "6. Listeler (Lists)",
-        badge: "[] | .append() | len() | max()",
-        desc: "Listeler [] köşeli parantez ile oluşturulur, birden fazla veriyi sıralı tutar ve sonradan eleman eklenip çıkarılabilir.",
-        rule: "Altın Kural: Listeye yeni eleman eklemek için .append(), eleman sayısını bulmak için len() kullanılır.",
-        code: 'diller = ["Python", "C"]\ndiller.append("Java")\nprint(len(diller))'
+        formula: "liste = [1, 2, 3] | liste.append(4) | len(liste)",
+        summary: "Birden fazla veriyi sıralı ve değiştirilebilir şekilde tek değişkende tutar.",
+        exampleCode: 'meyveler = ["Elma", "Muz"]\nmeyveler.append("Çilek")\nprint(len(meyveler))',
+        questions: [
+          { id: "6.1", title: "6.1 — Eleman Ekleme", diff: "Kolay", desc: "sayilar = [10, 20] listesine append(30) ile 30 ekleyip listeyi yazdır.", cmds: ["list", "append()", "print()"], skeleton: 'sayilar = [10, 20]\nsayilar.append(___)\nprint(sayilar)', expected: "[10, 20, 30]" },
+          { id: "6.2", title: "6.2 — Liste Uzunluğu", diff: "Kolay", desc: "['a', 'b', 'c', 'd'] listesinin eleman sayısını len() ile yazdır.", cmds: ["list", "len()", "print()"], skeleton: 'harfler = ["a", "b", "c", "d"]\nprint(len(___))', expected: "4" }
+        ]
       },
       {
         title: "7. Tuples (Demetler)",
-        badge: "(a, b) | .count() | .index()",
-        desc: "Tuple (Demet), () normal parantez ile oluşturulan ve oluşturulduktan sonra elemanları değiştirilemeyen (immutable) güvenli veri koleksiyonudur.",
-        rule: "Altın Kural: Sabit kalması gereken veriler (koordinatlar, günler, ayarlar) Tuple içinde saklanır; a, b = demet ile değişkenlere açılabilir.",
-        code: 'koordinat = (41, 36)\nenlem, boylam = koordinat\nprint(enlem + boylam)'
+        formula: "demet = (10, 20, 30) — Değiştirilemez sıralı koleksiyon",
+        summary: "Parantez () ile tanımlanır; oluşturulduktan sonra elemanları değiştirilemez ve güvenlidir.",
+        exampleCode: 'renkler = ("Mor", "Sarı")\nprint(renkler[0])',
+        questions: [
+          { id: "7.1", title: "7.1 — Demet Elemanına Erişim", diff: "Kolay", desc: "koordinat = (41, 36) demetinin ilk elemanını (41) ekrana yazdır.", cmds: ["tuple", "print()"], skeleton: 'koordinat = (41, 36)\nprint(koordinat[___])', expected: "41" },
+          { id: "7.2", title: "7.2 — Demet Uzunluğu", diff: "Kolay", desc: "gunler = ('Pzt', 'Sal', 'Çar') demetinin eleman sayısını yazdır.", cmds: ["tuple", "len()", "print()"], skeleton: 'gunler = ("Pzt", "Sal", "Çar")\nprint(len(gunler))', expected: "3" }
+        ]
       },
       {
         title: "8. Sözlükler (Dict) ve Kümeler (Set)",
-        badge: "{k: v} Dict | {a, b} Set",
-        desc: "Sözlükler 'anahtar: değer' çiftleriyle etiketli veri tutar. Kümeler (Set) ise tekrar eden elemanları otomatik temizleyen benzersiz koleksiyonlardır.",
-        rule: "Altın Kural: Bir listedeki tekrar eden elemanları tekilleştirmek için set(liste) dönüşümü kullanılır.",
-        code: 'ogrenci = {"ad": "Can", "not": 90}\nkume = set([1, 2, 2, 3])\nprint(len(kume))'
+        formula: "sozluk = {'anahtar': 'deger'} | kume = {1, 2, 3}",
+        summary: "Sözlükler anahtar-değer eşleşmesi tutar; kümeler ise benzersiz (tekrarsız) elemanlar saklar.",
+        exampleCode: 'ogrenci = {"ad": "Enes", "puan": 100}\nprint(ogrenci["ad"])',
+        questions: [
+          { id: "8.1", title: "8.1 — Sözlükten Değer Okuma", diff: "Orta", desc: "arac = {'marka': 'Togg', 'yil': 2026} sözlüğünden 'marka' değerini yazdır.", cmds: ["dict", "print()"], skeleton: 'arac = {"marka": "Togg", "yil": 2026}\nprint(arac["___"])', expected: "Togg" },
+          { id: "8.2", title: "8.2 — Benzersiz Küme", diff: "Orta", desc: "{1, 2, 2, 3} kümesinin eleman sayısını len() ile yazdır.", cmds: ["set", "len()", "print()"], skeleton: 'kume = {1, 2, 2, 3}\nprint(len(kume))', expected: "3" }
+        ]
       },
       {
         title: "9. Fonksiyonlar (def) ve Hata Yakalama",
-        badge: "def | return | try-except",
-        desc: "def ile tekrar kullanılabilir fonksiyonlar tanımlanır. try-except blokları ise çalışma zamanı hatalarında programın çökmesini engeller.",
-        rule: "Altın Kural: Riskli işlemleri try: bloğuna, hata oluştuğunda verilecek güvenli mesajı except: bloğuna yaz.",
-        code: 'try:\n    print(10 / 0)\nexcept:\n    print("Sıfıra bölünemez")'
+        formula: "def topla(a, b): return a + b | try: ... except: ...",
+        summary: "Tekrar kullanılabilir kod blokları def ile tanımlanır; hatalar try-except ile yakalanır.",
+        exampleCode: 'def kare(x):\n    return x * x\nprint(kare(6))',
+        questions: [
+          { id: "9.1", title: "9.1 — Kare Alan Fonksiyon", diff: "Orta", desc: "Verilen sayının karesini döndüren kare(x) fonksiyonunu tamamlayıp kare(5) sonucunu yazdır.", cmds: ["def", "return", "print()"], skeleton: 'def kare(x):\n    return x * ___\nprint(kare(5))', expected: "25" },
+          { id: "9.2", title: "9.2 — Sıfıra Bölme Koruması", diff: "Zor", desc: "try-except kullanarak 10 / 0 hatasını yakala ve ekrana <b>Hata Yakalandı</b> yazdır.", cmds: ["try", "except", "print()"], skeleton: 'try:\n    print(10 / 0)\nexcept:\n    print("___")', expected: "Hata Yakalandı" }
+        ]
       },
       {
         title: "10. Grafik ve Çizim (Turtle)",
-        badge: "import turtle | forward() | right()",
-        desc: "Turtle (Kaplumbağa) kütüphanesi ekranda bir kalemi hareket ettirerek çizgi, çokgen, daire ve geometrik desenler çizdirmeyi sağlar.",
-        rule: "Altın Kural: Çokgen çizerken dış açı 360 / kenar_sayisi formülüyle bulunur (Kare için 90, Üçgen için 120 derece).",
-        code: 'import turtle\nt = turtle.Turtle()\nfor i in range(4):\n    t.forward(50)\n    t.right(90)'
-      }
-    ];
-
-    const TOPICS_DATA = [
-      {
-        name: "1. Python'a Giriş ve Çıktı (print)",
-        formulaList: ["print('metin')", "print(a, b, sep='-')", "print('a\\nb')", "print('x' * 3)"],
-        formulaNote: "print() metinleri tırnak içinde, sayıları doğrudan ekrana yazdırır.",
-        poolCommands: ["print()", "sep=", "\\n (alt satır)", "* (tekrar)"],
+        formula: "import turtle | t = turtle.Turtle() | t.forward(100) | t.right(90)",
+        summary: "Turtle modülü ile ekranda geometrik şekiller, kareler, üçgenler ve daireler çizilir.",
+        exampleCode: 'import turtle\nt = turtle.Turtle()\nt.color("purple")\nfor i in range(4):\n    t.forward(80)\n    t.right(90)',
         questions: [
-          { diff: "Kolay", title: "İlk Çıktı Komutu", desc: "Ekrana Python Başladı yazdıran kodu yaz.", expected: "Python Başladı", usedCommands: ["print()"], skeleton: 'print("___")', hint: "print() fonksiyonunun içine çift tırnakla metni yaz.", example: 'print("Merhaba Python")', solution: 'print("Python Başladı")' },
-          { diff: "Kolay", title: "Sayı Yazdırma", desc: "Ekrana tırnak kullanmadan 2026 sayısını yazdır.", expected: "2026", usedCommands: ["print()"], skeleton: "print(___)", hint: "Sayılar tırnak işaretine ihtiyaç duymaz: print(2026)", example: "print(100)", solution: "print(2026)" },
-          { diff: "Orta", title: "Ayırıcı (sep) Kullanımı", desc: "print('10', '20', '30') ifadelerini aralarında '-' işareti olacak şekilde (10-20-30) yazdır.", expected: "10-20-30", usedCommands: ["print()", "sep="], skeleton: 'print("10", "20", "30", sep="___")', hint: 'sep="-" parametresini kullan.', example: 'print("A", "B", sep="-")', solution: 'print("10", "20", "30", sep="-")' },
-          { diff: "Orta", title: "Tek Satırda Alt Alta Yazdırma", desc: "Tek bir print() komutu ve \\n karakteri kullanarak üst satıra Ali, alt satıra Veli yazdır.", expected: "Ali\nVeli", usedCommands: ["print()", "\\n (alt satır)"], skeleton: 'print("Ali___Veli")', hint: "\\n kaçış karakteri imleci bir alt satıra geçirir.", example: 'print("Bir\\nİki")', solution: 'print("Ali\\nVeli")' },
-          { diff: "Orta", title: "Metin Çoğaltma", desc: "'Py' metnini 3 kez yan yana (PyPyPy) yazdır.", expected: "PyPyPy", usedCommands: ["print()", "* (tekrar)"], skeleton: 'print("Py" * ___)', hint: "Metinleri tam sayıyla çarparak tekrar ettirebilirsin.", example: 'print("Ha" * 3)', solution: 'print("Py" * 3)' },
-          { diff: "Zor", title: "Biçimli Başlık Çıktısı", desc: "print('Bölüm', '1', 'Tamam', sep=' | ') çıktısını ekrana yazdır.", expected: "Bölüm | 1 | Tamam", usedCommands: ["print()", "sep="], skeleton: 'print("Bölüm", "1", "Tamam", sep="___")', hint: 'sep=" | " olarak ayarla.', example: 'print("X", "Y", sep=" | ")', solution: 'print("Bölüm", "1", "Tamam", sep=" | ")' }
-        ]
-      },
-      {
-        name: "2. Değişkenler ve Veri Tipleri",
-        formulaList: ["degisken = deger", "f'{ad} {yas}'", "int('25')", "float(10)", "a, b = b, a"],
-        formulaNote: "f-string ile metin ve sayılar tek tırnak bloğu içinde birleştirilir.",
-        poolCommands: ["değişken =", "f-string", "int()", "float()", "a, b = b, a"],
-        questions: [
-          { diff: "Kolay", title: "Metin Değişkeni (str)", desc: "sehir değişkenine Samsun değerini ata ve ekrana yazdır.", expected: "Samsun", usedCommands: ["değişken ="], skeleton: 'sehir = "___"\nprint(sehir)', hint: "Metin değerini çift tırnak içine yaz.", example: 'ad = "Ece"\nprint(ad)', solution: 'sehir = "Samsun"\nprint(sehir)' },
-          { diff: "Kolay", title: "Tam Sayı Değişkeni (int)", desc: "plaka = 55 değişkenini tanımla ve ekrana yazdır.", expected: "55", usedCommands: ["değişken ="], skeleton: "plaka = ___\nprint(plaka)", hint: "plaka = 55 yaz.", example: "yil = 2026\nprint(yil)", solution: "plaka = 55\nprint(plaka)" },
-          { diff: "Orta", title: "f-String Birleştirme", desc: "ad = 'Can' ve yas = 20 kullanarak 'Can 20 yasindadir' yazdır.", expected: "Can 20 yasindadir", usedCommands: ["değişken =", "f-string"], skeleton: 'ad = "Can"\nyas = 20\nprint(f"{___} {___} yasindadir")', hint: 'f"{ad} {yas} yasindadir" kalıbını kullan.', example: 'kisi = "Ali"\npuan = 90\nprint(f"{kisi} {puan} aldi")', solution: 'ad = "Can"\nyas = 20\nprint(f"{ad} {yas} yasindadir")' },
-          { diff: "Orta", title: "Tip Dönüşümü (str -> int)", desc: "Metin olan s1 = '15' ve s2 = '25' değerlerini int() ile tam sayıya çevirip toplamlarını (40) yazdır.", expected: "40", usedCommands: ["değişken =", "int()"], skeleton: 's1 = "15"\ns2 = "25"\nprint(int(s1) + ___(s2))', hint: "int(s1) + int(s2) yazmalısın.", example: 'a = "5"\nb = "7"\nprint(int(a) + int(b))', solution: 's1 = "15"\ns2 = "25"\nprint(int(s1) + int(s2))' },
-          { diff: "Orta", title: "Değer Takası (Swap)", desc: "x = 10 ve y = 99 değerlerini yer değiştirip aralarında boşlukla yazdır (99 10).", expected: "99 10", usedCommands: ["değişken =", "a, b = b, a"], skeleton: "x = 10\ny = 99\nx, y = ___, ___\nprint(x, y)", hint: "x, y = y, x satırını ekle.", example: "a = 1\nb = 2\na, b = b, a\nprint(a, b)", solution: "x = 10\ny = 99\nx, y = y, x\nprint(x, y)" },
-          { diff: "Zor", title: "Ondalıklı Dönüşüm (float)", desc: "tam = 12 sayısını float() ile ondalıklı sayıya çevirip ekrana (12.0) yazdır.", expected: "12.0", usedCommands: ["değişken =", "float()"], skeleton: "tam = 12\nprint(___(tam))", hint: "float(12) sonucu 12.0 olur.", example: "s = 7\nprint(float(s))", solution: "tam = 12\nprint(float(tam))" }
-        ]
-      },
-      {
-        name: "3. Operatörler ve Kullanıcı Girdisi (input)",
-        formulaList: ["a // b (tam bölme)", "a % b (kalan/mod)", "a ** b (üs alma)", "input('mesaj')"],
-        formulaNote: "// bölme sonucunun tam kısmını, % ise bölümden kalanı verir.",
-        poolCommands: ["// (tam bölme)", "% (mod)", "** (üs)", "input()", "int()"],
-        questions: [
-          { diff: "Kolay", title: "Üs Alma Operatörü (**)", desc: "2 üzeri 5 işleminin sonucunu (32) ekrana yazdır.", expected: "32", usedCommands: ["** (üs)"], skeleton: "print(2 ___ 5)", hint: "Python'da üs alma için ** kullanılır.", example: "print(3 ** 2)", solution: "print(2 ** 5)" },
-          { diff: "Kolay", title: "Mod Alma (Kalan Bulma)", desc: "17 sayısının 5'e bölümünden kalanı (%) ekrana yazdır.", expected: "2", usedCommands: ["% (mod)"], skeleton: "print(17 ___ 5)", hint: "17 % 5 işleminin sonucu 2'dir.", example: "print(10 % 3)", solution: "print(17 % 5)" },
-          { diff: "Orta", title: "Tam Sayı Bölmesi (//)", desc: "23 sayısının 4'e tam bölümünü (ondalıksız kısmı 5) yazdır.", expected: "5", usedCommands: ["// (tam bölme)"], skeleton: "print(23 ___ 4)", hint: "23 // 4 işlemi 5.75 yerine tam kısım olan 5'i verir.", example: "print(15 // 2)", solution: "print(23 // 4)" },
-          { diff: "Orta", title: "input() ile Kullanıcıdan İsim Alma", desc: "ad = input('Adınız: ') ile kullanıcıdan isim al ve ekrana 'Merhaba ' + ad yazdır. (Sistem otomatik 'Python' girdisi verir).", expected: "Merhaba Python", usedCommands: ["input()"], skeleton: 'ad = ___("Adınız: ")\nprint("Merhaba " + ad)', hint: "input() fonksiyonu kullanıcıdan gelen metni ad değişkenine aktarır.", example: 'isim = input("Gir: ")\nprint("Selam " + isim)', solution: 'ad = input("Adınız: ")\nprint("Merhaba " + ad)' },
-          { diff: "Orta", title: "input() ile Sayısal Hesaplama", desc: "sayi = int(input('Sayı: ')) ile alınan sayının 2 katını yazdır. (Sistem otomatik 25 girdisi verir -> 50).", expected: "50", usedCommands: ["input()", "int()"], skeleton: 'sayi = int(___("Sayı: "))\nprint(sayi * 2)', hint: "int(input(...)) ile girilen metni tam sayıya çevir.", example: 'n = int(input("Sayı: "))\nprint(n + 10)', solution: 'sayi = int(input("Sayı: "))\nprint(sayi * 2)' },
-          { diff: "Zor", title: "Dakikayı Saat ve Dakikaya Çevirme", desc: "toplam_dk = 135 dakikayı // ve % kullanarak '2 saat 15 dakika' şeklinde yazdır.", expected: "2 saat 15 dakika", usedCommands: ["// (tam bölme)", "% (mod)"], skeleton: 'toplam_dk = 135\nsaat = toplam_dk // 60\ndk = toplam_dk ___ 60\nprint(f"{saat} saat {dk} dakika")', hint: "135 // 60 = 2 saat, 135 % 60 = 15 dakika verir.", example: 's = 90 // 60\nd = 90 % 60\nprint(s, d)', solution: 'toplam_dk = 135\nsaat = toplam_dk // 60\ndk = toplam_dk % 60\nprint(f"{saat} saat {dk} dakika")' }
-        ]
-      },
-      {
-        name: "4. Karar Yapıları (if - elif - else)",
-        formulaList: ["if şart:", "elif şart:", "else:", "and / or", "sayi % 2 == 0"],
-        formulaNote: "Koşul sonuna : konur ve alt satır 4 boşluk içeriden başlatılır.",
-        poolCommands: ["if :", "elif :", "else:", "% (mod)", "and"],
-        questions: [
-          { diff: "Kolay", title: "Pozitif Kontrolü", desc: "sayi = 15 için sayı 0'dan büyükse ekrana Pozitif yazdır.", expected: "Pozitif", usedCommands: ["if :"], skeleton: "sayi = 15\nif sayi ___ 0:\n    print('Pozitif')", hint: "if sayi > 0: yazmalısın.", example: "x = 8\nif x > 0:\n    print('Pozitif')", solution: "sayi = 15\nif sayi > 0:\n    print('Pozitif')" },
-          { diff: "Kolay", title: "Sınav Geçme Durumu", desc: "puan = 65 için 50 ve üzeriyse Geçti, değilse Kaldı yazdır.", expected: "Geçti", usedCommands: ["if :", "else:"], skeleton: "puan = 65\nif puan ___ 50:\n    print('Geçti')\nelse:\n    print('___')", hint: "if puan >= 50: şartını kontrol et.", example: "notu = 45\nif notu >= 50:\n    print('Geçti')\nelse:\n    print('Kaldı')", solution: "puan = 65\nif puan >= 50:\n    print('Geçti')\nelse:\n    print('Kaldı')" },
-          { diff: "Orta", title: "Tek mi Çift mi?", desc: "n = 28 sayısının 2'ye bölümünden kalan 0 ise Çift, değilse Tek yazdır.", expected: "Çift", usedCommands: ["if :", "else:", "% (mod)"], skeleton: "n = 28\nif n % ___ == 0:\n    print('Çift')\nelse:\n    print('Tek')", hint: "if n % 2 == 0: kullan.", example: "s = 14\nif s % 2 == 0:\n    print('Çift')\nelse:\n    print('Tek')", solution: "n = 28\nif n % 2 == 0:\n    print('Çift')\nelse:\n    print('Tek')" },
-          { diff: "Orta", title: "Harf Notu Hesabı", desc: "not_ort = 82 için 85+ AA, 70-84 BB, altı CC yazdır.", expected: "BB", usedCommands: ["if :", "elif :", "else:"], skeleton: "not_ort = 82\nif not_ort >= 85:\n    print('AA')\nelif not_ort >= ___:\n    print('BB')\nelse:\n    print('CC')", hint: "if, elif ve else bloklarını kur.", example: "p = 75\nif p >= 85:\n    print('AA')\nelif p >= 70:\n    print('BB')\nelse:\n    print('CC')", solution: "not_ort = 82\nif not_ort >= 85:\n    print('AA')\nelif not_ort >= 70:\n    print('BB')\nelse:\n    print('CC')" },
-          { diff: "Orta", title: "Giriş Doğrulama", desc: "user = 'admin' ve sifre = '1234' ise Giriş Başarılı yazdır.", expected: "Giriş Başarılı", usedCommands: ["if :", "and"], skeleton: 'user = "admin"\nsifre = "1234"\nif user == "admin" ___ sifre == "1234":\n    print("Giriş Başarılı")', hint: "and operatörü ile iki şartı birleştir.", example: 'u = "ali"\ns = "99"\nif u == "ali" and s == "99":\n    print("Giriş Başarılı")', solution: 'user = "admin"\nsifre = "1234"\nif user == "admin" and s == "1234":\n    print("Giriş Başarılı")' },
-          { diff: "Zor", title: "Üç Sayının En Büyüğü", desc: "a = 14, b = 29, c = 21 sayılarından en büyüğünü if-elif-else ile yazdır.", expected: "29", usedCommands: ["if :", "elif :", "else:", "and"], skeleton: "a, b, c = 14, 29, 21\nif a >= b and a >= c:\n    print(a)\nelif b >= ___:\n    print(b)\nelse:\n    print(___)", hint: "a >= b and a >= c mantığını kullan.", example: "x, y, z = 5, 12, 9\nif x >= y and x >= z:\n    print(x)\nelif y >= z:\n    print(y)\nelse:\n    print(z)", solution: "a, b, c = 14, 29, 21\nif a >= b and a >= c:\n    print(a)\nelif b >= c:\n    print(b)\nelse:\n    print(c)" }
-        ]
-      },
-      {
-        name: "5. Döngüler (for ve while)",
-        formulaList: ["for i in range(bas, son):", "while şart:", "toplam += i", "sayac -= 1"],
-        formulaNote: "range(1, 6) 1'den 5'e kadar sayar; bitiş değeri dahil edilmez.",
-        poolCommands: ["for i in", "range()", "while :", "+= / -=", "% (mod)"],
-        questions: [
-          { diff: "Kolay", title: "1'den 5'e Kadar", desc: "for döngüsü ile 1'den 5'e kadar (5 dahil) alt alta yazdır.", expected: "1\n2\n3\n4\n5", usedCommands: ["for i in", "range()"], skeleton: "for i in range(1, ___):\n    print(___)", hint: "range(1, 6) kullan.", example: "for k in range(1, 4):\n    print(k)", solution: "for i in range(1, 6):\n    print(i)" },
-          { diff: "Kolay", title: "Çift Sayıları Listele", desc: "2'den 10'a kadar çift sayıları alt alta yazdır.", expected: "2\n4\n6\n8\n10", usedCommands: ["for i in", "range()"], skeleton: "for i in range(2, ___, 2):\n    print(i)", hint: "range(2, 11, 2) kullan.", example: "for x in range(2, 7, 2):\n    print(x)", solution: "for i in range(2, 11, 2):\n    print(i)" },
-          { diff: "Orta", title: "1'den 10'a Toplam", desc: "1'den 10'a kadar olan sayıların toplamını döngüyle bul.", expected: "55", usedCommands: ["for i in", "range()", "+= / -="], skeleton: "toplam = 0\nfor i in range(1, 11):\n    toplam += ___\nprint(toplam)", hint: "toplam += i satırını ekle.", example: "t = 0\nfor i in range(1, 5):\n    t += i\nprint(t)", solution: "toplam = 0\nfor i in range(1, 11):\n    toplam += i\nprint(toplam)" },
-          { diff: "Orta", title: "While Geri Sayım", desc: "sayac = 3 iken 3, 2, 1 yazdırıp bitince Başla! yazdır.", expected: "3\n2\n1\nBaşla!", usedCommands: ["while :", "+= / -="], skeleton: "sayac = 3\nwhile sayac > 0:\n    print(sayac)\n    sayac -= ___\nprint('Başla!')", hint: "sayac -= 1 yaz.", example: "n = 2\nwhile n > 0:\n    print(n)\n    n -= 1\nprint('Bitti')", solution: "sayac = 3\nwhile sayac > 0:\n    print(sayac)\n    sayac -= 1\nprint('Başla!')" },
-          { diff: "Zor", title: "Faktöriyel Hesabı", desc: "5! sonucunu döngüyle hesaplayıp yazdır.", expected: "120", usedCommands: ["for i in", "range()", "+= / -="], skeleton: "sonuc = 1\nfor i in range(1, ___):\n    sonuc *= ___\nprint(sonuc)", hint: "range(1, 6) ve sonuc *= i kullan.", example: "f = 1\nfor i in range(1, 5):\n    f *= i\nprint(f)", solution: "sonuc = 1\nfor i in range(1, 6):\n    sonuc *= i\nprint(sonuc)" },
-          { diff: "Zor", title: "Ortak Bölünenler", desc: "1 ile 30 arasındaki hem 3'e hem 5'e bölünen sayıları alt alta yazdır.", expected: "15\n30", usedCommands: ["for i in", "range()", "% (mod)"], skeleton: "for i in range(1, 31):\n    if i % 3 == 0 and i % ___ == 0:\n        print(i)", hint: "i % 3 == 0 and i % 5 == 0", example: "for i in range(1, 20):\n    if i % 2 == 0 and i % 3 == 0:\n        print(i)", solution: "for i in range(1, 31):\n    if i % 3 == 0 and i % 5 == 0:\n        print(i)" }
-        ]
-      },
-      {
-        name: "6. Listeler (Lists)",
-        formulaList: ["liste = [a, b]", "liste.append(x)", "len(liste)", "max(liste)", "sum(liste)"],
-        formulaNote: "Listeler köşeli parantez [] ile tanımlanır ve sonradan değiştirilebilir.",
-        poolCommands: [".append()", "len()", "max()", "sum()", "liste[i]"],
-        questions: [
-          { diff: "Kolay", title: "Listeye Eleman Ekle", desc: "diller = ['Python', 'C'] listesine 'Java' ekleyip yazdır.", expected: "['Python', 'C', 'Java']", usedCommands: [".append()"], skeleton: 'diller = ["Python", "C"]\ndiller.append("___")\nprint(diller)', hint: "diller.append('Java')", example: 'meyve = ["Elma"]\nmeyve.append("Muz")\nprint(meyve)', solution: 'diller = ["Python", "C"]\ndiller.append("Java")\nprint(diller)' },
-          { diff: "Kolay", title: "Liste Uzunluğu", desc: "notlar = [70, 85, 90, 60] listesinin eleman sayısını yazdır.", expected: "4", usedCommands: ["len()"], skeleton: "notlar = [70, 85, 90, 60]\nprint(___(notlar))", hint: "print(len(notlar))", example: "liste = [1, 2, 3]\nprint(len(liste))", solution: "notlar = [70, 85, 90, 60]\nprint(len(notlar))" },
-          { diff: "Orta", title: "En Büyük Eleman", desc: "sayilar = [12, 45, 7, 89, 34] listesindeki en büyük sayıyı yazdır.", expected: "89", usedCommands: ["max()"], skeleton: "sayilar = [12, 45, 7, 89, 34]\nprint(___(sayilar))", hint: "print(max(sayilar))", example: "s = [4, 19, 2]\nprint(max(s))", solution: "sayilar = [12, 45, 7, 89, 34]\nprint(max(sayilar))" },
-          { diff: "Orta", title: "Liste Elemanları Toplamı", desc: "fiyatlar = [20, 35, 45] listesindeki sayıların toplamını (100) yazdır.", expected: "100", usedCommands: ["sum()"], skeleton: "fiyatlar = [20, 35, 45]\nprint(___(fiyatlar))", hint: "sum(fiyatlar) listedeki tüm sayıları toplar.", example: "l = [10, 15]\nprint(sum(l))", solution: "fiyatlar = [20, 35, 45]\nprint(sum(fiyatlar))" },
-          { diff: "Orta", title: "İndeks ile Eleman Güncelleme", desc: "renkler = ['Kırmızı', 'Mavi', 'Yeşil'] listesinin ilk elemanını (0. indeks) 'Mor' yapıp listeyi yazdır.", expected: "['Mor', 'Mavi', 'Yeşil']", usedCommands: ["liste[i]"], skeleton: 'renkler = ["Kırmızı", "Mavi", "Yeşil"]\nrenkler[0] = "___"\nprint(renkler)', hint: 'renkler[0] = "Mor" yaz.', example: 'a = ["Eski", "Yeni"]\na[0] = "Güncel"\nprint(a)', solution: 'renkler = ["Kırmızı", "Mavi", "Yeşil"]\nrenkler[0] = "Mor"\nprint(renkler)' },
-          { diff: "Zor", title: "Liste Filtreleme", desc: "sayilar = [5, 12, 18, 3, 25] listesinden 10'dan büyükleri yeni listede yazdır.", expected: "[12, 18, 25]", usedCommands: ["liste[i]"], skeleton: "sayilar = [5, 12, 18, 3, 25]\nprint([x for x in sayilar if x > ___])", hint: "print([x for x in sayilar if x > 10])", example: "s = [2, 8, 15]\nprint([i for i in s if i > 5])", solution: "sayilar = [5, 12, 18, 3, 25]\nprint([x for x in sayilar if x > 10])" }
-        ]
-      },
-      {
-        name: "7. Tuples (Demetler)",
-        formulaList: ["demet = (a, b, c)", "demet[indeks]", "demet.count(x)", "demet.index(x)", "a, b = demet"],
-        formulaNote: "Tuple () parantezle tanımlanır ve elemanları sonradan değiştirilemez.",
-        poolCommands: ["( ) Tuple", "demet[i]", ".count()", ".index()", "Unpacking"],
-        questions: [
-          { diff: "Kolay", title: "İlk Tuple Oluşturma", desc: "renkler adlı bir Tuple (demet) oluşturup içine 'Mor', 'Sarı', 'Siyah' ekle ve yazdır.", expected: "('Mor', 'Sarı', 'Siyah')", usedCommands: ["( ) Tuple"], skeleton: 'renkler = ("Mor", "___", "Siyah")\nprint(renkler)', hint: "Tuple tanımlarken normal parantez () kullanılır.", example: 'gunler = ("Pzt", "Sal")\nprint(gunler)', solution: 'renkler = ("Mor", "Sarı", "Siyah")\nprint(renkler)' },
-          { diff: "Kolay", title: "Demet Elemanına Erişim", desc: "sehirler = ('Samsun', 'Ankara', 'İzmir') demetinin ilk elemanını (0. indeks) yazdır.", expected: "Samsun", usedCommands: ["( ) Tuple", "demet[i]"], skeleton: 'sehirler = ("Samsun", "Ankara", "İzmir")\nprint(sehirler[___])', hint: "Python'da indeksler 0'dan başlar: sehirler[0]", example: 't = ("A", "B")\nprint(t[0])', solution: 'sehirler = ("Samsun", "Ankara", "İzmir")\nprint(sehirler[0])' },
-          { diff: "Orta", title: "Eleman Sayma (.count)", desc: "notlar = (90, 80, 90, 70, 90) demetinde 90 sayısının kaç kez geçtiğini yazdır.", expected: "3", usedCommands: ["( ) Tuple", ".count()"], skeleton: "notlar = (90, 80, 90, 70, 90)\nprint(notlar.count(___))", hint: "notlar.count(90) metodunu kullan.", example: "d = (1, 2, 1)\nprint(d.count(1))", solution: "notlar = (90, 80, 90, 70, 90)\nprint(notlar.count(90))" },
-          { diff: "Orta", title: "İndeks Bulma (.index)", desc: "diller = ('C', 'Python', 'Rust') demetinde 'Python' elemanının sıra numarasını yazdır.", expected: "1", usedCommands: ["( ) Tuple", ".index()"], skeleton: 'diller = ("C", "Python", "Rust")\nprint(diller.index("___"))', hint: "diller.index('Python') 1 sonucunu döndürür.", example: 'a = ("x", "y")\nprint(a.index("y"))', solution: 'diller = ("C", "Python", "Rust")\nprint(diller.index("Python"))' },
-          { diff: "Orta", title: "Tuple Paket Açma (Unpacking)", desc: "koordinat = (41, 36) demetini enlem ve boylam değişkenlerine aktarıp toplamlarını (77) yazdır.", expected: "77", usedCommands: ["( ) Tuple", "Unpacking"], skeleton: "koordinat = (41, 36)\nenlem, boylam = ___\nprint(enlem + boylam)", hint: "enlem, boylam = koordinat yazarak demeti iki değişkene ayırabilirsin.", example: "nokta = (10, 20)\nx, y = nokta\nprint(x + y)", solution: "koordinat = (41, 36)\nenlem, boylam = koordinat\nprint(enlem + boylam)" },
-          { diff: "Zor", title: "Demet İçinde En Büyük ve En Küçük", desc: "puanlar = (45, 92, 68, 100, 74) demetindeki en yüksek ve en düşük puanın farkını (55) yazdır.", expected: "55", usedCommands: ["( ) Tuple"], skeleton: "puanlar = (45, 92, 68, 100, 74)\nfark = max(puanlar) - ___(puanlar)\nprint(fark)", hint: "max(puanlar) - min(puanlar) işlemini kullan.", example: "t = (10, 40)\nprint(max(t) - min(t))", solution: "puanlar = (45, 92, 68, 100, 74)\nfark = max(puanlar) - min(puanlar)\nprint(fark)" }
-        ]
-      },
-      {
-        name: "8. Sözlükler (Dict) ve Kümeler (Set)",
-        formulaList: ["sozluk['anahtar']", "sum(sozluk.values())", "kume = {1, 2, 3}", "set(liste)", "kume.add(x)"],
-        formulaNote: "Sözlükler anahtar-değer eşleşmesi yapar; Kümeler (Set) tekrar eden elemanları siler.",
-        poolCommands: ["sozluk[key]", ".values()", "set()", ".add()", "len()"],
-        questions: [
-          { diff: "Kolay", title: "Sözlükten Değer Okuma", desc: "arac = {'marka': 'Volvo', 'yil': 2024} sözlüğünden marka değerini yazdır.", expected: "Volvo", usedCommands: ["sozluk[key]"], skeleton: 'arac = {"marka": "Volvo", "yil": 2024}\nprint(arac["___"])', hint: 'print(arac["marka"])', example: 'kisi = {"ad": "Mert"}\nprint(kisi["ad"])', solution: 'arac = {"marka": "Volvo", "yil": 2024}\nprint(arac["marka"])' },
-          { diff: "Kolay", title: "Sözlüğe Yeni Anahtar Ekleme", desc: "ogrenci = {'ad': 'Ali'} sözlüğüne 'not': 95 ekleyip ogrenci['not'] değerini yazdır.", expected: "95", usedCommands: ["sozluk[key]"], skeleton: 'ogrenci = {"ad": "Ali"}\nogrenci["not"] = ___\nprint(ogrenci["not"])', hint: 'ogrenci["not"] = 95 yaz.', example: 'd = {"a": 1}\nd["b"] = 2\nprint(d["b"])', solution: 'ogrenci = {"ad": "Ali"}\nogrenci["not"] = 95\nprint(ogrenci["not"])' },
-          { diff: "Orta", title: "Sözlük Değerlerini Toplama", desc: "sepet = {'kalem': 15, 'defter': 45, 'silgi': 10} toplam tutarını (70) yazdır.", expected: "70", usedCommands: [".values()"], skeleton: 'sepet = {"kalem": 15, "defter": 45, "silgi": 10}\nprint(sum(sepet.___()))', hint: "sum(sepet.values()) kullan.", example: 'f = {"a": 20, "b": 30}\nprint(sum(f.values()))', solution: 'sepet = {"kalem": 15, "defter": 45, "silgi": 10}\nprint(sum(sepet.values()))' },
-          { diff: "Orta", title: "Küme (Set) ile Tekrarları Silme", desc: "sayilar = [1, 2, 2, 3, 3, 3] listesini set() ile kümeye çevirip benzersiz eleman sayısını (3) yazdır.", expected: "3", usedCommands: ["set()", "len()"], skeleton: "sayilar = [1, 2, 2, 3, 3, 3]\nbenzersiz = ___(sayilar)\nprint(len(benzersiz))", hint: "set(sayilar) tekrar eden elemanları otomatik eler.", example: "l = [5, 5, 6]\nprint(len(set(l)))", solution: "sayilar = [1, 2, 2, 3, 3, 3]\nbenzersiz = set(sayilar)\nprint(len(benzersiz))" },
-          { diff: "Orta", title: "Kümeye Eleman Ekleme (.add)", desc: "kume = {'Python', 'C'} kümesine .add() ile 'Go' ekleyip eleman sayısını (3) yazdır.", expected: "3", usedCommands: [".add()", "len()"], skeleton: 'kume = {"Python", "C"}\nkume.add("___")\nprint(len(kume))', hint: "Kümelerde .append() yerine .add() kullanılır.", example: 'k = {1, 2}\nk.add(3)\nprint(len(k))', solution: 'kume = {"Python", "C"}\nkume.add("Go")\nprint(len(kume))' },
-          { diff: "Zor", title: "İki Kümenin Kesişimi (&)", desc: "a = {1, 2, 3, 4} ve b = {3, 4, 5, 6} kümelerinin ortak eleman sayısını (2) yazdır.", expected: "2", usedCommands: ["len()"], skeleton: "a = {1, 2, 3, 4}\nb = {3, 4, 5, 6}\nortak = a & ___\nprint(len(ortak))", hint: "a & b iki kümenin ortak elemanlarını (kesişimini) verir.", example: "x = {1, 2}\ny = {2, 3}\nprint(len(x & y))", solution: "a = {1, 2, 3, 4}\nb = {3, 4, 5, 6}\nortak = a & b\nprint(len(ortak))" }
-        ]
-      },
-      {
-        name: "9. Fonksiyonlar (def) ve Hata Yakalama",
-        formulaList: ["def ad(x):", "return sonuc", "try:", "except Exception:"],
-        formulaNote: "try-except bloğu hatalı işlemlerde programın çökmesini engeller.",
-        poolCommands: ["def :", "return", "try:", "except:"],
-        questions: [
-          { diff: "Kolay", title: "Selamlama Fonksiyonu", desc: "selamla() fonksiyonu tanımla ve çağrıldığında Merhaba Python yazdırsın.", expected: "Merhaba Python", usedCommands: ["def :"], skeleton: "def selamla():\n    print('___')\n\nselamla()", hint: "print('Merhaba Python') yaz.", example: "def merhaba():\n    print('Selam')\nmerhaba()", solution: "def selamla():\n    print('Merhaba Python')\nselamla()" },
-          { diff: "Kolay", title: "Kare Alma Fonksiyonu", desc: "kare(x) fonksiyonu x'in karesini return etsin. kare(6) sonucunu (36) yazdır.", expected: "36", usedCommands: ["def :", "return"], skeleton: "def kare(x):\n    return x ** ___\n\nprint(kare(6))", hint: "return x ** 2", example: "def kup(x):\n    return x ** 3\nprint(kup(2))", solution: "def kare(x):\n    return x ** 2\nprint(kare(6))" },
-          { diff: "Orta", title: "Dikdörtgen Alanı", desc: "alan(kisa, uzun) fonksiyonu ile 5 ve 8 kenarlı dikdörtgenin alanını (40) yazdır.", expected: "40", usedCommands: ["def :", "return"], skeleton: "def alan(kisa, uzun):\n    return ___ * ___\n\nprint(alan(5, 8))", hint: "return kisa * uzun", example: "def carp(a, b):\n    return a * b\nprint(carp(3, 4))", solution: "def alan(kisa, uzun):\n    return kisa * uzun\nprint(alan(5, 8))" },
-          { diff: "Orta", title: "Sıfıra Bölme Hatası Yakalama", desc: "try-except kullanarak 10 / 0 işlemini yakala ve ekrana Hata Yakalandı yazdır.", expected: "Hata Yakalandı", usedCommands: ["try:", "except:"], skeleton: "try:\n    sonuc = 10 / 0\n___:\n    print('Hata Yakalandı')", hint: "try bloğunun altına except: yaz.", example: "try:\n    x = 5 / 0\nexcept:\n    print('Hata')", solution: "try:\n    sonuc = 10 / 0\nexcept:\n    print('Hata Yakalandı')" },
-          { diff: "Orta", title: "Güvenli Bölme Fonksiyonu", desc: "bol(a, b) fonksiyonunda b=0 gelirse except ile 'Geçersiz' döndür. bol(10, 0) sonucunu yazdır.", expected: "Geçersiz", usedCommands: ["def :", "return", "try:", "except:"], skeleton: "def bol(a, b):\n    try:\n        return a / b\n    except:\n        return '___'\n\nprint(bol(10, 0))", hint: "except bloğunda return 'Geçersiz' döndür.", example: "def test(x):\n    try:\n        return 1/x\n    except:\n        return 'Yok'\nprint(test(0))", solution: "def bol(a, b):\n    try:\n        return a / b\n    except:\n        return 'Geçersiz'\n\nprint(bol(10, 0))" },
-          { diff: "Zor", title: "Liste Ortalaması Fonksiyonu", desc: "ortalama(liste) fonksiyonu [10, 20, 30] için 20.0 döndürsün; boş liste gelirse except ile 0 döndürsün.", expected: "20.0", usedCommands: ["def :", "return", "try:", "except:"], skeleton: "def ortalama(liste):\n    try:\n        return sum(liste) / ___(liste)\n    except:\n        return 0\n\nprint(ortalama([10, 20, 30]))", hint: "sum(liste) / len(liste) işlemini kullan.", example: "def ort(l):\n    return sum(l) / len(l)\nprint(ort([4, 6]))", solution: "def ortalama(liste):\n    try:\n        return sum(liste) / len(liste)\n    except:\n        return 0\n\nprint(ortalama([10, 20, 30]))" }
-        ]
-      },
-      {
-        name: "10. Grafik ve Çizim (Turtle)",
-        formulaList: ["import turtle", "t = turtle.Turtle()", "t.forward(50)", "t.right(90)", "t.circle(30)", "t.color('gold')"],
-        formulaNote: "Çizim komutları sağ alttaki Turtle Çizim Tuvalinde anında şekle dönüşür.",
-        poolCommands: ["import turtle", "forward()", "right() / left()", "circle()", "color()", "for döngüsü"],
-        questions: [
-          { diff: "Kolay", title: "İlk Çizgiyi Çizdirme", desc: "turtle modülünü içe aktar, bir kalem oluştur ve 60 birim ileri doğru çizgi çiz. (Çizim bitince 'Çizim Tamam' yazdır).", expected: "Çizim Tamam", isTurtle: true, usedCommands: ["import turtle", "forward()"], skeleton: 'import turtle\nt = turtle.Turtle()\nt.forward(___)\nprint("Çizim Tamam")', hint: "t.forward(60) komutuyla kalemi 60 birim ileri yürüt.", example: 'import turtle\nt = turtle.Turtle()\nt.forward(50)\nprint("Çizim Tamam")', solution: 'import turtle\nt = turtle.Turtle()\nt.forward(60)\nprint("Çizim Tamam")' },
-          { diff: "Kolay", title: "Daire Çizimi (circle)", desc: "turtle kalemiyle yarıçapı 35 birim olan bir daire çizdir ve 'Daire Hazır' yazdır.", expected: "Daire Hazır", isTurtle: true, usedCommands: ["import turtle", "circle()"], skeleton: 'import turtle\nt = turtle.Turtle()\nt.circle(___)\nprint("Daire Hazır")', hint: "t.circle(35) komutu yarıçapı 35 olan tam bir çember çizer.", example: 'import turtle\nt = turtle.Turtle()\nt.circle(25)\nprint("Daire Hazır")', solution: 'import turtle\nt = turtle.Turtle()\nt.circle(35)\nprint("Daire Hazır")' },
-          { diff: "Orta", title: "Döngü ile Kare Çizimi", desc: "for döngüsü kullanarak kenarı 50 birim olan bir kare çizdir (4 kez 50 ileri git, 90 derece sağa dön) ve 'Kare Çizildi' yazdır.", expected: "Kare Çizildi", isTurtle: true, usedCommands: ["import turtle", "forward()", "right() / left()", "for döngüsü"], skeleton: 'import turtle\nt = turtle.Turtle()\nfor i in range(4):\n    t.forward(50)\n    t.right(___)\nprint("Kare Çizildi")', hint: "Karenin her köşesi 90 derecedir: t.right(90)", example: 'import turtle\nt = turtle.Turtle()\nfor i in range(4):\n    t.forward(40)\n    t.right(90)', solution: 'import turtle\nt = turtle.Turtle()\nfor i in range(4):\n    t.forward(50)\n    t.right(90)\nprint("Kare Çizildi")' },
-          { diff: "Orta", title: "Eşkenar Üçgen Çizimi", desc: "for döngüsüyle 3 kez 60 birim ileri gidip 120 derece sola dönerek üçgen çizdir ve 'Üçgen Çizildi' yazdır.", expected: "Üçgen Çizildi", isTurtle: true, usedCommands: ["import turtle", "forward()", "right() / left()", "for döngüsü"], skeleton: 'import turtle\nt = turtle.Turtle()\nfor i in range(3):\n    t.forward(60)\n    t.left(___)\nprint("Üçgen Çizildi")', hint: "Eşkenar üçgenin dış açısı 360 / 3 = 120 derecedir.", example: 'import turtle\nt = turtle.Turtle()\nfor i in range(3):\n    t.forward(50)\n    t.left(120)', solution: 'import turtle\nt = turtle.Turtle()\nfor i in range(3):\n    t.forward(60)\n    t.left(120)\nprint("Üçgen Çizildi")' },
-          { diff: "Orta", title: "Renkli Altıgen Çizimi", desc: "Kalem rengini 'gold' (veya '#eab308') yapıp 6 kenarlı, her kenarı 35 birim ve dış açısı 60 derece olan altıgen çizdir; 'Altıgen Hazır' yazdır.", expected: "Altıgen Hazır", isTurtle: true, usedCommands: ["import turtle", "forward()", "right() / left()", "color()", "for döngüsü"], skeleton: 'import turtle\nt = turtle.Turtle()\nt.color("___")\nfor i in range(6):\n    t.forward(35)\n    t.right(60)\nprint("Altıgen Hazır")', hint: 't.color("gold") ve t.right(60) kullan.', example: 'import turtle\nt = turtle.Turtle()\nt.color("gold")\nt.forward(40)', solution: 'import turtle\nt = turtle.Turtle()\nt.color("gold")\nfor i in range(6):\n    t.forward(35)\n    t.right(60)\nprint("Altıgen Hazır")' },
-          { diff: "Zor", title: "5 Köşeli Yıldız Çizimi", desc: "5 kez 65 birim ileri gidip 144 derece sağa dönerek 5 köşeli yıldız çizdir ve 'Yıldız Tamam' yazdır.", expected: "Yıldız Tamam", isTurtle: true, usedCommands: ["import turtle", "forward()", "right() / left()", "for döngüsü"], skeleton: 'import turtle\nt = turtle.Turtle()\nfor i in range(5):\n    t.forward(65)\n    t.right(___)\nprint("Yıldız Tamam")', hint: "5 köşeli yıldız için dönüş açısı 144 derecedir.", example: 'import turtle\nt = turtle.Turtle()\nfor i in range(5):\n    t.forward(50)\n    t.right(144)', solution: 'import turtle\nt = turtle.Turtle()\nfor i in range(5):\n    t.forward(65)\n    t.right(144)\nprint("Yıldız Tamam")' }
+          { id: "10.1", title: "10.1 — Kare Çizimi", diff: "Kolay", desc: "Turtle ile kenarı 80 birim olan bir kare çizdir.", cmds: ["turtle", "for", "forward()", "right()"], skeleton: 'import turtle\nt = turtle.Turtle()\nfor i in range(4):\n    t.forward(80)\n    t.right(___)', freeCheck: true },
+          { id: "10.2", title: "10.2 — Renkli Daire", diff: "Orta", desc: "Kalem rengini mor ('purple') yapıp yarıçapı 50 olan bir daire çizdir.", cmds: ["turtle", "circle()"], skeleton: 'import turtle\nt = turtle.Turtle()\nt.color("purple")\nt.circle(___)', freeCheck: true }
         ]
       }
     ];
 
-    const PROJECTS_DATA = [
-      { diff: "Proje 1", title: "🏦 Banka ATM & Hesap Yönetimi", desc: "Başlangıç bakiyesi 1500 TL olan hesaba 750 TL yatır, 400 TL çek ve son bakiyeyi 'Güncel Bakiye: 1850 TL' olarak yazdır.", expected: "Güncel Bakiye: 1850 TL", poolCommands: ["class", "__init__", "self.bakiye", "append()"], usedCommands: ["class", "__init__", "self.bakiye"], hint: "hesap.para_yatir(750) ve hesap.para_cek(400) satırlarını tamamla.", example: "hesap.para_yatir(500)\nhesap.para_cek(200)", skeleton: `class BankaHesabi:\n    def __init__(self, sahip, bakiye=1500):\n        self.sahip = sahip\n        self.bakiye = bakiye\n    def para_yatir(self, miktar):\n        self.bakiye += miktar\n    def para_cek(self, miktar):\n        self.bakiye -= miktar\nhesap = BankaHesabi("Kullanıcı", 1500)\nhesap.para_yatir(___)\nhesap.para_cek(___)\nprint(f"Güncel Bakiye: {hesap.bakiye} TL")`, solution: `class BankaHesabi:\n    def __init__(self, sahip, bakiye=1500):\n        self.sahip = sahip\n        self.bakiye = bakiye\n    def para_yatir(self, miktar):\n        self.bakiye += miktar\n    def para_cek(self, miktar):\n        self.bakiye -= miktar\nhesap = BankaHesabi("Kullanıcı", 1500)\nhesap.para_yatir(750)\nhesap.para_cek(400)\nprint(f"Güncel Bakiye: {hesap.bakiye} TL")` },
-      { diff: "Proje 2", title: "🛒 E-Ticaret Sepet & İndirim Sistemi", desc: "Sepete 350 TL'lik Kulaklık ve 250 TL'lik Mouse ekle. 500 TL üzeri %10 indirimle 'Ödenecek Tutar: 540.0 TL' yazdır.", expected: "Ödenecek Tutar: 540.0 TL", poolCommands: ["dict", "sum()", "if >= 500", "* 0.90"], usedCommands: ["dict", "sum()", "if >= 500", "* 0.90"], hint: "urun_ekle('Mouse', 250, 1) satırını tamamla.", example: 'urun_ekle("Klavye", 400, 1)', skeleton: `sepet = []\ndef urun_ekle(ad, fiyat, adet=1):\n    sepet.append({"ad": ad, "fiyat": fiyat, "adet": adet})\ndef toplam_hesapla():\n    ham = sum(u["fiyat"] * u["adet"] for u in sepet)\n    return ham * 0.90 if ham >= 500 else float(ham)\nurun_ekle("Kulaklık", 350, 1)\nurun_ekle("___", ___, 1)\nprint(f"Ödenecek Tutar: {toplam_hesapla()} TL")`, solution: `sepet = []\ndef urun_ekle(ad, fiyat, adet=1):\n    sepet.append({"ad": ad, "fiyat": fiyat, "adet": adet})\ndef toplam_hesapla():\n    ham = sum(u["fiyat"] * u["adet"] for u in sepet)\n    return ham * 0.90 if ham >= 500 else float(ham)\nurun_ekle("Kulaklık", 350, 1)\nurun_ekle("Mouse", 250, 1)\nprint(f"Ödenecek Tutar: {toplam_hesapla()} TL")` },
-      { diff: "Proje 3", title: "📚 Akıllı Kütüphane Kitap Takibi", desc: "'Suç ve Ceza' kitabını ödünç al ve rafta kalan müsait kitap sayısını 'Müsait Kitap Sayısı: 2' olarak yazdır.", expected: "Müsait Kitap Sayısı: 2", poolCommands: ["for kitap", "bool", "sum()", "return"], usedCommands: ["for kitap", "bool", "sum()"], hint: "kitap_odunc_al('Suç ve Ceza') fonksiyonunu çağır.", example: 'kitap_odunc_al("1984")', skeleton: `kutuphane = [{"ad": "Suç ve Ceza", "musait": True}, {"ad": "1984", "musait": True}, {"ad": "Simyacı", "musait": True}]\ndef kitap_odunc_al(ad):\n    for k in kutuphane:\n        if k["ad"] == ad and k["musait"]:\n            k["musait"] = False\nkitap_odunc_al("___")\nprint(f"Müsait Kitap Sayısı: {sum(1 for k in kutuphane if k['musait'])}")`, solution: `kutuphane = [{"ad": "Suç ve Ceza", "musait": True}, {"ad": "1984", "musait": True}, {"ad": "Simyacı", "musait": True}]\ndef kitap_odunc_al(ad):\n    for k in kutuphane:\n        if k["ad"] == ad and k["musait"]:\n            k["musait"] = False\nkitap_odunc_al("Suç ve Ceza")\nprint(f"Müsait Kitap Sayısı: {sum(1 for k in kutuphane if k['musait'])}")` },
-      { diff: "Proje 4", title: "🎓 Öğrenci Not & Başarı Otomasyonu", desc: "Vize (%40) ve Final (%60) ağırlığına göre Zeynep'in ortalamasını 'Zeynep Ortalama: 86.0' olarak yazdır.", expected: "Zeynep Ortalama: 86.0", poolCommands: ["dict{}", "float", "return", "f-string"], usedCommands: ["dict{}", "return", "f-string"], hint: "Final katsayısını 0.60 olarak tamamla.", example: "print(ortalama_bul('Ali'))", skeleton: `ogrenciler = {"Ali": {"vize": 60, "final": 70}, "Zeynep": {"vize": 80, "final": 90}}\ndef ortalama_bul(isim):\n    v = ogrenciler[isim]\n    return v["vize"] * 0.40 + v["final"] * ___\nprint(f"Zeynep Ortalama: {ortalama_bul('Zeynep')}")`, solution: `ogrenciler = {"Ali": {"vize": 60, "final": 70}, "Zeynep": {"vize": 80, "final": 90}}\ndef ortalama_bul(isim):\n    v = ogrenciler[isim]\n    return v["vize"] * 0.40 + v["final"] * 0.60\nprint(f"Zeynep Ortalama: {ortalama_bul('Zeynep')}")` },
-      { diff: "Proje 5", title: "🚗 Akıllı Otopark Ücretlendirme", desc: "SUV tipi aracın 4 saatlik park ücretini hesaplayıp 'Toplam Ücret: 160 TL' yazdır.", expected: "Toplam Ücret: 160 TL", poolCommands: [".get()", "if saat", "return", "int()"], usedCommands: [".get()", "return"], hint: "birim * saat işlemini tamamla.", example: "ucret_hesapla('Otomobil', 2)", skeleton: `TARIFELER = {"Motosiklet": 15, "Otomobil": 25, "SUV": 40}\ndef ucret_hesapla(tip, saat):\n    return TARIFELER.get(tip, 25) * ___\nprint(f"Toplam Ücret: {ucret_hesapla('SUV', 4)} TL")`, solution: `TARIFELER = {"Motosiklet": 15, "Otomobil": 25, "SUV": 40}\ndef ucret_hesapla(tip, saat):\n    return TARIFELER.get(tip, 25) * saat\nprint(f"Toplam Ücret: {ucret_hesapla('SUV', 4)} TL")` },
-      { diff: "Proje 6", title: "🎬 Sinema Koltuk Rezervasyonu", desc: "A1 ve A2 koltuklarını rezerve edip boş koltuk sayısını 'Boş Koltuk: 3' olarak yazdır.", expected: "Boş Koltuk: 3", poolCommands: ["dict", "not", ".values()", ".count()"], usedCommands: ["dict", ".values()", ".count()"], hint: "rezerve_et('A1') ve rezerve_et('A2') çağrılarını yaz.", example: 'rezerve_et("A3")', skeleton: `salon = {"A1": False, "A2": False, "A3": False, "A4": False, "A5": False}\ndef rezerve_et(koltuk):\n    if koltuk in salon: salon[koltuk] = True\nrezerve_et("___")\nrezerve_et("___")\nprint(f"Boş Koltuk: {list(salon.values()).count(False)}")`, solution: `salon = {"A1": False, "A2": False, "A3": False, "A4": False, "A5": False}\ndef rezerve_et(koltuk):\n    if koltuk in salon: salon[koltuk] = True\nrezerve_et("A1")\nrezerve_et("A2")\nprint(f"Boş Koltuk: {list(salon.values()).count(False)}")` },
-      { diff: "Proje 7", title: "🔐 Siber Güvenlik Parola Analizörü", desc: "'Python2026!' parolasını denetleyip 'Güvenlik Seviyesi: Güçlü' çıktısını al.", expected: "Güvenlik Seviyesi: Güçlü", poolCommands: ["any()", ".isupper()", ".isdigit()", "len()"], usedCommands: ["any()", ".isupper()", ".isdigit()", "len()"], hint: "Uzunluk >= 8 şartını tamamla.", example: "parola_analiz('Test1234')", skeleton: `def parola_analiz(p):\n    if len(p) >= ___ and any(c.isupper() for c in p) and any(c.isdigit() for c in p):\n        return "Güçlü"\n    return "Zayıf"\nprint(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")`, solution: `def parola_analiz(p):\n    if len(p) >= 8 and any(c.isupper() for c in p) and any(c.isdigit() for c in p):\n        return "Güçlü"\n    return "Zayıf"\nprint(f"Güvenlik Seviyesi: {parola_analiz('Python2026!')}")` }
+    /* ================= NPC VİDEOLU KONU ANLATIMI SENARYOLARI ================= */
+    const NPC_SCRIPTS = [
+      {
+        topic: "1. Python'a Giriş ve print()",
+        slides: [
+          {
+            say: (n) => `Merhaba ${n}! Ben eğitmen Kaptan Py. Python öğrenme yolculuğuna hoş geldin. Bilgisayara ekranda bir yazı göstermesini söylemenin en temel yolu print() komutudur.`,
+            code: `# Ekrana yazı yazdırma\nprint("Merhaba ${n}!")\nprint("Python öğrenmeye başladık.")`
+          },
+          {
+            say: (n) => `Bak ${n}, burada dikkat etmen gereken en kritik nokta şu: Metin yazarken mutlaka çift tırnak veya tek tırnak kullanmalısın, ama sayıları tırnaksız yazarsan Python onları otomatik hesaplar!`,
+            code: `print("5 + 3")   # Metin olarak yazar: 5 + 3\nprint(5 + 3)     # Matematiksel hesaplar: 8`
+          },
+          {
+            say: (n) => `Harika gidiyorsun ${n}! Tek bir print() içinde virgül koyarak hem metni hem sonucu yan yana yazdırabilirsin. İşte bu kadar basit!`,
+            code: `print("Bugünkü şanslı sayın:", 7 * 3)\n# Çıktı: Bugünkü şanslı sayın: 21`
+          }
+        ]
+      },
+      {
+        topic: "2. Değişkenler ve Veri Tipleri",
+        slides: [
+          {
+            say: (n) => `Şimdi sıra kutularda ${n}! Programlamada verileri sakladığımız etiketli kutulara değişken diyoruz. Örneğin senin adını ve seviyeni bir değişkende tutalım.`,
+            code: `oyuncu = "${n}"\nseviye = 1\npuan = 95.5`
+          },
+          {
+            say: (n) => `Bak ${n}, Python'da her verinin bir kimliği yani veri tipi vardır. Tam sayılara int, ondalıklı sayılara float, metinlere ise str diyoruz.`,
+            code: `print(type(oyuncu))  # <class 'str'>\nprint(type(seviye))  # <class 'int'>\nprint(type(puan))    # <class 'float'>`
+          }
+        ]
+      },
+      {
+        topic: "3. Operatörler ve input()",
+        slides: [
+          {
+            say: (n) => `${n}, programının kullanıcıyla konuşmasını istiyorsan input() fonksiyonunu kullanmalısın. Kod bu satıra geldiğinde durur ve senin cevabını bekler.`,
+            code: `sehir = input("Hangi şehirdesin? ")\nprint("Demek", sehir, "şehrindesin!")`
+          },
+          {
+            say: (n) => `Çok önemli bir ipucu ${n}: input() her şeyi metin (str) olarak alır. Eğer kullanıcıdan aldığın sayıyla toplama yapacaksan mutlaka int() içine almalısın!`,
+            code: `yas = int(input("Yaşın kaç? "))\nprint("5 yıl sonraki yaşın:", yas + 5)`
+          }
+        ]
+      },
+      {
+        topic: "4. Karar Yapıları (if - elif - else)",
+        slides: [
+          {
+            say: (n) => `Hayatta olduğu gibi kodlarda da yol ayrımları vardır ${n}. Bir şart doğruysa şunu yap, değilse bunu yap demek için if ve else kullanırız.`,
+            code: `sicaklik = 28\nif sicaklik > 25:\n    print("Hava sıcak ${n}, tişört giy!")\nelse:\n    print("Hava serin, ceket al.")`
+          },
+          {
+            say: (n) => `Bak ${n}, if satırının sonuna iki nokta (:) koymayı ve alt satırda 4 boşluk içeriden (girintili) yazmayı sakın unutma! Python blokları bu boşlukla tanır.`,
+            code: `puan = 85\nif puan >= 90:\n    print("Mükemmel")\nelif puan >= 70:\n    print("Gayet İyi ${n}!")`
+          }
+        ]
+      },
+      {
+        topic: "5. Döngüler (for ve while)",
+        slides: [
+          {
+            say: (n) => `Aynı kodu 100 kere alt alta yazmak yerine döngü kurarız ${n}. for döngüsü ve range() ile istediğin sayıda tekrar yaptırabilirsin.`,
+            code: `for tur in range(1, 4):\n    print(tur, ". tur tamamlandı ${n}!")`
+          },
+          {
+            say: (n) => `while döngüsü ise 'bu şart doğru olduğu sürece dönmeye devam et' demektir ${n}. Sayacı artırmayı unutmazsan harika çalışır.`,
+            code: `enerji = 3\nwhile enerji > 0:\n    print("Kalan enerji:", enerji)\n    enerji -= 1`
+          }
+        ]
+      },
+      {
+        topic: "6. Listeler (Lists)",
+        slides: [
+          {
+            say: (n) => `Tek bir değişkende onlarca eşya taşımak istediğinde köşeli parantez [] ile liste oluşturursun ${n}.`,
+            code: `canta = ["Laptop", "Mouse", "Kahve"]\nprint("İlk eşya:", canta[0])`
+          },
+          {
+            say: (n) => `Bak ${n}, listeye sonradan yeni bir eleman eklemek için .append() metodunu kullanırız; liste anında genişler.`,
+            code: `canta.append("Python Kitabı")\nprint("Toplam eşya:", len(canta))`
+          }
+        ]
+      },
+      {
+        topic: "7. Tuples (Demetler)",
+        slides: [
+          {
+            say: (n) => `Listelere çok benzeyen ama kurşun geçirmez bir yapı var ${n}: Tuple yani Demet! Normal parantez () ile yapılır ve içindeki veriler sonradan değiştirilemez.`,
+            code: `sabit_konum = (41.2867, 36.33)\nprint("Enlem:", sabit_konum[0])`
+          }
+        ]
+      },
+      {
+        topic: "8. Sözlükler (Dict) ve Kümeler (Set)",
+        slides: [
+          {
+            say: (n) => `Gerçek bir sözlük gibi kelime-anlam yani anahtar-değer eşleşmesi tutmak için süslü parantez {} ile Dictionary kullanırız ${n}.`,
+            code: `profil = {"isim": "${n}", "dil": "Python", "rozet": 5}\nprint(profil["isim"], "rozet sayısı:", profil["rozet"])`
+          }
+        ]
+      },
+      {
+        topic: "9. Fonksiyonlar (def) ve Hata Yakalama",
+        slides: [
+          {
+            say: (n) => `Kendi özel Python komutunu üretmek ister misin ${n}? def anahtar kelimesiyle kendi fonksiyonunu tanımlayıp istediğin her yerde çağırabilirsin.`,
+            code: `def selamla(kisi):\n    return "Süpersin " + kisi + "!"\n\nprint(selamla("${n}"))`
+          }
+        ]
+      },
+      {
+        topic: "10. Grafik ve Çizim (Turtle)",
+        slides: [
+          {
+            say: (n) => `En eğlenceli bölüme geldik ${n}! Turtle modülüyle ekrandaki sanal kalemi ileri yürütüp sağa-sola döndürerek harika geometrik desenler çizebilirsin.`,
+            code: `import turtle\nt = turtle.Turtle()\nt.color("purple")\nfor i in range(4):\n    t.forward(90)\n    t.right(90)`
+          }
+        ]
+      }
     ];
 
-    let currentMode = 'topics';
-    let topicIndex = 0;
-    let questionIndex = 0;
-    let projectIndex = 0;
-    let openFolders = new Set([0]);
-    let openFormulaDrawers = new Set();
-    let completedSet = new Set();
-    let savedCodes = {};
-    let pyodide = null;
+    /* ================= PROJELER VE SINAV SORULARI ================= */
+    const PROJECTS = [
+      { title: "1. Akıllı Hesap Makinesi", desc: "Kullanıcıdan input() ile iki sayı ve işlem türü alıp sonucu hesaplayan interaktif araç.", code: 'a = int(input("1. Sayı: "))\nb = int(input("2. Sayı: "))\nprint("Toplam:", a + b)\nprint("Çarpım:", a * b)' },
+      { title: "2. Not Ortalaması & Geçti/Kaldı", desc: "Vize ve final notunu alarak ortalamayı hesaplayan ve durum belirten sistem.", code: 'vize = int(input("Vize: "))\nfinal = int(input("Final: "))\nort = vize * 0.4 + final * 0.6\nprint("Ortalama:", ort)\nif ort >= 50:\n    print("Tebrikler Geçtin!")\nelse:\n    print("Tekrar Denemelisin")' },
+      { title: "3. Sayı Tahmin Oyunu", desc: "Gizli sayıyı bulana kadar while döngüsü ve input() ile ipucu veren oyun.", code: 'gizli = 7\ntahmin = int(input("1-10 arası tahminin: "))\nif tahmin == gizli:\n    print("Tam isabet!")\nelse:\n    print("Bilemedin, sayı 7 idi!")' },
+      { title: "4. Alışveriş Sepeti Yöneticisi", desc: "Listelere ürün ekleyen ve toplam ürün sayısını gösteren sepet uygulaması.", code: 'sepet = []\nsepet.append(input("1. Ürün: "))\nsepet.append(input("2. Ürün: "))\nprint("Sepetiniz:", sepet)' },
+      { title: "5. Şifre Güç Kontrolcüsü", desc: "Girilen şifrenin uzunluğunu len() ile denetleyen güvenlik aracı.", code: 'sifre = input("Yeni şifreniz: ")\nif len(sifre) >= 6:\n    print("Güçlü şifre!")\nelse:\n    print("Çok kısa, en az 6 karakter girin.")' },
+      { title: "6. Öğrenci Bilgi Kartı (Dict)", desc: "Sözlük yapısıyla öğrenci kaydı oluşturan mini veritabanı.", code: 'kart = {"ad": input("Adın: "), "hedef": "Python Uzmanı"}\nprint(kart)' },
+      { title: "7. Turtle Yıldız & Spiral Çizimi", desc: "Turtle grafik motoru ile renkli geometrik yıldız çizen görsel proje.", code: 'import turtle\nt = turtle.Turtle()\nt.color("purple")\nfor i in range(5):\n    t.forward(110)\n    t.right(144)' }
+    ];
 
-    // 📝 Mini Sınav Durumları
-    let selectedExamDiff = 'kolay';
-    let examQuestions = [];
-    let examCurrentIdx = 0;
-    let examPassedSet = new Set();
-    let examUserCodes = {};
-    let examTimerInterval = null;
-    let examSecondsLeft = 900;
+    const EXAM_BANK = {
+      Kolay: [
+        { q: "Ekrana 'Python' yazdıran komut hangisidir?", opts: ["echo('Python')", "print('Python')", "input('Python')"], ans: 1 },
+        { q: "Python'da yorum satırı hangi işaretle başlar?", opts: ["//", "/*", "#"], ans: 2 },
+        { q: "len([10, 20, 30]) işleminin sonucu nedir?", opts: ["3", "30", "2"], ans: 0 }
+      ],
+      Orta: [
+        { q: "input() fonksiyonu kullanıcıdan veriyi hangi tipte alır?", opts: ["int", "str", "list"], ans: 1 },
+        { q: "Hangisi oluşturulduktan sonra değiştirilemez?", opts: ["list", "dict", "tuple"], ans: 2 },
+        { q: "17 % 5 işleminin çıktısı kaçtır?", opts: ["3", "2", "1"], ans: 1 }
+      ],
+      Zor: [
+        { q: "Hata yakalama blokları hangi ikili ile kurulur?", opts: ["try - except", "if - else", "def - return"], ans: 0 },
+        { q: "Turtle modülünde kalemi 90 derece sağa döndüren komut nedir?", opts: ["t.turn(90)", "t.right(90)", "t.circle(90)"], ans: 1 },
+        { q: "set veri yapısının temel özelliği nedir?", opts: ["Tekrarlı eleman tutmaz", "Sadece sayı tutar", "İndekslenebilir"], ans: 0 }
+      ]
+    };
 
-    function selectExamDifficulty(diff) {
-      selectedExamDiff = diff;
-      ['kolay', 'orta', 'zor'].forEach(d => {
-        document.getElementById(`exam-diff-${d}`).classList.toggle('selected', d === diff);
+    /* ================= UYGULAMA DURUMU & ARAYÜZ KURULUMU ================= */
+    let currentTopicIdx = 0;
+    let currentQIdx = 0;
+    let isFreeCodeMode = false;
+    let solvedQuestions = JSON.parse(localStorage.getItem("py_solved_qs") || "[]");
+
+    function initAppUI() {
+      // Sol Menü Konu Klasörleri
+      const container = document.getElementById("topics-container");
+      container.innerHTML = "";
+      TOPICS.forEach((t, tIdx) => {
+        const group = document.createElement("div");
+        group.className = "topic-group";
+
+        const header = document.createElement("div");
+        header.className = "topic-header";
+        header.innerHTML = `
+          <span style="flex:1;" onclick="toggleTopicFolder(${tIdx})">▾ ${t.title}</span>
+          <button class="formula-pill" title="Formül ve Kural Kartı" onclick="event.stopPropagation(); toggleFormula(${tIdx})">ƒ</button>
+        `;
+
+        const fDrawer = document.createElement("div");
+        fDrawer.className = "formula-drawer";
+        fDrawer.id = `formula-${tIdx}`;
+        fDrawer.textContent = t.formula;
+
+        const qList = document.createElement("div");
+        qList.className = "question-list" + (tIdx === 0 ? " open" : "");
+        qList.id = `qlist-${tIdx}`;
+
+        t.questions.forEach((q, qIdx) => {
+          const item = document.createElement("div");
+          const isSolved = solvedQuestions.includes(q.id);
+          item.className = "q-item" + (tIdx === 0 && qIdx === 0 ? " active" : "") + (isSolved ? " solved" : "");
+          item.id = `qitem-${tIdx}-${qIdx}`;
+          item.innerHTML = `<span>${q.title}</span><span>${isSolved ? "✓" : ""}</span>`;
+          item.onclick = () => selectQuestion(tIdx, qIdx);
+          qList.appendChild(item);
+        });
+
+        group.appendChild(header);
+        group.appendChild(fDrawer);
+        group.appendChild(qList);
+        container.appendChild(group);
+      });
+
+      // Sarı Komut Deposu
+      const bank = document.getElementById("command-bank");
+      bank.innerHTML = ALL_COMMANDS.map(c => `<span class="cmd-chip" data-cmd="${c}">${c}</span>`).join("");
+
+      // Klasik Konu Özeti Kartları
+      const classicArea = document.getElementById("classic-summary-area");
+      classicArea.innerHTML = TOPICS.map(t => `
+        <div class="summary-card">
+          <h3>${t.title}</h3>
+          <p style="font-size:0.86rem; color:var(--text-muted);">${t.summary}</p>
+          <pre>${t.exampleCode}</pre>
+        </div>
+      `).join("");
+
+      // NPC Konu Butonları
+      const npcBtns = document.getElementById("npc-topic-buttons");
+      npcBtns.innerHTML = NPC_SCRIPTS.map((s, idx) => `
+        <button class="npc-topic-btn ${idx === 0 ? 'active' : ''}" id="npc-tbtn-${idx}" onclick="loadNpcLesson(${idx}, true)">
+          🎬 ${s.topic}
+        </button>
+      `).join("");
+
+      // Projeler
+      const projGrid = document.getElementById("projects-grid");
+      projGrid.innerHTML = PROJECTS.map((p, idx) => `
+        <div class="card-box">
+          <div>
+            <h3 style="color:var(--accent-gold); margin-bottom:6px;">${p.title}</h3>
+            <p style="font-size:0.86rem; color:var(--text-muted);">${p.desc}</p>
+          </div>
+          <button class="check-btn" onclick="loadProjectToEditor(${idx})">Editöre Yükle ve Dene</button>
+        </div>
+      `).join("");
+
+      selectQuestion(0, 0);
+      clearTurtleCanvas();
+    }
+
+    function toggleTopicFolder(tIdx) {
+      document.getElementById(`qlist-${tIdx}`).classList.toggle("open");
+    }
+
+    function toggleFormula(tIdx) {
+      document.getElementById(`formula-${tIdx}`).classList.toggle("open");
+    }
+
+    function selectQuestion(tIdx, qIdx) {
+      isFreeCodeMode = false;
+      currentTopicIdx = tIdx;
+      currentQIdx = qIdx;
+      const q = TOPICS[tIdx].questions[qIdx];
+
+      document.querySelectorAll(".q-item").forEach(el => el.classList.remove("active"));
+      const activeEl = document.getElementById(`qitem-${tIdx}-${qIdx}`);
+      if (activeEl) activeEl.classList.add("active");
+
+      document.getElementById("current-q-title").textContent = q.title;
+      document.getElementById("current-q-diff").textContent = q.diff;
+      document.getElementById("current-q-desc").innerHTML = q.desc;
+      document.getElementById("skeleton-btn").style.display = "inline-block";
+      document.getElementById("verify-btn").style.display = "inline-block";
+      document.getElementById("code-editor").value = "";
+
+      // Sarı Komut Deposu Sadece Bu Sorudaki Komutları Yakar
+      document.querySelectorAll(".cmd-chip").forEach(chip => {
+        chip.classList.toggle("lit", q.cmds.includes(chip.dataset.cmd));
       });
     }
 
-    function populateExamModules() {
-      const sel = document.getElementById('exam-module-select');
-      if (!sel) return;
-      sel.innerHTML = TOPICS_DATA.map((t, i) => `<option value="${i}">${t.name}</option>`).join('');
+    function insertSkeleton() {
+      if (isFreeCodeMode) return;
+      const q = TOPICS[currentTopicIdx].questions[currentQIdx];
+      document.getElementById("code-editor").value = q.skeleton;
     }
 
-    function buildExamQuestions(modIdx, diff) {
-      const baseTopic = TOPICS_DATA[modIdx];
-      const baseQs = [...baseTopic.questions];
-      const extraMedium = {
-        title: "Karma Uygulama Sentezi",
-        desc: `${baseTopic.name} konusunda öğrendiğin iki yapıyı birleştirerek ekrana 'Modül Başarılı' yazdır.`,
-        expected: "Modül Başarılı"
-      };
-      const extraHard = {
-        title: "İleri Düzey Doğrulama Testi",
-        desc: `${baseTopic.name} kurallarına uygun olarak tam ve hatasız şekilde 'Tam Puan 100' çıktısını üret.`,
-        expected: "Tam Puan 100"
-      };
+    function openFreeCode(btn) {
+      switchTab("practice", btn);
+      isFreeCodeMode = true;
+      document.getElementById("current-q-title").textContent = "⚡ Serbest Kodlama Atölyesi";
+      document.getElementById("current-q-diff").textContent = "Serbest";
+      document.getElementById("current-q-desc").innerHTML = "Burada istediğin kadar <b>input()</b>, döngü veya <b>turtle</b> çizimi yazıp konsoldan canlı soru-cevap yapabilirsin.";
+      document.getElementById("skeleton-btn").style.display = "none";
+      document.getElementById("verify-btn").style.display = "none";
+      document.querySelectorAll(".cmd-chip").forEach(c => c.classList.add("lit"));
+    }
 
-      if (diff === 'kolay') {
-        return baseQs.map(q => ({
-          title: q.title,
-          desc: q.desc,
-          expected: q.expected,
-          isTurtle: q.isTurtle || false
-        }));
-      } else if (diff === 'orta') {
-        return [...baseQs.map(q => ({
-          title: q.title + " (Detaylı)",
-          desc: q.desc + "\nNot: Çıktı biçimi ve boşluk karakterleri birebir eşleşmelidir.",
-          expected: q.expected,
-          isTurtle: q.isTurtle || false
-        })), extraMedium];
-      } else {
-        return [...baseQs.map(q => ({
-          title: q.title + " (Zorlu Kapsam)",
-          desc: q.desc + "\nKısıt: Gereksiz ek çıktı vermeden doğrudan hedef sonucu üretmelisin.",
-          expected: q.expected,
-          isTurtle: q.isTurtle || false
-        })), extraMedium, extraHard];
+    function loadProjectToEditor(idx) {
+      const p = PROJECTS[idx];
+      const freeBtn = document.querySelector(".slant-btn");
+      openFreeCode(freeBtn);
+      document.getElementById("current-q-title").textContent = p.title;
+      document.getElementById("current-q-desc").textContent = p.desc;
+      document.getElementById("code-editor").value = p.code;
+    }
+
+    function switchTab(tabName, btnEl) {
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+      if (btnEl) btnEl.classList.add("active");
+
+      document.getElementById("view-practice").style.display = tabName === "practice" ? "grid" : "none";
+      document.querySelectorAll(".full-view").forEach(v => v.classList.remove("active"));
+
+      if (tabName !== "practice") {
+        document.getElementById(`view-${tabName}`).classList.add("active");
+      }
+      if (tabName === "summary") {
+        resetSummaryChoice();
       }
     }
 
-    function startMiniExam() {
-      const modIdx = parseInt(document.getElementById('exam-module-select').value || "0", 10);
-      examQuestions = buildExamQuestions(modIdx, selectedExamDiff);
-      examCurrentIdx = 0;
-      examPassedSet.clear();
-      examUserCodes = {};
-      examSecondsLeft = 15 * 60;
+    /* ================= KONU ÖZETİ İKİ KUTU & NPC VİDEO STÜDYOSU ================= */
+    let currentNpcTopicIndex = 0;
+    let currentNpcSlideIndex = 0;
+    let npcPlayTimer = null;
+    let isNpcPlaying = false;
 
-      document.getElementById('exam-setup-box').style.display = 'none';
-      document.getElementById('exam-result-box').style.display = 'none';
-      document.getElementById('exam-active-box').style.display = 'flex';
-
-      const diffLabel = selectedExamDiff === 'kolay' ? 'Kolay' : selectedExamDiff === 'orta' ? 'Orta' : 'Zor';
-      document.getElementById('exam-active-title').textContent = `📝 ${TOPICS_DATA[modIdx].name} — Değerlendirme Sınavı`;
-      document.getElementById('exam-active-sub').textContent = `Zorluk: ${diffLabel} • Toplam ${examQuestions.length} Soru • Süre: 15 Dakika`;
-
-      renderExamQuestion();
-      startExamTimer();
+    function resetSummaryChoice() {
+      stopNpcPlayback();
+      document.getElementById("summary-choice-cards").style.display = "grid";
+      document.getElementById("classic-summary-area").classList.remove("active");
+      document.getElementById("npc-video-area").classList.remove("active");
+      document.getElementById("summary-back-btn").style.display = "none";
     }
 
-    function startExamTimer() {
-      if (examTimerInterval) clearInterval(examTimerInterval);
-      updateExamTimerDisplay();
-      examTimerInterval = setInterval(() => {
-        examSecondsLeft--;
-        updateExamTimerDisplay();
-        if (examSecondsLeft <= 0) {
-          clearInterval(examTimerInterval);
-          finishMiniExam(true);
+    function openClassicSummary() {
+      document.getElementById("summary-choice-cards").style.display = "none";
+      document.getElementById("classic-summary-area").classList.add("active");
+      document.getElementById("summary-back-btn").style.display = "inline-block";
+    }
+
+    function openNpcVideoStudio() {
+      document.getElementById("summary-choice-cards").style.display = "none";
+      document.getElementById("npc-video-area").classList.add("active");
+      document.getElementById("summary-back-btn").style.display = "inline-block";
+      loadNpcLesson(0, true);
+    }
+
+    function loadNpcLesson(topicIdx, autoPlay) {
+      stopNpcPlayback();
+      currentNpcTopicIndex = topicIdx;
+      currentNpcSlideIndex = 0;
+
+      document.querySelectorAll(".npc-topic-btn").forEach(b => b.classList.remove("active"));
+      const btn = document.getElementById(`npc-tbtn-${topicIdx}`);
+      if (btn) btn.classList.add("active");
+
+      renderNpcSlide();
+      if (autoPlay) startNpcPlayback();
+    }
+
+    function renderNpcSlide() {
+      const lesson = NPC_SCRIPTS[currentNpcTopicIndex];
+      const slide = lesson.slides[currentNpcSlideIndex];
+      const nameToUse = studentName || "Enes";
+      const spokenText = slide.say(nameToUse);
+
+      document.getElementById("npc-lesson-title").textContent = `Kaptan Py — ${lesson.topic}`;
+      document.getElementById("npc-speech-text").textContent = spokenText;
+      document.getElementById("npc-code-board").textContent = slide.code;
+
+      // Köşedeki Altyazı / Metin Kutusunu Güncelle
+      const allLines = lesson.slides.map((s, i) =>
+        `<div style="margin-bottom:8px; ${i === currentNpcSlideIndex ? 'color:#eab308;font-weight:700;' : 'opacity:0.75;'}">
+          <b>Sahne ${i + 1}:</b> ${s.say(nameToUse)}
+        </div>`
+      ).join("");
+      document.getElementById("npc-transcript-box").innerHTML = allLines;
+
+      const total = lesson.slides.length;
+      document.getElementById("npc-step-indicator").textContent = `${currentNpcSlideIndex + 1} / ${total}`;
+      document.getElementById("npc-progress-fill").style.width = `${((currentNpcSlideIndex + 1) / total) * 100}%`;
+
+      // Tarayıcı Sesli Okuma Desteği (Varsa Türkçe okur)
+      if ("speechSynthesis" in window && isNpcPlaying) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(spokenText);
+        utter.lang = "tr-TR";
+        utter.rate = 1.02;
+        window.speechSynthesis.speak(utter);
+      }
+    }
+
+    function toggleNpcPlay() {
+      if (isNpcPlaying) {
+        stopNpcPlayback();
+      } else {
+        startNpcPlayback();
+      }
+    }
+
+    function startNpcPlayback() {
+      isNpcPlaying = true;
+      document.getElementById("npc-play-btn").textContent = "⏸ Duraklat";
+      document.getElementById("npc-avatar").classList.add("talking");
+      renderNpcSlide();
+
+      clearInterval(npcPlayTimer);
+      npcPlayTimer = setInterval(() => {
+        const lesson = NPC_SCRIPTS[currentNpcTopicIndex];
+        if (currentNpcSlideIndex < lesson.slides.length - 1) {
+          currentNpcSlideIndex++;
+          renderNpcSlide();
+        } else {
+          stopNpcPlayback();
         }
+      }, 6500);
+    }
+
+    function stopNpcPlayback() {
+      isNpcPlaying = false;
+      clearInterval(npcPlayTimer);
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+      document.getElementById("npc-play-btn").textContent = "▶ Oynat";
+      document.getElementById("npc-avatar").classList.remove("talking");
+    }
+
+    function nextNpcSlide() {
+      const lesson = NPC_SCRIPTS[currentNpcTopicIndex];
+      if (currentNpcSlideIndex < lesson.slides.length - 1) {
+        currentNpcSlideIndex++;
+        renderNpcSlide();
+      }
+    }
+
+    function prevNpcSlide() {
+      if (currentNpcSlideIndex > 0) {
+        currentNpcSlideIndex--;
+        renderNpcSlide();
+      }
+    }
+
+    function toggleTranscript() {
+      document.getElementById("npc-transcript-box").classList.toggle("open");
+    }
+
+    /* ================= GERÇEK İNTERAKTİF PYODIDE KONSOL MOTORU ================= */
+    let pyodide = null;
+    let lastRunOutput = "";
+    let pendingInputResolver = null;
+    let isCodeRunning = false;
+
+    async function initPyodideEngine() {
+      try {
+        pyodide = await loadPyodide();
+
+        // JavaScript tarafında asenkron input() ve Turtle köprüsü
+        window.jsAskInput = (promptText) => {
+          return new Promise((resolve) => {
+            if (promptText) appendConsole(String(promptText), "term-line-out", false);
+            const bar = document.getElementById("terminal-input-bar");
+            const inp = document.getElementById("terminal-input");
+            const lbl = document.getElementById("term-prompt-label");
+            bar.classList.add("waiting-input");
+            lbl.textContent = "GİRDİ >";
+            inp.placeholder = "Cevabını buraya yazıp Enter'a bas...";
+            inp.focus();
+            pendingInputResolver = resolve;
+          });
+        };
+
+        window.jsTurtleCmd = (cmd, arg1, arg2) => {
+          executeTurtleCommand(cmd, arg1, arg2);
+        };
+
+        // Python ortamına özel async input() ve sanal turtle modülü kurulumu
+        await pyodide.runPythonAsync(`
+import sys, builtins, types, js
+
+class ConsoleOut:
+    def write(self, s):
+        if s:
+            js.appendConsoleFromPy(s)
+    def flush(self):
+        pass
+
+sys.stdout = ConsoleOut()
+sys.stderr = ConsoleOut()
+
+async def _async_input(prompt=""):
+    res = await js.jsAskInput(str(prompt))
+    return str(res)
+
+builtins.input = _async_input
+
+# Sanal Turtle Modülü
+turtle_mod = types.ModuleType("turtle")
+class _Turtle:
+    def forward(self, d): js.jsTurtleCmd("forward", float(d), 0)
+    def fd(self, d): self.forward(d)
+    def backward(self, d): js.jsTurtleCmd("forward", -float(d), 0)
+    def right(self, a): js.jsTurtleCmd("right", float(a), 0)
+    def rt(self, a): self.right(a)
+    def left(self, a): js.jsTurtleCmd("right", -float(a), 0)
+    def lt(self, a): self.left(a)
+    def circle(self, r): js.jsTurtleCmd("circle", float(r), 0)
+    def color(self, c): js.jsTurtleCmd("color", str(c), 0)
+    def pensize(self, w): js.jsTurtleCmd("pensize", float(w), 0)
+    def penup(self): js.jsTurtleCmd("penup", 0, 0)
+    def pendown(self): js.jsTurtleCmd("pendown", 0, 0)
+    def goto(self, x, y): js.jsTurtleCmd("goto", float(x), float(y))
+
+turtle_mod.Turtle = _Turtle
+turtle_mod.done = lambda: None
+sys.modules["turtle"] = turtle_mod
+        `);
+
+        document.getElementById("py-dot").classList.add("ready");
+        document.getElementById("py-status-text").textContent = "Python Hazır";
+        clearConsole();
+        appendConsole("Python 3.11 Hazır! Kodunu çalıştırabilir veya aşağıdan doğrudan komut yazabilirsin.\n", "term-line-sys");
+      } catch (err) {
+        appendConsole("Python yüklenirken hata oluştu: " + err + "\n", "term-line-err");
+      }
+    }
+
+    window.appendConsoleFromPy = (text) => {
+      lastRunOutput += text;
+      appendConsole(text, "term-line-out", false);
+    };
+
+    function appendConsole(text, className = "term-line-out", addNewLine = false) {
+      const out = document.getElementById("console-output");
+      const span = document.createElement("span");
+      span.className = className;
+      span.textContent = text + (addNewLine ? "\n" : "");
+      out.appendChild(span);
+      out.scrollTop = out.scrollHeight;
+    }
+
+    function clearConsole() {
+      document.getElementById("console-output").innerHTML = "";
+      lastRunOutput = "";
+    }
+
+    // Kullanıcının input() çağrılarını otomatik await input() haline dönüştüren ön işleyici
+    function transformAsyncInputs(userCode) {
+      // input( çağrılarının önüne await ekler (zaten await yoksa)
+      return userCode.replace(/(?<!await\s)\binput\s*\(/g, "await input(");
+    }
+
+    async function runUserCode() {
+      if (!pyodide) {
+        alert("Python motoru henüz yükleniyor, birkaç saniye bekle.");
+        return;
+      }
+      if (isCodeRunning) {
+        pendingInputResolver = null;
+      }
+      clearConsole();
+      clearTurtleCanvas();
+      isCodeRunning = true;
+
+      const rawCode = document.getElementById("code-editor").value;
+      const preparedCode = transformAsyncInputs(rawCode);
+
+      try {
+        await pyodide.runPythonAsync(preparedCode);
+      } catch (err) {
+        appendConsole("\n" + err.message + "\n", "term-line-err");
+      } finally {
+        isCodeRunning = false;
+        resetTerminalBar();
+      }
+    }
+
+    // Konsol altındaki giriş kutusundan Enter / Gönder basıldığında
+    document.getElementById("terminal-input").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") submitTerminalInput();
+    });
+
+    async function submitTerminalInput() {
+      const inp = document.getElementById("terminal-input");
+      const val = inp.value;
+      inp.value = "";
+
+      // Eğer çalışan kod input() bekliyorsa cevabı doğrudan Python'a teslim et
+      if (pendingInputResolver) {
+        appendConsole(val + "\n", "term-line-in", false);
+        const resolver = pendingInputResolver;
+        pendingInputResolver = null;
+        resetTerminalBar();
+        resolver(val);
+        return;
+      }
+
+      // Kod çalışmıyorsa konsolu canlı Python REPL kabuğu gibi kullan
+      if (!val.trim() || !pyodide) return;
+      appendConsole(">>> " + val + "\n", "term-line-in", false);
+      try {
+        const prepared = transformAsyncInputs(val);
+        const result = await pyodide.runPythonAsync(prepared);
+        if (result !== undefined && result !== null) {
+          appendConsole(String(result) + "\n", "term-line-out", false);
+        }
+      } catch (err) {
+        appendConsole(err.message + "\n", "term-line-err", false);
+      }
+    }
+
+    function resetTerminalBar() {
+      const bar = document.getElementById("terminal-input-bar");
+      const inp = document.getElementById("terminal-input");
+      const lbl = document.getElementById("term-prompt-label");
+      bar.classList.remove("waiting-input");
+      lbl.textContent = ">>>";
+      inp.placeholder = "Komut yaz veya input() cevabı girip Enter'a bas...";
+    }
+
+    async function verifySolution() {
+      await runUserCode();
+      const q = TOPICS[currentTopicIdx].questions[currentQIdx];
+      const cleanOut = lastRunOutput.trim().replace(/\r\n/g, "\n");
+
+      if (q.freeCheck ? cleanOut.length > 0 || document.getElementById("code-editor").value.trim().length > 5 : cleanOut === q.expected) {
+        appendConsole("\n✓ Tebrikler " + (studentName || "") + "! Cevap doğru.\n", "term-line-ok");
+        if (!solvedQuestions.includes(q.id)) {
+          solvedQuestions.push(q.id);
+          localStorage.setItem("py_solved_qs", JSON.stringify(solvedQuestions));
+          const itemEl = document.getElementById(`qitem-${currentTopicIdx}-${currentQIdx}`);
+          if (itemEl) {
+            itemEl.classList.add("solved");
+            itemEl.lastElementChild.textContent = "✓";
+          }
+        }
+      } else {
+        appendConsole(`\n✗ Beklenen çıktı:\n${q.expected}\nSenin çıktın:\n${cleanOut || "(Boş)"}\n`, "term-line-err");
+      }
+    }
+
+    /* ================= TURTLE ÇİZİM MOTORU ================= */
+    let tState = { x: 180, y: 110, angle: 0, penDown: true, color: "#7e22ce", width: 2 };
+
+    function clearTurtleCanvas() {
+      const canvas = document.getElementById("turtle-canvas");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      tState = { x: 180, y: 110, angle: 0, penDown: true, color: "#7e22ce", width: 2 };
+    }
+
+    function executeTurtleCommand(cmd, a1, a2) {
+      const canvas = document.getElementById("turtle-canvas");
+      const ctx = canvas.getContext("2d");
+      ctx.strokeStyle = tState.color;
+      ctx.lineWidth = tState.width;
+
+      if (cmd === "forward") {
+        const rad = (tState.angle * Math.PI) / 180;
+        const nx = tState.x + a1 * Math.cos(rad);
+        const ny = tState.y + a1 * Math.sin(rad);
+        if (tState.penDown) {
+          ctx.beginPath();
+          ctx.moveTo(tState.x, tState.y);
+          ctx.lineTo(nx, ny);
+          ctx.stroke();
+        }
+        tState.x = nx;
+        tState.y = ny;
+      } else if (cmd === "right") {
+        tState.angle += a1;
+      } else if (cmd === "circle") {
+        ctx.beginPath();
+        ctx.arc(tState.x, tState.y - a1, Math.abs(a1), 0, Math.PI * 2);
+        ctx.stroke();
+      } else if (cmd === "color") {
+        tState.color = a1;
+      } else if (cmd === "pensize") {
+        tState.width = a1;
+      } else if (cmd === "penup") {
+        tState.penDown = false;
+      } else if (cmd === "pendown") {
+        tState.penDown = true;
+      } else if (cmd === "goto") {
+        const nx = 180 + a1;
+        const ny = 110 - a2;
+        if (tState.penDown) {
+          ctx.beginPath();
+          ctx.moveTo(tState.x, tState.y);
+          ctx.lineTo(nx, ny);
+          ctx.stroke();
+        }
+        tState.x = nx;
+        tState.y = ny;
+      }
+    }
+
+    /* ================= MİNİ SINAV MODÜLÜ ================= */
+    let examInterval = null;
+    let examSeconds = 900;
+
+    function startMiniExam() {
+      clearInterval(examInterval);
+      examSeconds = 900;
+      updateTimerDisplay();
+      const diff = document.getElementById("exam-diff-select").value;
+      const list = EXAM_BANK[diff];
+      const box = document.getElementById("exam-questions-container");
+
+      box.innerHTML = list.map((item, idx) => `
+        <div class="card-box">
+          <div>
+            <div style="font-weight:800; color:var(--accent-gold); margin-bottom:6px;">Soru ${idx + 1} (${diff})</div>
+            <p style="margin-bottom:10px;">${item.q}</p>
+            ${item.opts.map((opt, oIdx) => `
+              <label style="display:block; margin-bottom:6px; cursor:pointer; font-size:0.9rem;">
+                <input type="radio" name="exam-q-${idx}" value="${oIdx}"> ${opt}
+              </label>
+            `).join("")}
+          </div>
+        </div>
+      `).join("");
+
+      examInterval = setInterval(() => {
+        examSeconds--;
+        updateTimerDisplay();
+        if (examSeconds <= 0) finishMiniExam();
       }, 1000);
     }
 
-    function updateExamTimerDisplay() {
-      const el = document.getElementById('exam-timer-display');
-      if (!el) return;
-      const mins = Math.floor(Math.max(0, examSecondsLeft) / 60);
-      const secs = Math.max(0, examSecondsLeft) % 60;
-      el.textContent = `⏱️ ${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-      el.classList.toggle('danger', examSecondsLeft <= 120);
+    function updateTimerDisplay() {
+      const m = String(Math.floor(examSeconds / 60)).padStart(2, "0");
+      const s = String(examSeconds % 60).padStart(2, "0");
+      document.getElementById("exam-timer").textContent = `${m}:${s}`;
     }
 
-    function renderExamQuestion() {
-      const pills = document.getElementById('exam-q-pills');
-      pills.innerHTML = examQuestions.map((_, i) => {
-        const cls = i === examCurrentIdx ? 'active' : (examPassedSet.has(i) ? 'passed' : '');
-        return `<button class="exam-pill ${cls}" onclick="jumpExamQ(${i})">Soru ${i + 1} ${examPassedSet.has(i) ? '✓' : ''}</button>`;
-      }).join('');
-
-      const q = examQuestions[examCurrentIdx];
-      document.getElementById('exam-q-title').textContent = `Soru ${examCurrentIdx + 1} / ${examQuestions.length}: ${q.title}`;
-      document.getElementById('exam-q-desc').textContent = q.desc;
-      document.getElementById('exam-q-expected').textContent = `Beklenen Çıktı: ${q.expected}`;
-      document.getElementById('exam-code-editor').value = examUserCodes[examCurrentIdx] || "";
-    }
-
-    function saveCurrentExamCode() {
-      examUserCodes[examCurrentIdx] = document.getElementById('exam-code-editor').value;
-    }
-
-    function jumpExamQ(i) {
-      saveCurrentExamCode();
-      examCurrentIdx = i;
-      renderExamQuestion();
-    }
-
-    function prevExamQ() {
-      if (examCurrentIdx > 0) {
-        saveCurrentExamCode();
-        examCurrentIdx--;
-        renderExamQuestion();
-      }
-    }
-
-    function nextExamQ() {
-      if (examCurrentIdx < examQuestions.length - 1) {
-        saveCurrentExamCode();
-        examCurrentIdx++;
-        renderExamQuestion();
-      }
-    }
-
-    async function checkExamQuestion() {
-      saveCurrentExamCode();
-      const fb = document.getElementById('exam-feedback');
-      const code = document.getElementById('exam-code-editor').value;
-      const q = examQuestions[examCurrentIdx];
-
-      if (!pyodide) { fb.textContent = "Python motoru hazırlanıyor..."; return; }
-
-      try {
-        pyodide.runPython(PYTHON_TURTLE_SHIM + `
-import sys, io, builtins
-sys.stdout = io.StringIO()
-_turtle_log.clear()
-builtins.input = lambda p="": "25" if "Sayı" in str(p) else "Python"
-        `);
-        await pyodide.runPythonAsync(code);
-        const result = pyodide.runPython("sys.stdout.getvalue()").trim();
-        const isOk = normalizeText(result) === normalizeText(q.expected);
-
-        if (isOk) {
-          examPassedSet.add(examCurrentIdx);
-          fb.style.color = "#10b981";
-          fb.textContent = `✔ Doğru! Soru ${examCurrentIdx + 1} onaylandı. (Çıktı: ${result})`;
-          renderExamQuestion();
-        } else {
-          fb.style.color = "#f59e0b";
-          fb.textContent = `✖ Beklenen: "${q.expected}" | Senin Çıktın: "${result || 'Boş'}"`;
-        }
-      } catch (err) {
-        fb.style.color = "#f43f5e";
-        fb.textContent = explainError(err.toString());
-      }
-    }
-
-    function finishMiniExam(autoClosed) {
-      if (examTimerInterval) clearInterval(examTimerInterval);
-      document.getElementById('exam-active-box').style.display = 'none';
-      document.getElementById('exam-result-box').style.display = 'block';
-
-      const total = examQuestions.length;
-      const correct = examPassedSet.size;
-      const score = Math.round((correct / total) * 100);
-
-      document.getElementById('exam-result-heading').textContent = autoClosed
-        ? "⏰ 15 Dakikalık Süre Doldu — Sınav Otomatik Kapatıldı!"
-        : "🏁 Mini Sınav Tamamlandı!";
-      document.getElementById('exam-result-summary').innerHTML =
-        `Toplam <b>${total}</b> sorudan <b>${correct}</b> tanesini doğru tamamladın.<br>Sınav Puanın: <strong style="color:#10b981; font-size:1.2rem;">${score} / 100</strong><br><br>İstediğin zaman yeniden sınava girebilir veya farklı bir zorluk seviyesi deneyebilirsin.`;
-    }
-
-    function resetExamToSetup() {
-      if (examTimerInterval) clearInterval(examTimerInterval);
-      document.getElementById('exam-active-box').style.display = 'none';
-      document.getElementById('exam-result-box').style.display = 'none';
-      document.getElementById('exam-setup-box').style.display = 'block';
-    }
-
-    // 📤 Dosya Olarak Dışa Aktar / 📥 İçe Aktar
-    function exportBackupFile() {
-      saveProgress();
-      const backupObj = {
-        app: "pythonhazirlik",
-        exportedAt: new Date().toISOString(),
-        completed: Array.from(completedSet),
-        topicIndex,
-        questionIndex,
-        savedCodes
-      };
-      const blob = new Blob([JSON.stringify(backupObj, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `pythonhazirlik-yedek-${new Date().toISOString().slice(0, 10)}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      document.getElementById('yellow-text').innerHTML = `<span style="color:#eab308; font-weight:700;">📤 İlerlemen ve tüm kodların JSON dosyası olarak bilgisayarına indirildi!</span>`;
-    }
-
-    function importBackupFile(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const data = JSON.parse(e.target.result);
-          if (Array.isArray(data.completed)) completedSet = new Set(data.completed);
-          if (typeof data.topicIndex === 'number') topicIndex = data.topicIndex;
-          if (typeof data.questionIndex === 'number') questionIndex = data.questionIndex;
-          if (data.savedCodes) savedCodes = data.savedCodes;
-          openFolders.add(topicIndex);
-          saveProgress();
-          renderSidebar();
-          renderTask();
-          document.getElementById('yellow-text').innerHTML = `<span style="color:#10b981; font-weight:700;">📥 Yedek dosyası başarıyla yüklendi! Tüm ilerlemen geri getirildi.</span>`;
-        } catch (err) {
-          document.getElementById('yellow-text').innerHTML = `<span style="color:#f43f5e; font-weight:700;">❌ Geçersiz yedek dosyası seçildi.</span>`;
-        }
-      };
-      reader.readAsText(file);
-      event.target.value = "";
-    }
-
-    // Turtle Grafik Tuvali Motoru
-    function renderTurtleCommands(canvasId, commandsJson) {
-      const canvas = document.getElementById(canvasId);
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      ctx.strokeStyle = 'rgba(139, 92, 246, 0.12)';
-      ctx.lineWidth = 1;
-      for (let gx = 0; gx < canvas.width; gx += 20) {
-        ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, canvas.height); ctx.stroke();
-      }
-      for (let gy = 0; gy < canvas.height; gy += 20) {
-        ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(canvas.width, gy); ctx.stroke();
-      }
-
-      let x = canvas.width / 2;
-      let y = canvas.height / 2;
-      let angle = 0;
-      let penDown = true;
-      let color = '#eab308';
-      let width = 2.2;
-
-      let cmds = [];
-      try { cmds = JSON.parse(commandsJson || '[]'); } catch (e) {}
-
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-
-      cmds.forEach(c => {
-        if (c.type === 'forward') {
-          const rad = (angle * Math.PI) / 180;
-          const nx = x + Math.cos(rad) * c.val;
-          const ny = y - Math.sin(rad) * c.val;
-          if (penDown) {
-            ctx.beginPath();
-            ctx.strokeStyle = color;
-            ctx.lineWidth = width;
-            ctx.moveTo(x, y);
-            ctx.lineTo(nx, ny);
-            ctx.stroke();
-          }
-          x = nx; y = ny;
-        } else if (c.type === 'right') { angle -= c.val; }
-        else if (c.type === 'left') { angle += c.val; }
-        else if (c.type === 'color') { color = c.val || '#eab308'; }
-        else if (c.type === 'pensize') { width = c.val || 2; }
-        else if (c.type === 'penup') { penDown = false; }
-        else if (c.type === 'pendown') { penDown = true; }
-        else if (c.type === 'goto') {
-          const nx = canvas.width / 2 + c.x;
-          const ny = canvas.height / 2 - c.y;
-          if (penDown) {
-            ctx.beginPath();
-            ctx.strokeStyle = color;
-            ctx.lineWidth = width;
-            ctx.moveTo(x, y);
-            ctx.lineTo(nx, ny);
-            ctx.stroke();
-          }
-          x = nx; y = ny;
-        } else if (c.type === 'circle') {
-          ctx.beginPath();
-          ctx.strokeStyle = color;
-          ctx.lineWidth = width;
-          ctx.arc(x, y, Math.abs(c.val), 0, Math.PI * 2);
-          ctx.stroke();
-        }
+    function finishMiniExam() {
+      clearInterval(examInterval);
+      const diff = document.getElementById("exam-diff-select").value;
+      const list = EXAM_BANK[diff];
+      let correct = 0;
+      list.forEach((item, idx) => {
+        const chosen = document.querySelector(`input[name="exam-q-${idx}"]:checked`);
+        if (chosen && Number(chosen.value) === item.ans) correct++;
       });
-
-      ctx.fillStyle = '#8b5cf6';
-      ctx.beginPath();
-      ctx.arc(x, y, 4, 0, Math.PI * 2);
-      ctx.fill();
+      alert(`Sınav Tamamlandı ${studentName || ""}!\nDoğru Sayısı: ${correct} / ${list.length}`);
     }
 
-    function clearTurtleCanvas() { renderTurtleCommands('turtle-canvas', '[]'); }
-
-    const PYTHON_TURTLE_SHIM = `
-import sys, types, json
-_turtle_log = []
-class _VirtualTurtle:
-    def forward(self, d): _turtle_log.append({"type": "forward", "val": float(d)})
-    fd = forward
-    def backward(self, d): _turtle_log.append({"type": "forward", "val": -float(d)})
-    bk = backward
-    def right(self, a): _turtle_log.append({"type": "right", "val": float(a)})
-    rt = right
-    def left(self, a): _turtle_log.append({"type": "left", "val": float(a)})
-    lt = left
-    def circle(self, r): _turtle_log.append({"type": "circle", "val": float(r)})
-    def color(self, c): _turtle_log.append({"type": "color", "val": str(c)})
-    pencolor = color
-    def pensize(self, w): _turtle_log.append({"type": "pensize", "val": float(w)})
-    width = pensize
-    def penup(self): _turtle_log.append({"type": "penup"})
-    pu = penup
-    def pendown(self): _turtle_log.append({"type": "pendown"})
-    pd = pendown
-    def goto(self, x, y=0): _turtle_log.append({"type": "goto", "x": float(x), "y": float(y)})
-    setpos = goto
-    def speed(self, s): pass
-    def hideturtle(self): pass
-_default_t = _VirtualTurtle()
-_turtle_mod = types.ModuleType("turtle")
-_turtle_mod.Turtle = _VirtualTurtle
-_turtle_mod.forward = _default_t.forward
-_turtle_mod.fd = _default_t.forward
-_turtle_mod.backward = _default_t.backward
-_turtle_mod.right = _default_t.right
-_turtle_mod.rt = _default_t.right
-_turtle_mod.left = _default_t.left
-_turtle_mod.lt = _default_t.left
-_turtle_mod.circle = _default_t.circle
-_turtle_mod.color = _default_t.color
-_turtle_mod.pensize = _default_t.pensize
-_turtle_mod.penup = _default_t.penup
-_turtle_mod.pendown = _default_t.pendown
-_turtle_mod.goto = _default_t.goto
-_turtle_mod.speed = _default_t.speed
-_turtle_mod.done = lambda: None
-_turtle_mod.mainloop = lambda: None
-sys.modules["turtle"] = _turtle_mod
-`;
-
-    function loadSavedState() {
-      try {
-        const raw = localStorage.getItem('pythonhazirlik_save_v4');
-        if (!raw) return;
-        const data = JSON.parse(raw);
-        if (Array.isArray(data.completed)) completedSet = new Set(data.completed);
-        if (typeof data.topicIndex === 'number') topicIndex = data.topicIndex;
-        if (typeof data.questionIndex === 'number') questionIndex = data.questionIndex;
-        if (data.savedCodes) savedCodes = data.savedCodes;
-        openFolders.add(topicIndex);
-      } catch (e) {}
+    /* ================= TEMA & YEDEKLEME İŞLEMLERİ ================= */
+    function toggleTheme() {
+      const html = document.documentElement;
+      const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      html.setAttribute("data-theme", next);
     }
 
     function saveProgress() {
-      const key = `${currentMode}-${topicIndex}-${questionIndex}-${projectIndex}`;
-      const ed = document.getElementById('code-editor');
-      if (ed) savedCodes[key] = ed.value;
-      const payload = {
-        completed: Array.from(completedSet),
-        topicIndex,
-        questionIndex,
-        savedCodes
+      localStorage.setItem("py_solved_qs", JSON.stringify(solvedQuestions));
+      localStorage.setItem("py_last_code", document.getElementById("code-editor").value);
+      alert("İlerlemen tarayıcı hafızasına kaydedildi!");
+    }
+
+    function exportBackup() {
+      const data = {
+        studentName,
+        solvedQuestions,
+        lastCode: document.getElementById("code-editor").value
       };
-      localStorage.setItem('pythonhazirlik_save_v4', JSON.stringify(payload));
-      const yt = document.getElementById('yellow-text');
-      if (yt) yt.innerHTML = `<span style="color:#10b981; font-weight:700;">💾 İlerlemen ve yazdığın kod başarıyla kaydedildi!</span>`;
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "pythonhazirlik-yedek.json";
+      a.click();
     }
 
-    function resetAllProgress() {
-      localStorage.removeItem('pythonhazirlik_save_v4');
-      completedSet.clear();
-      savedCodes = {};
-      topicIndex = 0;
-      questionIndex = 0;
-      projectIndex = 0;
-      openFolders = new Set([0]);
-      openFormulaDrawers.clear();
-      clearTurtleCanvas();
-      renderSidebar();
-      renderTask();
-      document.getElementById('yellow-text').innerHTML = `<span style="color:#f59e0b; font-weight:700;">🗑️ Tüm ilerleme ve kayıtlar sıfırlandı, en baştan başlayabilirsin.</span>`;
-    }
-
-    window.addEventListener('load', () => {
-      loadSavedState();
-      populateExamModules();
-      clearTurtleCanvas();
-      renderSidebar();
-      renderTask();
-      const splash = document.getElementById('welcome-splash');
-      // 1 saniye arttırılmış giriş ekranı süresi (2100ms)
-      setTimeout(() => {
-        splash.classList.add('hide-splash');
-        setTimeout(() => splash.remove(), 850);
-      }, 2100);
-    });
-
-    (async function initPython() {
-      const statusEl = document.getElementById('engine-status');
-      try {
-        pyodide = await loadPyodide();
-        statusEl.textContent = "● Python Hazır";
-        statusEl.style.color = "#10b981";
-      } catch (e) {
-        statusEl.textContent = "Bağlantı Hatası";
-      }
-    })();
-
-    function toggleTheme() {
-      const html = document.documentElement;
-      const btn = document.getElementById('theme-btn');
-      if (html.getAttribute('data-theme') === 'dark') {
-        html.setAttribute('data-theme', 'light');
-        btn.textContent = "🌙 Koyu Tema";
-      } else {
-        html.setAttribute('data-theme', 'dark');
-        btn.textContent = "☀️ Beyaz-Mor";
-      }
-    }
-
-    function renderLectures() {
-      const grid = document.getElementById('lecture-grid');
-      grid.innerHTML = LECTURES_DATA.map(item => `
-        <div class="lecture-card">
-          <div class="lecture-card-top">
-            <h3>${item.title}</h3>
-            <span style="font-family:Consolas; font-size:0.73rem; color:var(--accent-gold); background:rgba(234,179,8,0.14); padding:3px 8px; border-radius:99px; white-space:nowrap;">${item.badge}</span>
-          </div>
-          <p>${item.desc}</p>
-          <div class="lecture-rule">${item.rule}</div>
-          <div class="lecture-code">${item.code}</div>
-        </div>
-      `).join('');
-    }
-
-    function switchMode(mode) {
-      currentMode = mode;
-      document.getElementById('mode-lecture').classList.toggle('active', mode === 'lecture');
-      document.getElementById('mode-topics').classList.toggle('active', mode === 'topics');
-      document.getElementById('mode-projects').classList.toggle('active', mode === 'projects');
-      document.getElementById('mode-exam').classList.toggle('active', mode === 'exam');
-
-      const lectureView = document.getElementById('lecture-view');
-      const examView = document.getElementById('exam-view');
-      const workspace = document.getElementById('workspace');
-
-      lectureView.classList.remove('active');
-      examView.classList.remove('active');
-      workspace.style.display = 'none';
-
-      if (mode === 'lecture') {
-        lectureView.classList.add('active');
-        renderLectures();
-      } else if (mode === 'exam') {
-        examView.classList.add('active');
-        populateExamModules();
-      } else {
-        workspace.style.display = 'flex';
-        renderSidebar();
-        renderTask();
-      }
-    }
-
-    function renderSidebar() {
-      const list = document.getElementById('sidebar-list');
-      const title = document.getElementById('sidebar-title');
-      const counter = document.getElementById('progress-counter');
-      list.innerHTML = '';
-
-      if (currentMode === 'topics') {
-        title.textContent = "Konu Klasörleri";
-        const totalQ = TOPICS_DATA.reduce((a, b) => a + b.questions.length, 0);
-        counter.textContent = `${completedSet.size} / ${totalQ}`;
-
-        TOPICS_DATA.forEach((topic, tIdx) => {
-          const isOpen = openFolders.has(tIdx);
-          const isFormulaOpen = openFormulaDrawers.has(tIdx);
-          const group = document.createElement('div');
-          group.className = `folder-group ${isOpen ? 'open' : ''}`;
-
-          const header = document.createElement('div');
-          header.className = `folder-header ${tIdx === topicIndex ? 'active-folder' : ''}`;
-
-          const titleSpan = document.createElement('span');
-          titleSpan.style.cssText = "overflow:hidden; text-overflow:ellipsis; white-space:nowrap;";
-          titleSpan.textContent = `📁 ${topic.name}`;
-
-          const rightBox = document.createElement('div');
-          rightBox.style.cssText = "display:flex; align-items:center; gap:6px;";
-
-          const roundBtn = document.createElement('button');
-          roundBtn.className = `yellow-round-btn ${isFormulaOpen ? 'active' : ''}`;
-          roundBtn.title = "Bu konunun formüllerini aç/kapat";
-          roundBtn.textContent = "ƒ";
-          roundBtn.onclick = (e) => {
-            e.stopPropagation();
-            if (openFormulaDrawers.has(tIdx)) openFormulaDrawers.delete(tIdx);
-            else openFormulaDrawers.add(tIdx);
-            renderSidebar();
-          };
-
-          const arrowSpan = document.createElement('span');
-          arrowSpan.className = "folder-arrow";
-          arrowSpan.textContent = "▾";
-
-          rightBox.appendChild(roundBtn);
-          rightBox.appendChild(arrowSpan);
-          header.appendChild(titleSpan);
-          header.appendChild(rightBox);
-
-          header.onclick = () => {
-            if (openFolders.has(tIdx)) openFolders.delete(tIdx);
-            else openFolders.add(tIdx);
-            topicIndex = tIdx;
-            renderSidebar();
-          };
-
-          const drawer = document.createElement('div');
-          drawer.className = `formula-drawer ${isFormulaOpen ? 'open' : ''}`;
-          drawer.innerHTML = `
-            <span class="formula-drawer-title">⚡ ${topic.name} Formülleri</span>
-            <div>${topic.formulaList.map(f => `<code>${f}</code>`).join('')}</div>
-            <div style="margin-top:5px; font-size:0.73rem; color:var(--text-secondary);">${topic.formulaNote}</div>
-          `;
-
-          const itemsDiv = document.createElement('div');
-          itemsDiv.className = 'folder-items';
-
-          topic.questions.forEach((q, qIdx) => {
-            const sub = document.createElement('div');
-            const isSelected = (tIdx === topicIndex && qIdx === questionIndex);
-            const isDone = completedSet.has(`${tIdx}-${qIdx}`);
-            sub.className = `sub-question-item ${isSelected ? 'selected' : ''}`;
-            sub.innerHTML = `<span>${qIdx + 1}. ${q.title}</span><span>${isDone ? '✅' : '›'}</span>`;
-            sub.onclick = (e) => {
-              e.stopPropagation();
-              topicIndex = tIdx;
-              questionIndex = qIdx;
-              openFolders.add(tIdx);
-              renderSidebar();
-              renderTask();
-            };
-            itemsDiv.appendChild(sub);
-          });
-
-          group.appendChild(header);
-          group.appendChild(drawer);
-          group.appendChild(itemsDiv);
-          list.appendChild(group);
-        });
-      } else {
-        title.textContent = "Proje Klasörleri";
-        counter.textContent = `${PROJECTS_DATA.length} Proje`;
-
-        PROJECTS_DATA.forEach((proj, idx) => {
-          const div = document.createElement('div');
-          div.className = `folder-group`;
-          div.innerHTML = `<div class="folder-header ${idx === projectIndex ? 'active-folder' : ''}"><span>${proj.title}</span></div>`;
-          div.onclick = () => {
-            projectIndex = idx;
-            renderSidebar();
-            renderTask();
-          };
-          list.appendChild(div);
-        });
-      }
-    }
-
-    function renderYellowVault(poolCommands, usedCommands) {
-      const status = document.getElementById('vault-status');
-      const chips = document.getElementById('vault-chips');
-      const activeSet = new Set(usedCommands);
-
-      status.textContent = `${usedCommands.length} Komut Aktif`;
-
-      chips.innerHTML = poolCommands.map(cmd => {
-        const isLit = activeSet.has(cmd);
-        return `<span class="cmd-chip ${isLit ? 'lit-now' : ''}">${isLit ? '⚡ ' : ''}${cmd}</span>`;
-      }).join('');
-    }
-
-    function loadSkeleton() {
-      const editor = document.getElementById('code-editor');
-      const currentItem = currentMode === 'topics'
-        ? TOPICS_DATA[topicIndex].questions[questionIndex]
-        : PROJECTS_DATA[projectIndex];
-      editor.value = currentItem.skeleton;
-      editor.focus();
-      document.getElementById('yellow-text').textContent = "Örnek başlangıç iskeleti yerleştirildi. '___' olan boşlukları doldurup çalıştırabilirsin.";
-    }
-
-    function openThreeSplit(wrongReason, exampleCode, solutionCode) {
-      document.getElementById('yellow-vault').style.display = 'none';
-      const helper = document.getElementById('three-split-helper');
-      document.getElementById('split-wrong').textContent = wrongReason;
-      document.getElementById('split-example').textContent = exampleCode;
-      document.getElementById('split-solution').textContent = solutionCode;
-      helper.classList.add('visible');
-    }
-
-    function closeThreeSplit() {
-      document.getElementById('three-split-helper').classList.remove('visible');
-      document.getElementById('yellow-vault').style.display = 'block';
-    }
-
-    function renderTask() {
-      closeThreeSplit();
-      clearTurtleCanvas();
-      const catEl = document.getElementById('task-category');
-      const diffEl = document.getElementById('task-diff');
-      const titleEl = document.getElementById('task-title');
-      const descEl = document.getElementById('task-desc');
-      const expEl = document.getElementById('task-expected');
-      const yellowText = document.getElementById('yellow-text');
-      const indicator = document.getElementById('item-indicator');
-      const editor = document.getElementById('code-editor');
-      const saveKey = `${currentMode}-${topicIndex}-${questionIndex}-${projectIndex}`;
-
-      if (currentMode === 'topics') {
-        const topic = TOPICS_DATA[topicIndex];
-        const q = topic.questions[questionIndex];
-        catEl.textContent = topic.name;
-        diffEl.textContent = q.diff;
-        diffEl.className = `difficulty-pill diff-${q.diff.toLowerCase()}`;
-        titleEl.textContent = `Soru ${questionIndex + 1}: ${q.title}`;
-        descEl.textContent = q.desc;
-        expEl.textContent = q.expected;
-        yellowText.textContent = q.hint;
-        indicator.textContent = `${questionIndex + 1} / ${topic.questions.length}`;
-        editor.value = savedCodes[saveKey] || "";
-        renderYellowVault(topic.poolCommands, q.usedCommands);
-      } else {
-        const p = PROJECTS_DATA[projectIndex];
-        catEl.textContent = "Kapsamlı Proje";
-        diffEl.textContent = p.diff;
-        diffEl.className = "difficulty-pill diff-orta";
-        titleEl.textContent = p.title;
-        descEl.textContent = p.desc;
-        expEl.textContent = p.expected;
-        yellowText.textContent = p.hint;
-        indicator.textContent = `${projectIndex + 1} / ${PROJECTS_DATA.length}`;
-        editor.value = savedCodes[saveKey] || "";
-        renderYellowVault(p.poolCommands, p.usedCommands);
-      }
-      document.getElementById('console-output').textContent = "Hazır.";
-    }
-
-    function resetEditor() {
-      document.getElementById('code-editor').value = "";
-      document.getElementById('console-output').textContent = "Temizlendi.";
-      clearTurtleCanvas();
-    }
-
-    function prevItem() {
-      if (currentMode === 'topics') {
-        if (questionIndex > 0) questionIndex--;
-        else if (topicIndex > 0) {
-          topicIndex--;
-          openFolders.add(topicIndex);
-          questionIndex = TOPICS_DATA[topicIndex].questions.length - 1;
-        }
-      } else if (projectIndex > 0) projectIndex--;
-      renderSidebar();
-      renderTask();
-    }
-
-    function nextItem() {
-      if (currentMode === 'topics') {
-        const maxQ = TOPICS_DATA[topicIndex].questions.length - 1;
-        if (questionIndex < maxQ) questionIndex++;
-        else if (topicIndex < TOPICS_DATA.length - 1) {
-          topicIndex++;
-          openFolders.add(topicIndex);
-          questionIndex = 0;
-        }
-      } else if (projectIndex < PROJECTS_DATA.length - 1) projectIndex++;
-      renderSidebar();
-      renderTask();
-    }
-
-    function explainError(errStr) {
-      if (errStr.includes("SyntaxError")) return "Yazım Hatası (SyntaxError): Satır sonundaki iki noktayı (:), tırnakları veya parantezleri kontrol et.";
-      if (errStr.includes("IndentationError")) return "Girinti Hatası: if, for, def veya try satırından sonraki satırı 4 boşluk içeriden başlatmalısın.";
-      if (errStr.includes("NameError")) return "Tanımsız İsim: Kullandığın değişkeni veya '___' boşluğunu doldurmayı unutmuş olabilirsin.";
-      if (errStr.includes("TypeError")) return "Tür Uyuşmazlığı: Metin (str) ile sayıyı (int) doğrudan birleştirmeye çalışıyorsun.";
-      return "Kodunda bir çalışma hatası oluştu. Satır numarasını ve değişken adlarını kontrol et.";
-    }
-
-    function normalizeText(str) {
-      return str.trim().toLocaleLowerCase('tr-TR').replace(/\s+/g, ' ');
-    }
-
-    async function runMainCode(checkAnswer) {
-      const out = document.getElementById('console-output');
-      const yellowText = document.getElementById('yellow-text');
-      const code = document.getElementById('code-editor').value;
-
-      const currentItem = currentMode === 'topics'
-        ? TOPICS_DATA[topicIndex].questions[questionIndex]
-        : PROJECTS_DATA[projectIndex];
-
-      if (!pyodide) { out.textContent = "Python motoru yükleniyor, birkaç saniye bekleyin..."; return; }
-
-      try {
-        pyodide.runPython(PYTHON_TURTLE_SHIM + `
-import sys, io, builtins
-sys.stdout = io.StringIO()
-sys.stderr = io.StringIO()
-_turtle_log.clear()
-def _mock_input(prompt=""):
-    return "25" if "Sayı" in str(prompt) else "Python"
-builtins.input = _mock_input
-        `);
-        await pyodide.runPythonAsync(code);
-        const result = pyodide.runPython("sys.stdout.getvalue()").trim();
-        const turtleData = pyodide.runPython("json.dumps(_turtle_log)");
-        const turtleCount = JSON.parse(turtleData).length;
-
-        renderTurtleCommands('turtle-canvas', turtleData);
-
-        out.style.color = "var(--text-primary)";
-        out.textContent = result || (turtleCount > 0 ? `(🐢 ${turtleCount} çizim komutu uygulandı)` : "(Çıktı yok)");
-
-        if (checkAnswer) {
-          const textMatch = normalizeText(result) === normalizeText(currentItem.expected);
-          const turtleValid = currentItem.isTurtle ? (turtleCount > 0 && textMatch) : textMatch;
-
-          if (turtleValid) {
-            closeThreeSplit();
-            yellowText.innerHTML = `<span style="color:#10b981; font-weight:700;">✔ Harika! Doğru sonucu ve çizimi elde ettin.</span>`;
-            if (currentMode === 'topics') {
-              completedSet.add(`${topicIndex}-${questionIndex}`);
-              renderSidebar();
-            }
-          } else {
-            const wrongMsg = currentItem.isTurtle && turtleCount === 0
-              ? "Herhangi bir turtle çizim komutu (ör. forward, circle) çalıştırılmadı."
-              : `Beklenen çıktı "${currentItem.expected}" iken senin kodun "${result || 'boş çıktı'}" üretti.`;
-            openThreeSplit(wrongMsg, currentItem.example, currentItem.solution);
+    function importBackup(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const data = JSON.parse(ev.target.result);
+          if (data.studentName) {
+            studentName = data.studentName;
+            localStorage.setItem("py_student_name", studentName);
+            updateUserBadge();
           }
+          if (Array.isArray(data.solvedQuestions)) {
+            solvedQuestions = data.solvedQuestions;
+            localStorage.setItem("py_solved_qs", JSON.stringify(solvedQuestions));
+            initAppUI();
+          }
+          if (data.lastCode) document.getElementById("code-editor").value = data.lastCode;
+          alert("Yedek başarıyla geri yüklendi!");
+        } catch {
+          alert("Geçersiz yedek dosyası.");
         }
-      } catch (err) {
-        out.style.color = "#f43f5e";
-        out.textContent = err.toString();
-        openThreeSplit(explainError(err.toString()), currentItem.example, currentItem.solution);
-      }
+      };
+      reader.readAsText(file);
     }
 
-    function openFreeModal() {
-      document.getElementById('freecode-modal').classList.add('open');
-      renderTurtleCommands('free-turtle-canvas', '[]');
+    function resetProgress() {
+      if (!confirm("Tüm çözülen sorular ve kayıtlar sıfırlansın mı?")) return;
+      localStorage.removeItem("py_solved_qs");
+      solvedQuestions = [];
+      initAppUI();
     }
-    function closeFreeModal() { document.getElementById('freecode-modal').classList.remove('open'); }
-
-    async function runFreeCode() {
-      const out = document.getElementById('free-output');
-      const yText = document.getElementById('free-yellow-text');
-      const code = document.getElementById('free-editor').value;
-      if (!pyodide) { out.textContent = "Python motoru hazırlanıyor..."; return; }
-
-      try {
-        pyodide.runPython(PYTHON_TURTLE_SHIM + `
-import sys, io
-sys.stdout = io.StringIO()
-_turtle_log.clear()
-        `);
-        await pyodide.runPythonAsync(code);
-        const res = pyodide.runPython("sys.stdout.getvalue()");
-        const turtleData = pyodide.runPython("json.dumps(_turtle_log)");
-        renderTurtleCommands('free-turtle-canvas', turtleData);
-
-        out.style.color = "var(--text-primary)";
-        out.textContent = res || "(Çizim ve kod başarıyla çalıştırıldı)";
-        yText.textContent = "Kod hatasız çalıştırıldı ve çizim tuvaline aktarıldı.";
-      } catch (err) {
-        out.style.color = "#f43f5e";
-        out.textContent = err.toString();
-        yText.textContent = explainError(err.toString());
-      }
-    }
-
-    ['code-editor', 'free-editor', 'exam-code-editor'].forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.addEventListener('keydown', e => {
-        if (e.key === 'Tab') {
-          e.preventDefault();
-          const s = el.selectionStart;
-          el.value = el.value.substring(0, s) + "    " + el.value.substring(el.selectionEnd);
-          el.selectionStart = el.selectionEnd = s + 4;
-        }
-      });
-    });
-
-    function makeResizable(resizerId, leftPaneId, minW, maxW) {
-      const resizer = document.getElementById(resizerId);
-      const pane = document.getElementById(leftPaneId);
-      let dragging = false;
-      resizer.addEventListener('mousedown', () => {
-        dragging = true;
-        resizer.classList.add('active');
-        document.body.style.cursor = 'col-resize';
-        document.body.style.userSelect = 'none';
-      });
-      document.addEventListener('mousemove', e => {
-        if (!dragging) return;
-        const rect = pane.getBoundingClientRect();
-        const newW = e.clientX - rect.left;
-        if (newW >= minW && newW <= maxW) pane.style.width = newW + 'px';
-      });
-      document.addEventListener('mouseup', () => {
-        if (!dragging) return;
-        dragging = false;
-        resizer.classList.remove('active');
-        document.body.style.cursor = '';
-        document.body.style.userSelect = '';
-      });
-    }
-
-    makeResizable('resizer-1', 'pane-left', 220, 420);
-    makeResizable('resizer-2', 'pane-mid', 280, 580);
   </script>
-  <footer style="height:26px; background:var(--bg-panel); border-top:1px solid var(--border-line); display:flex; align-items:center; justify-content:center; font-size:0.72rem; color:var(--text-secondary); z-index:15; flex-shrink:0;">
-    <span>pythonhazırlık — Geliştirici: <strong style="color:var(--accent-gold);">[ADIN SOYADIN]</strong></span>
-  </footer>
 </body>
 </html>
