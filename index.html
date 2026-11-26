@@ -2354,5 +2354,2481 @@ _turtle_log.clear()
     makeResizable('resizer-1', 'pane-left', 220, 420);
     makeResizable('resizer-2', 'pane-mid', 280, 580);
   </script>
+  <style>
+.npc-tabs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.npc-tab{background:var(--bg-panel);color:var(--text-primary);border:1.5px solid var(--border-line);border-radius:12px;padding:16px 18px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:4px;box-shadow:var(--panel-shadow);transition:all .2s}
+.npc-tab b{font-size:1rem}.npc-tab span{font-size:.78rem;color:var(--text-secondary)}
+.npc-tab:hover{border-color:var(--accent-purple)}
+.npc-tab.active{border-color:var(--accent-gold);background:rgba(234,179,8,.1);box-shadow:0 0 18px rgba(234,179,8,.2)}
+#npc-panel{display:none}
+.npc-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);gap:16px}
+.npc-box{background:var(--bg-panel);border:1.5px solid var(--border-line);border-radius:12px;box-shadow:var(--panel-shadow);overflow:hidden}
+.npc-video{display:flex;flex-direction:column}
+.npc-scene{display:flex;align-items:center;gap:18px;padding:22px;min-height:250px;background:radial-gradient(circle at 25% 30%,#2a2160,#0b0f1d 75%)}
+.npc-char{width:110px;flex-shrink:0}
+.npc-head{width:70px;height:70px;border-radius:50%;background:#f1c9a0;margin:0 auto;position:relative;z-index:2}
+.npc-hair{position:absolute;top:-6px;left:-2px;width:74px;height:30px;border-radius:40px 40px 6px 6px;background:#3b2a1e}
+.npc-eye{position:absolute;top:32px;width:8px;height:8px;border-radius:50%;background:#1e1b4b;animation:npcBlink 4s infinite}
+.npc-eye.l{left:18px}.npc-eye.r{left:44px}
+.npc-mouth{position:absolute;left:25px;top:50px;width:20px;height:5px;border-radius:0 0 10px 10px;background:#7a2e2e}
+.npc-char.talk .npc-mouth{animation:npcTalk .28s infinite alternate}
+.npc-char.talk{animation:npcBob .6s infinite alternate}
+.npc-body{width:96px;height:82px;margin:-6px auto 0;border-radius:14px 14px 4px 4px;background:linear-gradient(135deg,#8b5cf6,#6d28d9);display:flex;align-items:center;justify-content:center;color:#eab308;font-weight:900;font-family:Consolas,monospace}
+@keyframes npcBlink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+@keyframes npcTalk{to{height:13px;border-radius:50%}}
+@keyframes npcBob{to{transform:translateY(-4px)}}
+.npc-board{flex:1;min-width:0;background:rgba(6,9,17,.8);border:1.5px solid rgba(234,179,8,.45);border-radius:10px;padding:14px;color:#f1f5f9}
+.npc-board h4{color:#eab308;font-size:.95rem;margin-bottom:8px}
+.npc-board pre{font-family:Consolas,monospace;font-size:.85rem;color:#c4b5fd;white-space:pre-wrap;min-height:22px}
+.npc-board p{font-size:.78rem;color:#94a3b8;margin-top:8px}
+.npc-controls{display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1.5px solid var(--border-line);background:var(--bg-elevated);flex-wrap:wrap}
+.npc-bar{flex:1;min-width:120px;height:9px;background:rgba(139,92,246,.2);border-radius:9px;cursor:pointer;overflow:hidden}
+.npc-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent-purple),var(--accent-gold))}
+.npc-time{font-family:Consolas,monospace;font-size:.78rem;color:var(--text-secondary)}
+.npc-controls select{background:var(--bg-panel);color:var(--text-primary);border:1px solid var(--border-line);border-radius:6px;padding:4px;font-size:.76rem}
+.npc-topics{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;padding:12px;border-top:1.5px solid var(--border-line)}
+.npc-topic{background:var(--bg-elevated);color:var(--text-primary);border:1px solid var(--border-line);border-radius:8px;padding:8px 10px;font-size:.76rem;text-align:left;cursor:pointer;display:flex;justify-content:space-between;gap:6px}
+.npc-topic small{color:var(--accent-gold);white-space:nowrap}
+.npc-topic.on{border-color:var(--accent-gold);background:rgba(234,179,8,.12)}
+.npc-chat{display:flex;flex-direction:column;height:560px}
+.npc-chat-h{padding:11px 14px;font-weight:800;font-size:.82rem;color:var(--accent-purple);background:var(--bg-elevated);border-bottom:1.5px solid var(--border-line)}
+#npc-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:9px}
+.npc-msg{max-width:92%;background:var(--bg-elevated);border:1px solid var(--border-line);border-radius:4px 12px 12px 12px;padding:8px 11px;font-size:.82rem;line-height:1.5;animation:npcIn .25s}
+.npc-msg b{display:block;font-size:.7rem;color:var(--accent-gold);margin-bottom:2px}
+.npc-msg.sys{align-self:center;background:rgba(139,92,246,.12);font-size:.74rem;text-align:center}
+@keyframes npcIn{from{opacity:0;transform:translateY(6px)}}
+@media(max-width:860px){.npc-layout{grid-template-columns:1fr}.npc-tabs{grid-template-columns:1fr}.npc-chat{height:380px}}
+</style>
+<script>
+(function(){
+  const EXTRA=[
+    ["print komutu Python'un konuşma yöntemidir. Program ne düşünürse düşünsün, ekranda görmek istediğin her şeyi print ile gösterirsin.","Metinleri tırnak içine alırız, çünkü tırnak Python'a bunun bir yazı olduğunu söyler. Sayılarda ise tırnak gerekmez.","Birden fazla değeri virgülle ayırırsan Python aralarına kendiliğinden boşluk koyar. Bu boşluğu sep ile istediğin işarete çevirebilirsin.","Ters bölü n yazarsan imleç alt satıra geçer. Yıldız ile bir yazıyı istediğin kadar tekrar ettirebilirsin.","En sık yapılan hata tırnağı açıp kapatmayı unutmaktır. Parantezleri ve tırnakları her zaman çift çift kontrol et."],
+    ["Değişken, bir değere verdiğin etikettir. Bir kutuya isim yazıp içine bir şey koymak gibi düşünebilirsin.","Metinler str, tam sayılar int, ondalıklı sayılar float olarak adlandırılır. type komutuyla bir verinin türünü öğrenebilirsin.","Metni ve sayıyı aynı cümlede kullanmak istiyorsan f-string en rahat yöntemdir. Tırnağın önüne f yazar, değişkeni süslü parantez içine koyarsın.","int ve float komutları bir değeri başka türe çevirir. Örneğin metin olarak gelen on beş yazısını int ile gerçek sayıya dönüştürürsün.","Değişken adlarında boşluk ve Türkçe karakterden kaçınmak, sayıyla başlamamak iyi bir alışkanlıktır."],
+    ["Çift bölü işareti tam bölme yapar ve sadece sonucun tam kısmını verir. Yirmi üç bölü dört işleminde sonuç beştir.","Yüzde işareti kalanı bulur. Bu yüzden bir sayının çift mi tek mi olduğunu yüzde iki ile anlarız.","İki yıldız üs almadır. İki yıldız beş yazarsan iki üzeri beş, yani otuz iki elde edersin.","input komutu kullanıcıdan bilgi alır ama aldığı her şeyi yazı olarak saklar.","Bu yüzden sayıyla işlem yapacaksan input'u int ile sarmalaman gerekir. Aksi halde Python sayıyı toplamak yerine yazıları yan yana yapıştırır."],
+    ["Karar yapıları programın dallanmasını sağlar. Hava yağmurluysa şemsiye al, değilse alma, gibi düşün.","if bir şart sorar, şart doğruysa altındaki bloğu çalıştırır. Yanlışsa sıradaki elif ya da else devreye girer.","Şart satırının sonuna iki nokta koymak zorundasın. Altındaki satırlar da dört boşluk içeriden başlamalı.","and iki şartın da doğru olmasını, or ise en az birinin doğru olmasını ister.","Karşılaştırmada eşit mi diye sormak için iki tane eşittir yazılır. Tek eşittir atama yapar, onu karıştırmamaya dikkat et."],
+    ["Döngüler tekrar eden işleri senin yerine yapar. Yüz kere print yazmak yerine döngüye yüz kere çalışmasını söylersin.","for döngüsü, kaç kere döneceğini bildiğinde kullanılır. range ise sayı üreten yardımcıdır.","range bir ile altı yazarsan bir, iki, üç, dört, beş üretir. Bitiş değeri dahil değildir, bunu sınavlarda sık sorarlar.","while döngüsü ise şart doğru olduğu sürece döner. Sayacı güncellemeyi unutursan döngü sonsuza kadar sürer.","Toplam gibi birikimli işlemlerde artı eşittir kullanılır. Böylece her turda değer biraz daha büyür."],
+    ["Liste, birden fazla veriyi tek isim altında saklar. Köşeli parantez içinde ve virgülle ayrılarak yazılır.","Elemanlara sıra numarasıyla ulaşılır ve sayma sıfırdan başlar. İlk eleman sıfırıncı indekstedir.","append listenin sonuna eleman ekler. len eleman sayısını, max en büyüğü, sum ise toplamı verir.","Listeler değiştirilebilir olduğu için bir elemanı doğrudan yeni değerle değiştirebilirsin.","Liste üzerinde for döngüsü kurarak her elemanı tek tek gezebilirsin. Bu, gerçek projelerde en çok kullanacağın kalıplardan biridir."],
+    ["Tuple, listeye çok benzer ama bir kere oluşturulunca elemanları değiştirilemez. Buna immutable denir.","Normal parantezle yazılır. Haftanın günleri ya da koordinatlar gibi hiç değişmemesi gereken veriler için çok uygundur.","Elemanlara yine indeks ile ulaşırsın. count bir değerin kaç kere geçtiğini, index ise kaçıncı sırada olduğunu söyler.","Bir demeti birden fazla değişkene tek satırda dağıtabilirsin. Buna paket açma, yani unpacking denir.","Tuple'ın elemanını değiştirmeye çalışırsan Python hata verir. Bu kısıtlama aslında verini korumak için vardır."],
+    ["Sözlük, anahtar ve değer çiftleriyle çalışır. Gerçek bir sözlükte kelime ve anlamı olması gibi.","Süslü parantez içinde anahtar, iki nokta, değer şeklinde yazılır. Değere ulaşmak için anahtarı köşeli parantez içine yazarsın.","Yeni bir anahtara değer verirsen sözlüğe yeni bir kayıt eklenmiş olur. values komutu tüm değerleri verir.","Küme, yani set, aynı elemanı iki kere tutmaz. Bir listeyi sete çevirirsen tekrar edenler otomatik silinir.","Kümelerde eleman eklemek için append değil add kullanılır. Ayrıca iki kümenin ortak elemanlarını and işaretiyle bulabilirsin."],
+    ["Fonksiyon, bir kere yazıp istediğin kadar çağırabildiğin kod parçasıdır. Tekrar eden kodu azaltır.","def ile başlar, isim ve parantez gelir, sonuna iki nokta konur. İçerideki kodlar dört boşluk girintili olur.","return fonksiyonun sonucu geri göndermesini sağlar. print sadece gösterir, return ise değeri program içinde kullanabilmeni sağlar.","Hatalar programı çökertebilir. Örneğin bir sayıyı sıfıra bölmek hata verir.","try bloğunda riskli işi dener, hata çıkarsa except bloğuna geçersin. Böylece kullanıcı kırmızı hata ekranı yerine anlaşılır bir mesaj görür."],
+    ["Turtle, ekranda kalem hareket ettirerek çizim yapmanı sağlayan eğlenceli bir kütüphanedir.","Önce import turtle ile kütüphaneyi çağırırsın, sonra Turtle komutuyla kalemini oluşturursun.","forward kalemi ileri götürür, right ve left ise döndürür. circle ile daire, color ile renk seçersin.","Çokgen çizerken dış açı üç yüz altmış bölü kenar sayısıdır. Kare için doksan, üçgen için yüz yirmi derece döneriz.","Aynı hareketleri for döngüsüne koyarsan kısa bir kodla karmaşık şekiller çizebilirsin. Beş köşeli yıldız için yüz kırk dört derece dönmek gerekir."]
+  ];
+  const D=LECTURES_DATA;
+  const spoken=l=>l.replace(/\+=/g,' artı eşittir ').replace(/==/g,' eşittir eşittir ').replace(/=/g,' eşittir ').replace(/[(){}\[\]"':,.]/g,' ').replace(/\s+/g,' ').trim();
+  const clean=s=>s.replace(/\\n/g,' ').replace(/\s+/g,' ');
+  const SC=D.map((d,i)=>{
+    const n=d.title.replace(/^\d+\.\s*/,''),S=[];
+    S.push({t:`Selam yazılımcı! Ben NPC Usta. Bu videoda ${n} konusunu baştan sona birlikte öğreneceğiz.`});
+    S.push({t:'Rahat bir pozisyon al, istersen yanında editörü de aç. Hazırsan başlıyoruz.'});
+    S.push({t:clean(d.desc)});
+    EXTRA[i].forEach(x=>S.push({t:x}));
+    S.push({t:clean(d.rule).replace(/^Altın Kural:\s*/,'Şimdi altın kurala geliyoruz. ')});
+    S.push({t:'Şimdi örnek koda bakalım. Ekrandaki tahtada her satırı göreceksin.'});
+    d.code.split('\n').forEach((l,k)=>{if(l.trim())S.push({t:`${k+1}. satırda şunu yazıyoruz: ${spoken(l)}`,code:l});});
+    S.push({t:'Bu kodu kendi editöründe yazıp çalıştırmanı öneririm. Deneyerek öğrenmek en kalıcı yoldur.'});
+    S.push({t:`Kısaca toparlayalım: ${n} konusunda aklında kalması gereken şey şu. ${clean(d.rule).replace(/^Altın Kural:\s*/,'')}`});
+    S.push({t:'Konu bu kadardı. Alıştırmalar bölümünde bu konunun sorularını çözerek pekiştirebilirsin. Bol şans!'});
+    return S;
+  });
+  const words=s=>s.t.split(/\s+/).length,est=s=>words(s)/2.5+0.65;
+  const total=i=>SC[i].reduce((a,s)=>a+est(s),0);
+  const fmt=x=>{x=Math.max(0,Math.round(x));return String(Math.floor(x/60)).padStart(2,'0')+':'+String(x%60).padStart(2,'0')};
+
+  const cont=document.querySelector('.lecture-container');
+  const banner=cont.querySelector('.lecture-banner'),grid=document.getElementById('lecture-grid');
+  const tabs=document.createElement('div');tabs.className='npc-tabs';
+  tabs.innerHTML='<button class="npc-tab active" data-t="sum"><b>📖 Konu Özeti</b><span>Formüller, kurallar ve örnek kodlar</span></button><button class="npc-tab" data-t="npc"><b>🎬 NPC Video Rehberi</b><span>Erkek NPC sesiyle sesli ve sohbetli konu anlatımı</span></button>';
+  cont.prepend(tabs);
+  const panel=document.createElement('div');panel.id='npc-panel';
+  panel.innerHTML=`<div class="npc-layout"><div class="npc-box npc-video">
+    <div class="npc-scene"><div class="npc-char" id="npc-char"><div class="npc-head"><div class="npc-hair"></div><div class="npc-eye l"></div><div class="npc-eye r"></div><div class="npc-mouth"></div></div><div class="npc-body">PY</div></div>
+    <div class="npc-board"><h4 id="npc-title"></h4><pre id="npc-code">Başlatmak için ▶ düğmesine bas.</pre><p id="npc-sub"></p></div></div>
+    <div class="npc-controls"><button class="run-btn" id="npc-play">▶ Oynat</button><button class="nav-small-btn" id="npc-restart">⏮</button><div class="npc-bar" id="npc-bar"><i></i></div><span class="npc-time" id="npc-time">00:00 / 00:00</span>
+    <select id="npc-rate"><option value="0.85">0.85x</option><option value="1" selected>1x</option><option value="1.2">1.2x</option></select>
+    <label style="font-size:.75rem;color:var(--text-secondary)"><input type="checkbox" id="npc-auto"> Sıradakine geç</label></div>
+    <div class="npc-topics" id="npc-topics"></div></div>
+    <div class="npc-box npc-chat"><div class="npc-chat-h">💬 NPC Sohbeti (Anlatılan Yazı)</div><div id="npc-msgs"></div></div></div>`;
+  cont.appendChild(panel);
+  const $=id=>document.getElementById(id);
+  let cur=0,idx=0,playing=false,timer=null,token=0,voice=null,rate=1,shown=-1;
+
+  function pickVoice(){if(!('speechSynthesis' in window))return;const v=speechSynthesis.getVoices().filter(x=>/^tr/i.test(x.lang));voice=v.find(x=>/tolga|cem|ahmet|male|erkek/i.test(x.name))||v[0]||null;}
+  pickVoice();if('speechSynthesis' in window)speechSynthesis.onvoiceschanged=pickVoice;
+
+  function chat(s,k){const m=document.createElement('div');m.className='npc-msg';m.innerHTML='<b>NPC Usta</b>';m.appendChild(document.createTextNode(s.t));$('npc-msgs').appendChild(m);$('npc-msgs').scrollTop=1e6;shown=k;}
+  function rebuild(k){$('npc-msgs').innerHTML='';for(let j=0;j<=k;j++)chat(SC[cur][j],j);}
+  function ui(){
+    const S=SC[cur];let el=0;for(let j=0;j<Math.min(idx,S.length);j++)el+=est(S[j]);const tot=total(cur);
+    $('npc-bar').firstChild.style.width=Math.min(100,el/tot*100)+'%';
+    $('npc-time').textContent=fmt(el/rate)+' / '+fmt(tot/rate);
+    $('npc-play').textContent=playing?'⏸ Durdur':'▶ Oynat';
+    $('npc-char').classList.toggle('talk',playing);
+    const s=S[Math.min(idx,S.length-1)];
+    $('npc-code').textContent=s.code||$('npc-code').textContent;
+    document.querySelectorAll('.npc-topic').forEach((b,i)=>b.classList.toggle('on',i===cur));
+  }
+  function stopSpeech(){token++;clearTimeout(timer);if('speechSynthesis' in window)speechSynthesis.cancel();}
+  function say(){
+    if(!playing)return;const S=SC[cur];
+    if(idx>=S.length){playing=false;stopSpeech();const m=document.createElement('div');m.className='npc-msg sys';m.textContent='✔ Video bitti';$('npc-msgs').appendChild(m);ui();
+      if($('npc-auto').checked&&cur<SC.length-1){select(cur+1);playing=true;say();}return;}
+    const s=S[idx];if(shown!==idx)chat(s,idx);if(!s.code&&idx<3)$('npc-code').textContent='…';ui();
+    const my=++token,next=()=>{if(my!==token||!playing)return;idx++;timer=setTimeout(say,600);};
+    if(!('speechSynthesis' in window)){timer=setTimeout(next,est(s)*1000/rate);return;}
+    const u=new SpeechSynthesisUtterance(s.t);u.lang='tr-TR';if(voice)u.voice=voice;
+    u.rate=0.95*rate;u.pitch=voice&&/tolga|cem|ahmet|male|erkek/i.test(voice.name)?0.85:0.45;
+    u.onend=next;u.onerror=()=>{if(my===token)timer=setTimeout(next,est(s)*1000/rate)};speechSynthesis.speak(u);
+  }
+  function select(i){stopSpeech();playing=false;cur=i;idx=0;shown=-1;$('npc-msgs').innerHTML='';
+    $('npc-title').textContent=D[i].title;$('npc-code').textContent='Başlatmak için ▶ düğmesine bas.';
+    $('npc-sub').textContent='Tahmini süre: yaklaşık '+Math.max(1,Math.round(total(i)/rate/60))+' dk • '+(voice?'Ses: '+voice.name:'Türkçe ses bulunamadı, cihazın varsayılan sesi kullanılır');ui();}
+  $('npc-topics').innerHTML=D.map((d,i)=>`<button class="npc-topic" data-i="${i}"><span>${d.title}</span><small>~${Math.max(1,Math.round(total(i)/60))} dk</small></button>`).join('');
+  $('npc-topics').onclick=e=>{const b=e.target.closest('.npc-topic');if(b)select(+b.dataset.i);};
+  $('npc-play').onclick=()=>{if(playing){playing=false;stopSpeech();ui();}else{if(idx>=SC[cur].length){idx=0;shown=-1;$('npc-msgs').innerHTML='';}playing=true;say();}};
+  $('npc-restart').onclick=()=>{const p=playing;select(cur);if(p){playing=true;say();}};
+  $('npc-rate').onchange=e=>{rate=+e.target.value;const p=playing;if(p){stopSpeech();}ui();if(p)say();};
+  $('npc-bar').onclick=e=>{const r=e.currentTarget.getBoundingClientRect(),f=(e.clientX-r.left)/r.width,tot=total(cur);let a=0,k=0;
+    for(;k<SC[cur].length-1&&a+est(SC[cur][k])<f*tot;k++)a+=est(SC[cur][k]);
+    const p=playing;stopSpeech();idx=k;rebuild(Math.max(0,k-1));shown=k-1;playing=p;ui();if(p)say();};
+  tabs.onclick=e=>{const b=e.target.closest('.npc-tab');if(!b)return;const npc=b.dataset.t==='npc';
+    tabs.querySelectorAll('.npc-tab').forEach(x=>x.classList.toggle('active',x===b));
+    banner.style.display=grid.style.display=npc?'none':'';panel.style.display=npc?'block':'none';
+    if(!npc){playing=false;stopSpeech();ui();}};
+  const orig=window.switchMode;
+  window.switchMode=function(m){if(m!=='lecture'){playing=false;stopSpeech();ui();}return orig.apply(this,arguments);};
+  select(0);
+})();
+</script>
+  <!-- CANLI ETKİLEŞİMLİ KONSOL & SINIRSIZ INPUT CHAT EKLENTİSİ -->
+<style>
+  .live-chat-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: var(--bg-panel);
+    border-top: 1.5px solid var(--border-line);
+    flex-shrink: 0;
+  }
+  .live-chat-bar.waiting {
+    border-top-color: var(--accent-gold);
+    background: rgba(234, 179, 8, 0.12);
+    box-shadow: inset 0 0 12px rgba(234, 179, 8, 0.15);
+  }
+  .live-chat-prompt {
+    font-family: 'Consolas', monospace;
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--accent-gold);
+    white-space: nowrap;
+  }
+  .live-chat-input {
+    flex: 1;
+    background: var(--bg-editor);
+    color: var(--text-primary);
+    border: 1.5px solid var(--border-line);
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-family: 'Consolas', monospace;
+    font-size: 0.82rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .live-chat-input:focus {
+    border-color: var(--accent-gold);
+  }
+  .live-chat-send {
+    background: linear-gradient(135deg, var(--accent-purple), #6d28d9);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .live-chat-send:hover {
+    opacity: 0.92;
+  }
+</style>
+
+<script>
+(function () {
+  function attachChatBar(containerEl, outputEl, prefix) {
+    if (!containerEl || document.getElementById(prefix + '-chat-bar')) return null;
+
+    const bar = document.createElement('div');
+    bar.className = 'live-chat-bar';
+    bar.id = prefix + '-chat-bar';
+    bar.innerHTML = `
+      <span class="live-chat-prompt" id="${prefix}-chat-prompt">&gt;&gt;&gt;</span>
+      <input type="text" class="live-chat-input" id="${prefix}-chat-input" placeholder="Kod input() sorduğunda cevabını buraya yazıp Enter'a bas..." autocomplete="off" />
+      <button type="button" class="live-chat-send" id="${prefix}-chat-send">Gönder ↵</button>
+    `;
+    containerEl.appendChild(bar);
+
+    const inputEl = document.getElementById(prefix + '-chat-input');
+    const sendBtn = document.getElementById(prefix + '-chat-send');
+    const promptEl = document.getElementById(prefix + '-chat-prompt');
+
+    let resolver = null;
+
+    function submitValue() {
+      const val = inputEl.value;
+      if (!resolver) return;
+      inputEl.value = '';
+      bar.classList.remove('waiting');
+      promptEl.textContent = '>>>';
+      inputEl.placeholder = "Kod input() sorduğunda cevabını buraya yazıp Enter'a bas...";
+
+      const line = document.createElement('div');
+      line.style.cssText = 'color:#eab308; font-weight:700; margin:2px 0;';
+      line.textContent = '› ' + val;
+      outputEl.appendChild(line);
+      outputEl.scrollTop = outputEl.scrollHeight;
+
+      const done = resolver;
+      resolver = null;
+      done(val);
+    }
+
+    sendBtn.addEventListener('click', submitValue);
+    inputEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        submitValue();
+      }
+    });
+
+    return {
+      ask(promptText) {
+        if (promptText) {
+          const pLine = document.createElement('span');
+          pLine.style.color = '#c4b5fd';
+          pLine.textContent = String(promptText);
+          outputEl.appendChild(pLine);
+          outputEl.scrollTop = outputEl.scrollHeight;
+        }
+        bar.classList.add('waiting');
+        promptEl.textContent = 'Cevap:';
+        inputEl.placeholder = 'Cevabını yaz ve Enter\'a bas...';
+        inputEl.focus();
+        return new Promise((resolve) => {
+          resolver = resolve;
+        });
+      },
+      cancel() {
+        if (resolver) {
+          const done = resolver;
+          resolver = null;
+          done('');
+        }
+        bar.classList.remove('waiting');
+        promptEl.textContent = '>>>';
+      }
+    };
+  }
+
+  // 1. Ana Çalışma Alanı Çıktı Konsoluna Sohbet Kutusu Ekle
+  const mainConsoleArea = document.querySelector('.console-area');
+  const mainConsoleOut = document.getElementById('console-output');
+  const mainChat = attachChatBar(mainConsoleArea, mainConsoleOut, 'main');
+
+  // 2. Serbest Kod Penceresi Çıktı Alanına Sohbet Kutusu Ekle
+  const freeOut = document.getElementById('free-output');
+  let freeChat = null;
+  if (freeOut && freeOut.parentElement) {
+    const freeWrap = document.createElement('div');
+    freeWrap.style.cssText = 'flex:1; display:flex; flex-direction:column; min-width:0; border:1.5px solid var(--border-line); border-radius:8px; overflow:hidden; background:var(--bg-editor);';
+    freeOut.parentElement.insertBefore(freeWrap, freeOut);
+    freeOut.style.border = 'none';
+    freeOut.style.borderRadius = '0';
+    freeWrap.appendChild(freeOut);
+    freeChat = attachChatBar(freeWrap, freeOut, 'free');
+  }
+
+  // Python kodundaki input() çağrılarını asenkron hale getirip canlı sohbete bağlayan dönüştürücü
+  function transformInteractiveInput(code) {
+    if (!/\binput\s*\(/.test(code)) return { hasInput: false, code };
+    let transformed = code.replace(/\binput\s*\(/g, 'await _live_input(');
+    const indented = transformed.split('\n').map(line => '    ' + line).join('\n');
+    const wrapped = `async def __interactive_runner__():\n${indented}\nawait __interactive_runner__()`;
+    return { hasInput: true, code: wrapped };
+  }
+
+  function appendStreamText(outEl, text, isErr) {
+    if (!text) return;
+    const span = document.createElement('span');
+    if (isErr) span.style.color = '#f43f5e';
+    span.textContent = text;
+    outEl.appendChild(span);
+    outEl.scrollTop = outEl.scrollHeight;
+  }
+
+  // Mevcut runMainCode fonksiyonunu sar: Kontrol Et modunda orijinali korur, Çalıştır modunda canlı chat açar
+  const origRunMainCode = window.runMainCode;
+  window.runMainCode = async function (checkAnswer) {
+    const rawCode = document.getElementById('code-editor').value;
+    const prep = transformInteractiveInput(rawCode);
+
+    if (checkAnswer || !prep.hasInput || !mainChat) {
+      if (mainChat) mainChat.cancel();
+      return origRunMainCode.apply(this, arguments);
+    }
+
+    if (!pyodide) {
+      mainConsoleOut.textContent = 'Python motoru yükleniyor, birkaç saniye bekleyin...';
+      return;
+    }
+
+    mainChat.cancel();
+    mainConsoleOut.innerHTML = '';
+    mainConsoleOut.style.color = 'var(--text-primary)';
+    window._jsLiveInputMain = (p) => mainChat.ask(p);
+
+    try {
+      pyodide.runPython(PYTHON_TURTLE_SHIM + `
+import sys, json
+from js import _jsLiveInputMain
+_turtle_log.clear()
+class _LiveStream:
+    def __init__(self, err=False): self.err = err
+    def write(self, s):
+        if s: window._appendMainOut(str(s), self.err)
+    def flush(self): pass
+import js as window
+sys.stdout = _LiveStream(False)
+sys.stderr = _LiveStream(True)
+async def _live_input(prompt=""):
+    res = await _jsLiveInputMain(str(prompt))
+    return str(res)
+`);
+      window._appendMainOut = (txt, isErr) => appendStreamText(mainConsoleOut, txt, isErr);
+      await pyodide.runPythonAsync(prep.code);
+      const turtleData = pyodide.runPython('json.dumps(_turtle_log)');
+      renderTurtleCommands('turtle-canvas', turtleData);
+    } catch (err) {
+      appendStreamText(mainConsoleOut, '\n' + err.toString(), true);
+    }
+  };
+
+  // Mevcut runFreeCode fonksiyonunu sar: Serbest Kod'da sınırsız canlı input() sohbeti sağlar
+  const origRunFreeCode = window.runFreeCode;
+  window.runFreeCode = async function () {
+    const rawCode = document.getElementById('free-editor').value;
+    const prep = transformInteractiveInput(rawCode);
+
+    if (!prep.hasInput || !freeChat) {
+      if (freeChat) freeChat.cancel();
+      return origRunFreeCode.apply(this, arguments);
+    }
+
+    const yText = document.getElementById('free-yellow-text');
+    if (!pyodide) {
+      freeOut.textContent = 'Python motoru hazırlanıyor...';
+      return;
+    }
+
+    freeChat.cancel();
+    freeOut.innerHTML = '';
+    freeOut.style.color = 'var(--text-primary)';
+    window._jsLiveInputFree = (p) => freeChat.ask(p);
+
+    try {
+      pyodide.runPython(PYTHON_TURTLE_SHIM + `
+import sys, json
+from js import _jsLiveInputFree
+_turtle_log.clear()
+class _FreeLiveStream:
+    def __init__(self, err=False): self.err = err
+    def write(self, s):
+        if s: window._appendFreeOut(str(s), self.err)
+    def flush(self): pass
+import js as window
+sys.stdout = _FreeLiveStream(False)
+sys.stderr = _FreeLiveStream(True)
+async def _live_input(prompt=""):
+    res = await _jsLiveInputFree(str(prompt))
+    return str(res)
+`);
+      window._appendFreeOut = (txt, isErr) => appendStreamText(freeOut, txt, isErr);
+      await pyodide.runPythonAsync(prep.code);
+      const turtleData = pyodide.runPython('json.dumps(_turtle_log)');
+      renderTurtleCommands('free-turtle-canvas', turtleData);
+      if (yText) yText.textContent = 'Etkileşimli oturum tamamlandı.';
+    } catch (err) {
+      appendStreamText(freeOut, '\n' + err.toString(), true);
+      if (yText) yText.textContent = explainError(err.toString());
+    }
+  };
+})();
+</script>
+<!-- GİRİŞ EKRANI PİKSEL GLITCH & İSİM SORMA EKLENTİSİ -->
+<style>
+  #elite-gate-overlay {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at top right, #1e1b4b, #060911 75%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2147483647;
+    transition: transform 0.75s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.75s ease;
+    overflow: hidden;
+  }
+  /* Arka plana çok hafif CRT / piksel tarama çizgisi */
+  #elite-gate-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.02) 0px,
+      rgba(255, 255, 255, 0.02) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    pointer-events: none;
+  }
+  #elite-gate-overlay.gate-closing {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* PİKSEL BOZULMA / CIZIRTI (GLITCH) BAŞLIK */
+  .glitch-title {
+    position: relative;
+    font-size: clamp(2.4rem, 5.2vw, 4.1rem);
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: -0.02em;
+    color: #e9d5ff;
+    text-shadow:
+      0 0 18px rgba(147, 51, 234, 0.75),
+      -2px 0 #a855f7,
+      2px 0 #eab308;
+    padding: 4px 18px;
+    user-select: none;
+    animation: glitchSkew 2.8s infinite linear alternate-reverse;
+  }
+  .glitch-title::before,
+  .glitch-title::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 4px 18px;
+    background: transparent;
+    overflow: hidden;
+  }
+  /* Üst piksel dilimi (Mor-Cyan cızırtı) */
+  .glitch-title::before {
+    left: 3px;
+    text-shadow: -2px 0 #38bdf8, 2px 0 #c084fc;
+    color: #f3e8ff;
+    animation: glitchSliceTop 1.9s infinite linear alternate-reverse;
+  }
+  /* Alt piksel dilimi (Altın-Pembe cızırtı) */
+  .glitch-title::after {
+    left: -3px;
+    text-shadow: -2px 0 #eab308, 2px 0 #f43f5e;
+    color: #ddd6fe;
+    animation: glitchSliceBottom 1.4s infinite linear alternate-reverse;
+  }
+
+  @keyframes glitchSliceTop {
+    0%   { clip-path: inset(12% 0 78% 0); transform: translate(-3px, -1px); }
+    15%  { clip-path: inset(65% 0 14% 0); transform: translate(4px, 1px); }
+    30%  { clip-path: inset(28% 0 55% 0); transform: translate(-4px, 0); }
+    45%  { clip-path: inset(82% 0 4% 0);  transform: translate(3px, -1px); }
+    60%  { clip-path: inset(8% 0 84% 0);  transform: translate(-2px, 2px); }
+    75%  { clip-path: inset(46% 0 38% 0); transform: translate(5px, -1px); }
+    90%  { clip-path: inset(72% 0 12% 0); transform: translate(-3px, 1px); }
+    100% { clip-path: inset(19% 0 66% 0); transform: translate(2px, 0); }
+  }
+
+  @keyframes glitchSliceBottom {
+    0%   { clip-path: inset(74% 0 8% 0);  transform: translate(4px, 1px); }
+    20%  { clip-path: inset(16% 0 68% 0); transform: translate(-5px, -1px); }
+    40%  { clip-path: inset(52% 0 29% 0); transform: translate(3px, 0); }
+    60%  { clip-path: inset(5% 0 86% 0);  transform: translate(-3px, 2px); }
+    80%  { clip-path: inset(61% 0 21% 0); transform: translate(4px, -2px); }
+    100% { clip-path: inset(34% 0 49% 0); transform: translate(-4px, 1px); }
+  }
+
+  @keyframes glitchSkew {
+    0%, 88%, 100% { transform: skewX(-7deg); }
+    90%           { transform: skewX(-14deg) scaleX(1.02); }
+    93%           { transform: skewX(4deg) scaleX(0.98); }
+    96%           { transform: skewX(-11deg); }
+  }
+
+  .elite-name-box {
+    margin-top: 26px;
+    padding: 20px 24px;
+    width: min(390px, 90vw);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.09) 0%, rgba(124, 58, 237, 0.26) 48%, rgba(15, 22, 36, 0.94) 100%);
+    border: 1.5px solid rgba(196, 181, 253, 0.55);
+    border-left: 4px solid #eab308;
+    border-radius: 3px;
+    box-shadow: 0 18px 45px rgba(109, 40, 217, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    position: relative;
+    z-index: 2;
+  }
+  .elite-name-label {
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #e9d5ff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .elite-name-row {
+    display: flex;
+    gap: 8px;
+  }
+  .elite-name-input {
+    flex: 1;
+    background: linear-gradient(135deg, rgba(245, 243, 255, 0.96), rgba(237, 233, 254, 0.9));
+    color: #1e1b4b;
+    border: 1.5px solid #a855f7;
+    border-radius: 2px;
+    padding: 9px 12px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    outline: none;
+  }
+  .elite-name-input:focus {
+    border-color: #eab308;
+    box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.28);
+  }
+  .elite-name-btn {
+    background: linear-gradient(135deg, #9333ea 0%, #6b21a8 100%);
+    color: #ffffff;
+    border: 1.5px solid rgba(234, 179, 8, 0.75);
+    border-radius: 2px;
+    padding: 9px 16px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .elite-name-btn:hover {
+    background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+    box-shadow: 0 0 16px rgba(168, 85, 247, 0.6);
+  }
+  .header-user-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    border-radius: 3px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.18), rgba(255, 255, 255, 0.08));
+    border: 1px solid rgba(168, 85, 247, 0.55);
+    border-left: 3px solid var(--accent-gold);
+    color: var(--text-primary);
+    font-size: 0.7rem;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  header {
+    overflow-x: auto !important;
+  }
+  header::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+<script>
+(function () {
+  const STORAGE_KEY = 'pythonhazirlik_user_name';
+  const savedName = (localStorage.getItem(STORAGE_KEY) || '').trim();
+
+  const oldSplash = document.getElementById('welcome-splash');
+  if (oldSplash) oldSplash.style.display = 'none';
+
+  const gate = document.createElement('div');
+  gate.id = 'elite-gate-overlay';
+  gate.innerHTML = `
+    <h1 class="glitch-title" data-text="Python Stüdyoya">Python Stüdyoya</h1>
+    <p class="splash-sub-gold" style="opacity:1; transform:none;">Hoşgeldiniz</p>
+    <div class="elite-name-box">
+      <div class="elite-name-label">
+        <span>Geliştirici Kimliği</span>
+        <span style="color:#eab308;">PYTHON STÜDYO</span>
+      </div>
+      <div class="elite-name-row">
+        <input type="text" id="elite-name-input" class="elite-name-input" placeholder="Adını ve soyadını yaz..." value="${savedName}" autocomplete="off" />
+        <button type="button" id="elite-name-submit" class="elite-name-btn">Giriş ↵</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(gate);
+
+  function renderHeaderBadge(name) {
+    const actionsBar = document.querySelector('.header-actions');
+    const saveBtn = actionsBar ? actionsBar.querySelector('.save-btn') : null;
+    if (!actionsBar || !saveBtn) return;
+
+    let badge = document.getElementById('header-user-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.id = 'header-user-badge';
+      badge.className = 'header-user-badge';
+      badge.title = 'İsmini değiştirmek için tıkla';
+      badge.onclick = function () {
+        const yeni = prompt('Stüdyoda görünecek adını gir:', localStorage.getItem(STORAGE_KEY) || '');
+        if (yeni && yeni.trim()) {
+          localStorage.setItem(STORAGE_KEY, yeni.trim());
+          renderHeaderBadge(yeni.trim());
+        }
+      };
+      actionsBar.insertBefore(badge, saveBtn);
+    }
+    badge.innerHTML = `<span style="color:var(--accent-gold);">◆</span> ${name}`;
+  }
+
+  if (savedName) renderHeaderBadge(savedName);
+
+  const inputEl = document.getElementById('elite-name-input');
+  const submitBtn = document.getElementById('elite-name-submit');
+  setTimeout(() => inputEl && inputEl.focus(), 100);
+
+  function enterStudio() {
+    const val = (inputEl.value || '').trim();
+    if (!val) {
+      inputEl.style.borderColor = '#f43f5e';
+      inputEl.focus();
+      return;
+    }
+    localStorage.setItem(STORAGE_KEY, val);
+    renderHeaderBadge(val);
+    gate.classList.add('gate-closing');
+    setTimeout(() => gate.remove(), 800);
+  }
+
+  submitBtn.addEventListener('click', enterStudio);
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      enterStudio();
+    }
+  });
+})();
+</script>
+  <!-- ORİJİNAL GİRİŞ EKRANINI KORUYAN İSİM KUTUSU & AKICI AI SES SİSTEMİ -->
+<style>
+  #welcome-splash {
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  }
+  #welcome-splash.splash-unlock {
+    opacity: 0 !important;
+    transform: translateY(-30px) !important;
+    pointer-events: none !important;
+  }
+  .orig-name-wrap {
+    margin-top: 22px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.78);
+    border: 1.5px solid rgba(168, 85, 247, 0.55);
+    border-left: 4px solid #eab308;
+    padding: 8px 10px;
+    border-radius: 6px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    z-index: 10;
+  }
+  .orig-name-input {
+    background: rgba(255, 255, 255, 0.94);
+    color: #0f172a;
+    border: 1px solid #a855f7;
+    border-radius: 4px;
+    padding: 7px 11px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    outline: none;
+    width: 210px;
+  }
+  .orig-name-btn {
+    background: linear-gradient(135deg, #9333ea, #6b21a8);
+    color: #fff;
+    border: 1px solid #eab308;
+    border-radius: 4px;
+    padding: 7px 14px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .header-user-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(139, 92, 246, 0.16);
+    border: 1px solid rgba(168, 85, 247, 0.5);
+    border-left: 3px solid var(--accent-gold, #eab308);
+    color: var(--text-primary, #f8fafc);
+    font-size: 0.72rem;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+</style>
+
+<script>
+(function () {
+  /* 1. SENİN KENDİ GİRİŞ EKRANINA DOKUNMADAN ALTINA İSİM KUTUSU EKLE */
+  const STORAGE_KEY = 'pythonhazirlik_user_name';
+  const savedName = (localStorage.getItem(STORAGE_KEY) || '').trim();
+  const splash = document.getElementById('welcome-splash');
+
+  function renderHeaderBadge(name) {
+    const actionsBar = document.querySelector('.header-actions');
+    const saveBtn = actionsBar ? actionsBar.querySelector('.save-btn') : null;
+    if (!actionsBar || !saveBtn) return;
+
+    let badge = document.getElementById('header-user-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.id = 'header-user-badge';
+      badge.className = 'header-user-badge';
+      badge.title = 'İsmini değiştirmek için tıkla';
+      badge.onclick = function () {
+        const yeni = prompt('Stüdyoda görünecek adını gir:', localStorage.getItem(STORAGE_KEY) || '');
+        if (yeni && yeni.trim()) {
+          localStorage.setItem(STORAGE_KEY, yeni.trim());
+          renderHeaderBadge(yeni.trim());
+        }
+      };
+      actionsBar.insertBefore(badge, saveBtn);
+    }
+    badge.innerHTML = `<span style="color:#eab308;">◆</span> ${name}`;
+  }
+
+  if (savedName) renderHeaderBadge(savedName);
+
+  if (splash) {
+    // Sitenin kendi otomatik kapanma zamanlayıcısını durdur, isim girilince açılsın
+    splash.style.display = 'flex';
+    splash.style.opacity = '1';
+
+    const box = document.createElement('div');
+    box.className = 'orig-name-wrap';
+    box.innerHTML = `
+      <input type="text" id="orig-name-input" class="orig-name-input" placeholder="Adını yaz..." value="${savedName}" autocomplete="off" />
+      <button type="button" id="orig-name-btn" class="orig-name-btn">Giriş →</button>
+    `;
+    splash.appendChild(box);
+
+    const inp = document.getElementById('orig-name-input');
+    const btn = document.getElementById('orig-name-btn');
+    setTimeout(() => inp && inp.focus(), 150);
+
+    function unlockSplash() {
+      const val = (inp.value || '').trim();
+      if (!val) {
+        inp.style.borderColor = '#f43f5e';
+        inp.focus();
+        return;
+      }
+      localStorage.setItem(STORAGE_KEY, val);
+      renderHeaderBadge(val);
+      splash.classList.add('splash-unlock');
+      setTimeout(() => { splash.style.display = 'none'; }, 750);
+    }
+
+    btn.addEventListener('click', unlockSplash);
+    inp.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        unlockSplash();
+      }
+    });
+  }
+
+  /* 2. VİDEO PANELİ İÇİN KESİKSİZ AI SES & DOĞRU TELAFUZ MOTORU */
+  if ('speechSynthesis' in window) {
+    let bestVoice = null;
+    function loadTrVoice() {
+      const voices = window.speechSynthesis.getVoices() || [];
+      const tr = voices.filter(v => (v.lang || '').toLowerCase().includes('tr'));
+      if (tr.length) {
+        bestVoice = tr.find(v => /google|natural|neural|emel|yelda/i.test(v.name)) || tr[0];
+      }
+    }
+    loadTrVoice();
+    window.speechSynthesis.onvoiceschanged = loadTrVoice;
+
+    function fixPronunciation(text) {
+      return (text || '')
+        .replace(/print\s*\(\s*\)/gi, 'pirint fonksiyonu')
+        .replace(/\bprint\b/gi, 'pirint')
+        .replace(/input\s*\(\s*\)/gi, 'input fonksiyonu')
+        .replace(/range\s*\(\s*\)/gi, 'reync fonksiyonu')
+        .replace(/\brange\b/gi, 'reync')
+        .replace(/\bwhile\b/gi, 'vayl')
+        .replace(/\belif\b/gi, 'elif')
+        .replace(/\belse\b/gi, 'els')
+        .replace(/\breturn\b/gi, 'ritörn')
+        .replace(/\bbreak\b/gi, 'bireyk')
+        .replace(/\bfloat\b/gi, 'fıloat')
+        .replace(/\bstr\b/gi, 'sıtır')
+        .replace(/\bturtle\b/gi, 'törtıl')
+        .replace(/\bforward\b/gi, 'forvırd')
+        .replace(/\bright\b/gi, 'rayt')
+        .replace(/\bPython\b/gi, 'Paytın')
+        .replace(/[#*_`~]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    const origSpeak = window.speechSynthesis.speak.bind(window.speechSynthesis);
+    let keepTimer = null;
+
+    window.speechSynthesis.speak = function (utter) {
+      if (!utter) return;
+      loadTrVoice();
+      utter.text = fixPronunciation(utter.text);
+      utter.lang = 'tr-TR';
+      if (bestVoice) utter.voice = bestVoice;
+      utter.rate = 0.98;
+      utter.pitch = 1.02;
+
+      clearInterval(keepTimer);
+      utter.onstart = () => {
+        keepTimer = setInterval(() => {
+          if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+            window.speechSynthesis.pause();
+            window.speechSynthesis.resume();
+          } else {
+            clearInterval(keepTimer);
+          }
+        }, 9000);
+      };
+      utter.onend = utter.onerror = () => clearInterval(keepTimer);
+      origSpeak(utter);
+    };
+  }
+})();
+</script>
+  <!-- HİÇBİR KODU SİLMEDEN EN ALTA EKLENEN GÜVENLİK, STABİLİTE VE AI SES PAKETİ -->
+<style>
+  #welcome-splash {
+    transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  }
+  #welcome-splash.splash-unlock {
+    opacity: 0 !important;
+    transform: translateY(-28px) !important;
+    pointer-events: none !important;
+  }
+  .orig-name-wrap {
+    margin-top: 22px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.82);
+    border: 1.5px solid rgba(168, 85, 247, 0.55);
+    border-left: 4px solid #eab308;
+    padding: 8px 10px;
+    border-radius: 6px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    z-index: 10;
+  }
+  .orig-name-input {
+    background: rgba(255, 255, 255, 0.95);
+    color: #0f172a;
+    border: 1px solid #a855f7;
+    border-radius: 4px;
+    padding: 7px 11px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    outline: none;
+    width: 215px;
+  }
+  .orig-name-btn {
+    background: linear-gradient(135deg, #9333ea, #6b21a8);
+    color: #fff;
+    border: 1px solid #eab308;
+    border-radius: 4px;
+    padding: 7px 14px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .header-user-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(139, 92, 246, 0.16);
+    border: 1px solid rgba(168, 85, 247, 0.5);
+    border-left: 3px solid var(--accent-gold, #eab308);
+    color: var(--text-primary, #f8fafc);
+    font-size: 0.72rem;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  #studio-toast-alert {
+    position: fixed;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120%);
+    background: #1e1b4b;
+    color: #f8fafc;
+    border: 1.5px solid #eab308;
+    padding: 9px 16px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    z-index: 2147483647;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    transition: transform 0.3s ease;
+  }
+  #studio-toast-alert.show {
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+
+<script>
+(function () {
+  if (window.__masterPatchApplied) return;
+  window.__masterPatchApplied = true;
+
+  /* 0. ÖNCEKİ ÇAKIŞAN KATMANLARI OTOMATİK TEMİZLE (SİLMEDEN DEVRE DIŞI BIRAK) */
+  function cleanupLegacyOverlays() {
+    const dupGate = document.getElementById('elite-gate-overlay');
+    if (dupGate) dupGate.remove();
+    const oldToast = document.getElementById('studio-toast-alert');
+    if (oldToast) oldToast.remove();
+  }
+  cleanupLegacyOverlays();
+
+  const toastEl = document.createElement('div');
+  toastEl.id = 'studio-toast-alert';
+  document.body.appendChild(toastEl);
+  let toastTimer = null;
+
+  function showStudioAlert(msg, isError) {
+    toastEl.textContent = msg;
+    toastEl.style.borderColor = isError ? '#f43f5e' : '#eab308';
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 4000);
+  }
+
+  /* 1 & 2. TEK GİRİŞ SİSTEMİ + XSS KORUMALI İSİM ATAMASI */
+  const STORAGE_KEY = 'pythonhazirlik_user_name';
+
+  function sanitizeName(raw) {
+    return String(raw || '').replace(/[\u0000-\u001F\u007F]/g, '').trim().slice(0, 40);
+  }
+
+  const savedName = sanitizeName(localStorage.getItem(STORAGE_KEY));
+  const splash = document.getElementById('welcome-splash');
+
+  function renderHeaderBadge(name) {
+    const safeName = sanitizeName(name);
+    if (!safeName) return;
+    const actionsBar = document.querySelector('.header-actions');
+    const saveBtn = actionsBar ? actionsBar.querySelector('.save-btn') : null;
+    if (!actionsBar || !saveBtn) return;
+
+    let badge = document.getElementById('header-user-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.id = 'header-user-badge';
+      badge.className = 'header-user-badge';
+      badge.title = 'İsmini değiştirmek için tıkla';
+      actionsBar.insertBefore(badge, saveBtn);
+    }
+
+    badge.onclick = function () {
+      const yeni = prompt('Stüdyoda görünecek adını gir:', sanitizeName(localStorage.getItem(STORAGE_KEY)));
+      const cleanYeni = sanitizeName(yeni);
+      if (cleanYeni) {
+        localStorage.setItem(STORAGE_KEY, cleanYeni);
+        renderHeaderBadge(cleanYeni);
+      }
+    };
+
+    badge.replaceChildren();
+    const diamond = document.createElement('span');
+    diamond.style.color = '#eab308';
+    diamond.textContent = '◆ ';
+    badge.appendChild(diamond);
+    badge.appendChild(document.createTextNode(safeName));
+  }
+
+  if (savedName) renderHeaderBadge(savedName);
+
+  if (splash) {
+    splash.querySelectorAll('.orig-name-wrap').forEach(el => el.remove());
+    splash.classList.remove('splash-unlock');
+    splash.style.display = 'flex';
+    splash.style.opacity = '1';
+
+    const box = document.createElement('div');
+    box.className = 'orig-name-wrap';
+
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.id = 'orig-name-input';
+    inp.className = 'orig-name-input';
+    inp.placeholder = 'Adını yaz...';
+    inp.autocomplete = 'off';
+    inp.maxLength = 40;
+    inp.value = savedName;
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'orig-name-btn';
+    btn.className = 'orig-name-btn';
+    btn.textContent = 'Giriş →';
+
+    box.appendChild(inp);
+    box.appendChild(btn);
+    splash.appendChild(box);
+
+    setTimeout(() => inp.focus(), 150);
+
+    function unlockSplash() {
+      const val = sanitizeName(inp.value);
+      if (!val) {
+        inp.style.borderColor = '#f43f5e';
+        inp.focus();
+        return;
+      }
+      localStorage.setItem(STORAGE_KEY, val);
+      renderHeaderBadge(val);
+      splash.classList.add('splash-unlock');
+      setTimeout(() => { splash.style.display = 'none'; }, 700);
+    }
+
+    btn.addEventListener('click', unlockSplash);
+    inp.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        unlockSplash();
+      }
+    });
+  }
+
+  /* 3, 4 & 6. AST TABANLI GERÇEK INPUT() + SONSUZ DÖNGÜ KORUMASI */
+  function installPythonSafetyGuards() {
+    if (!window.pyodide || window.__pySafetyInstalled) return;
+    window.__pySafetyInstalled = true;
+
+    window._real_interactive_input = function (promptText) {
+      return new Promise((resolve) => {
+        const label = String(promptText || 'Değer girin:');
+        const liveInput = document.querySelector('#live-chat-input, .live-input-field');
+        const liveBtn = document.querySelector('#live-chat-send, .live-input-send');
+        if (liveInput && liveBtn && liveInput.offsetParent !== null) {
+          liveInput.placeholder = label;
+          liveInput.focus();
+          const onSend = () => {
+            const val = liveInput.value;
+            liveInput.value = '';
+            cleanup();
+            resolve(val);
+          };
+          const onKey = (e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              onSend();
+            }
+          };
+          const cleanup = () => {
+            liveBtn.removeEventListener('click', onSend);
+            liveInput.removeEventListener('keydown', onKey);
+          };
+          liveBtn.addEventListener('click', onSend);
+          liveInput.addEventListener('keydown', onKey);
+        } else {
+          const ans = window.prompt(label, '');
+          resolve(ans === null ? '' : String(ans));
+        }
+      });
+    };
+
+    window.pyodide.runPython(`
+import ast, sys, time
+
+class _InfiniteLoopError(Exception):
+    pass
+
+def _install_loop_guard(max_steps=180000, max_seconds=3.0):
+    steps = 0
+    start_t = time.monotonic()
+    def _tracer(frame, event, arg):
+        nonlocal steps
+        if event == 'line':
+            steps += 1
+            if steps > max_steps or (time.monotonic() - start_t) > max_seconds:
+                sys.settrace(None)
+                raise _InfiniteLoopError("Sonsuz döngü koruması: Kod çok uzun sürdüğü için durduruldu.")
+        return _tracer
+    sys.settrace(_tracer)
+
+def _clear_loop_guard():
+    sys.settrace(None)
+
+class _SafeInputTransformer(ast.NodeTransformer):
+    def visit_Call(self, node):
+        self.generic_visit(node)
+        if isinstance(node.func, ast.Name) and node.func.id == 'input':
+            await_node = ast.Await(
+                value=ast.Call(
+                    func=ast.Name(id='_real_interactive_input', ctx=ast.Load()),
+                    args=node.args,
+                    keywords=node.keywords
+                )
+            )
+            return ast.copy_location(await_node, node)
+        return node
+
+def _transform_user_code_ast(source_code):
+    try:
+        tree = ast.parse(source_code, mode='exec')
+        tree = _SafeInputTransformer().visit(tree)
+        ast.fix_missing_locations(tree)
+        return ast.unparse(tree)
+    except SyntaxError:
+        return source_code
+`);
+
+    const origRunAsync = window.pyodide.runPythonAsync.bind(window.pyodide);
+    window.pyodide.runPythonAsync = async function (code, ...args) {
+      let safeCode = String(code || '');
+      try {
+        window.pyodide.globals.set('_raw_src_tmp', safeCode);
+        safeCode = window.pyodide.runPython('_transform_user_code_ast(_raw_src_tmp)');
+        window.pyodide.runPython('_install_loop_guard()');
+        return await origRunAsync(safeCode, ...args);
+      } finally {
+        try { window.pyodide.runPython('_clear_loop_guard()'); } catch (_) {}
+      }
+    };
+  }
+
+  const pyPoll = setInterval(() => {
+    if (window.pyodide) {
+      installPythonSafetyGuards();
+      clearInterval(pyPoll);
+    }
+  }, 400);
+
+  /* 5 & 7. YEDEK DOSYASI DOĞRULAMA & GÜVENLİ LOCALSTORAGE KAYIT SİSTEMİ */
+  function clampIndex(val, maxLen) {
+    const n = Number(val);
+    if (!Number.isInteger(n) || n < 0) return 0;
+    if (typeof maxLen === 'number' && maxLen > 0 && n >= maxLen) return maxLen - 1;
+    return n;
+  }
+
+  window.validateAndSanitizeBackupData = function (rawObj) {
+    if (!rawObj || typeof rawObj !== 'object' || Array.isArray(rawObj)) {
+      throw new Error('Geçersiz yedek dosyası formatı.');
+    }
+    const maxTopics = Array.isArray(window.curriculum) ? window.curriculum.length : 10;
+    const topicIdx = clampIndex(rawObj.topicIndex ?? rawObj.currentTopic ?? 0, maxTopics);
+
+    let maxTasks = 20;
+    if (Array.isArray(window.curriculum) && window.curriculum[topicIdx] && Array.isArray(window.curriculum[topicIdx].tasks)) {
+      maxTasks = window.curriculum[topicIdx].tasks.length;
+    }
+    const taskIdx = clampIndex(rawObj.taskIndex ?? rawObj.currentTask ?? 0, maxTasks);
+
+    const safeCodes = {};
+    if (rawObj.savedCodes && typeof rawObj.savedCodes === 'object' && !Array.isArray(rawObj.savedCodes)) {
+      for (const [k, v] of Object.entries(rawObj.savedCodes)) {
+        if (typeof k === 'string' && typeof v === 'string' && v.length <= 50000) {
+          safeCodes[k] = v;
+        }
+      }
+    }
+
+    return {
+      ...rawObj,
+      topicIndex: topicIdx,
+      currentTopic: topicIdx,
+      taskIndex: taskIdx,
+      currentTask: taskIdx,
+      savedCodes: safeCodes
+    };
+  };
+
+  const origSetItem = Storage.prototype.setItem;
+  Storage.prototype.setItem = function (key, value) {
+    try {
+      origSetItem.call(this, key, value);
+    } catch (err) {
+      if (err && (err.name === 'QuotaExceededError' || err.code === 22)) {
+        showStudioAlert('⚠️ Tarayıcı hafızası doldu! İlerlemen kaydedilemedi, gereksiz kodları temizle veya yedek indir.', true);
+      } else {
+        showStudioAlert('⚠️ Kayıt sırasında beklenmeyen bir hata oluştu.', true);
+      }
+    }
+  };
+
+  /* 8. KESİKSİZ DOĞAL TÜRKÇE AI SES & TELAFUZ YAMASI */
+  if ('speechSynthesis' in window) {
+    let bestVoice = null;
+    function loadTrVoice() {
+      const voices = window.speechSynthesis.getVoices() || [];
+      const tr = voices.filter(v => (v.lang || '').toLowerCase().includes('tr'));
+      if (tr.length) {
+        bestVoice = tr.find(v => /google|natural|neural|emel|yelda/i.test(v.name)) || tr[0];
+      }
+    }
+    loadTrVoice();
+    window.speechSynthesis.onvoiceschanged = loadTrVoice;
+
+    function fixPronunciation(text) {
+      return String(text || '')
+        .replace(/print\s*\(\s*\)/gi, 'pirint fonksiyonu')
+        .replace(/\bprint\b/gi, 'pirint')
+        .replace(/input\s*\(\s*\)/gi, 'input fonksiyonu')
+        .replace(/range\s*\(\s*\)/gi, 'reync fonksiyonu')
+        .replace(/\brange\b/gi, 'reync')
+        .replace(/\bwhile\b/gi, 'vayl')
+        .replace(/\belif\b/gi, 'elif')
+        .replace(/\belse\b/gi, 'els')
+        .replace(/\breturn\b/gi, 'ritörn')
+        .replace(/\bbreak\b/gi, 'bireyk')
+        .replace(/\bfloat\b/gi, 'fıloat')
+        .replace(/\bstr\b/gi, 'sıtır')
+        .replace(/\bturtle\b/gi, 'törtıl')
+        .replace(/\bforward\b/gi, 'forvırd')
+        .replace(/\bright\b/gi, 'rayt')
+        .replace(/\bPython\b/gi, 'Paytın')
+        .replace(/[#*_`~]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    const origSpeak = window.speechSynthesis.speak.bind(window.speechSynthesis);
+    let keepTimer = null;
+
+    window.speechSynthesis.speak = function (utter) {
+      if (!utter) return;
+      loadTrVoice();
+      utter.text = fixPronunciation(utter.text);
+      utter.lang = 'tr-TR';
+      if (bestVoice) utter.voice = bestVoice;
+      utter.rate = 0.98;
+      utter.pitch = 1.02;
+
+      clearInterval(keepTimer);
+      utter.onstart = () => {
+        keepTimer = setInterval(() => {
+          if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+            window.speechSynthesis.pause();
+            window.speechSynthesis.resume();
+          } else {
+            clearInterval(keepTimer);
+          }
+        }, 9000);
+      };
+      utter.onend = utter.onerror = () => clearInterval(keepTimer);
+      origSpeak(utter);
+    };
+  }
+})();
+</script>
+  <!-- SİLMEDEN EN ALTA EKLENEN KİLİTLİ GİRİŞ EKRANI & TAM GÜVENLİK PAKETİ (FINAL) -->
+<style>
+  #welcome-splash:not(.splash-unlock) {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    animation: none !important;
+    pointer-events: auto !important;
+  }
+  #welcome-splash {
+    transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  }
+  #welcome-splash.splash-unlock {
+    opacity: 0 !important;
+    transform: translateY(-28px) !important;
+    pointer-events: none !important;
+  }
+  .orig-name-wrap {
+    margin-top: 22px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1.5px solid rgba(168, 85, 247, 0.6);
+    border-left: 4px solid #eab308;
+    padding: 8px 10px;
+    border-radius: 6px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    z-index: 10;
+  }
+  .orig-name-input {
+    background: rgba(255, 255, 255, 0.96);
+    color: #0f172a;
+    border: 1px solid #a855f7;
+    border-radius: 4px;
+    padding: 7px 11px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    outline: none;
+    width: 215px;
+  }
+  .orig-name-btn {
+    background: linear-gradient(135deg, #9333ea, #6b21a8);
+    color: #fff;
+    border: 1px solid #eab308;
+    border-radius: 4px;
+    padding: 7px 14px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .header-user-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(139, 92, 246, 0.16);
+    border: 1px solid rgba(168, 85, 247, 0.5);
+    border-left: 3px solid var(--accent-gold, #eab308);
+    color: var(--text-primary, #f8fafc);
+    font-size: 0.72rem;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  /* Altta çıkıntı yapmaması için tamamen gizli başlar */
+  #studio-toast-alert {
+    position: fixed;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e1b4b;
+    color: #f8fafc;
+    border: 1.5px solid #eab308;
+    padding: 9px 16px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    z-index: 2147483647;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    display: none !important;
+    opacity: 0 !important;
+  }
+  #studio-toast-alert.show {
+    display: block !important;
+    opacity: 1 !important;
+  }
+</style>
+
+<script>
+(function () {
+  /* ÖNCEKİ TÜM EKLEMELERİ VE ÇAKIŞAN KATMANLARI OTOMATİK TEMİZLE */
+  const dupGate = document.getElementById('elite-gate-overlay');
+  if (dupGate) dupGate.remove();
+  document.querySelectorAll('#studio-toast-alert').forEach(el => el.remove());
+
+  const toastEl = document.createElement('div');
+  toastEl.id = 'studio-toast-alert';
+  document.body.appendChild(toastEl);
+  let toastTimer = null;
+
+  function showStudioAlert(msg, isError) {
+    toastEl.textContent = msg;
+    toastEl.style.borderColor = isError ? '#f43f5e' : '#eab308';
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 4000);
+  }
+
+  /* 1 & 2. İSİM GİRİLENE KADAR KİLİTLİ GİRİŞ SİSTEMİ + XSS KORUMASI */
+  const STORAGE_KEY = 'pythonhazirlik_user_name';
+
+  function sanitizeName(raw) {
+    return String(raw || '').replace(/[\u0000-\u001F\u007F]/g, '').trim().slice(0, 40);
+  }
+
+  const savedName = sanitizeName(localStorage.getItem(STORAGE_KEY));
+  const splash = document.getElementById('welcome-splash');
+
+  function renderHeaderBadge(name) {
+    const safeName = sanitizeName(name);
+    if (!safeName) return;
+    const actionsBar = document.querySelector('.header-actions');
+    const saveBtn = actionsBar ? actionsBar.querySelector('.save-btn') : null;
+    if (!actionsBar || !saveBtn) return;
+
+    let badge = document.getElementById('header-user-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.id = 'header-user-badge';
+      badge.className = 'header-user-badge';
+      badge.title = 'İsmini değiştirmek için tıkla';
+      actionsBar.insertBefore(badge, saveBtn);
+    }
+
+    badge.onclick = function () {
+      const yeni = prompt('Stüdyoda görünecek adını gir:', sanitizeName(localStorage.getItem(STORAGE_KEY)));
+      const cleanYeni = sanitizeName(yeni);
+      if (cleanYeni) {
+        localStorage.setItem(STORAGE_KEY, cleanYeni);
+        renderHeaderBadge(cleanYeni);
+      }
+    };
+
+    badge.replaceChildren();
+    const diamond = document.createElement('span');
+    diamond.style.color = '#eab308';
+    diamond.textContent = '◆ ';
+    badge.appendChild(diamond);
+    badge.appendChild(document.createTextNode(safeName));
+  }
+
+  if (savedName) renderHeaderBadge(savedName);
+
+  if (splash) {
+    let isUnlocked = false;
+    splash.querySelectorAll('.orig-name-wrap').forEach(el => el.remove());
+    splash.classList.remove('splash-unlock');
+    splash.style.display = 'flex';
+    splash.style.opacity = '1';
+
+    // Sitenin kendi otomatik kapanma zamanlayıcısını isim girilene kadar sürekli engelle
+    const lockInterval = setInterval(() => {
+      if (!isUnlocked) {
+        splash.classList.remove('splash-unlock');
+        splash.style.display = 'flex';
+        splash.style.opacity = '1';
+      } else {
+        clearInterval(lockInterval);
+      }
+    }, 100);
+
+    const box = document.createElement('div');
+    box.className = 'orig-name-wrap';
+
+    const inp = document.createElement('input');
+    inp.type = 'text';
+    inp.id = 'orig-name-input';
+    inp.className = 'orig-name-input';
+    inp.placeholder = 'Adını yaz...';
+    inp.autocomplete = 'off';
+    inp.maxLength = 40;
+    inp.value = savedName;
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'orig-name-btn';
+    btn.className = 'orig-name-btn';
+    btn.textContent = 'Giriş →';
+
+    box.appendChild(inp);
+    box.appendChild(btn);
+    splash.appendChild(box);
+
+    setTimeout(() => inp.focus(), 150);
+
+    function unlockSplash() {
+      const val = sanitizeName(inp.value);
+      if (!val) {
+        inp.style.borderColor = '#f43f5e';
+        inp.focus();
+        return;
+      }
+      isUnlocked = true;
+      clearInterval(lockInterval);
+      localStorage.setItem(STORAGE_KEY, val);
+      renderHeaderBadge(val);
+      splash.classList.add('splash-unlock');
+      setTimeout(() => { splash.style.display = 'none'; }, 700);
+    }
+
+    btn.addEventListener('click', unlockSplash);
+    inp.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        unlockSplash();
+      }
+    });
+  }
+
+  /* 3, 4 & 6. AST TABANLI GERÇEK INPUT() + SONSUZ DÖNGÜ KORUMASI */
+  function installPythonSafetyGuards() {
+    if (!window.pyodide || window.__pySafetyV2Installed) return;
+    window.__pySafetyV2Installed = true;
+
+    window._real_interactive_input = function (promptText) {
+      return new Promise((resolve) => {
+        const label = String(promptText || 'Değer girin:');
+        const liveInput = document.querySelector('#live-chat-input, .live-input-field');
+        const liveBtn = document.querySelector('#live-chat-send, .live-input-send');
+        if (liveInput && liveBtn && liveInput.offsetParent !== null) {
+          liveInput.placeholder = label;
+          liveInput.focus();
+          const onSend = () => {
+            const val = liveInput.value;
+            liveInput.value = '';
+            cleanup();
+            resolve(val);
+          };
+          const onKey = (e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              onSend();
+            }
+          };
+          const cleanup = () => {
+            liveBtn.removeEventListener('click', onSend);
+            liveInput.removeEventListener('keydown', onKey);
+          };
+          liveBtn.addEventListener('click', onSend);
+          liveInput.addEventListener('keydown', onKey);
+        } else {
+          const ans = window.prompt(label, '');
+          resolve(ans === null ? '' : String(ans));
+        }
+      });
+    };
+
+    window.pyodide.runPython(`
+import ast, sys, time
+
+class _InfiniteLoopError(Exception):
+    pass
+
+def _install_loop_guard(max_steps=180000, max_seconds=3.0):
+    steps = 0
+    start_t = time.monotonic()
+    def _tracer(frame, event, arg):
+        nonlocal steps
+        if event == 'line':
+            steps += 1
+            if steps > max_steps or (time.monotonic() - start_t) > max_seconds:
+                sys.settrace(None)
+                raise _InfiniteLoopError("Sonsuz döngü koruması: Kod çok uzun sürdüğü için durduruldu.")
+        return _tracer
+    sys.settrace(_tracer)
+
+def _clear_loop_guard():
+    sys.settrace(None)
+
+class _SafeInputTransformer(ast.NodeTransformer):
+    def visit_Call(self, node):
+        self.generic_visit(node)
+        if isinstance(node.func, ast.Name) and node.func.id == 'input':
+            await_node = ast.Await(
+                value=ast.Call(
+                    func=ast.Name(id='_real_interactive_input', ctx=ast.Load()),
+                    args=node.args,
+                    keywords=node.keywords
+                )
+            )
+            return ast.copy_location(await_node, node)
+        return node
+
+def _transform_user_code_ast(source_code):
+    try:
+        tree = ast.parse(source_code, mode='exec')
+        tree = _SafeInputTransformer().visit(tree)
+        ast.fix_missing_locations(tree)
+        return ast.unparse(tree)
+    except SyntaxError:
+        return source_code
+`);
+
+    const origRunAsync = window.pyodide.runPythonAsync.bind(window.pyodide);
+    window.pyodide.runPythonAsync = async function (code, ...args) {
+      let safeCode = String(code || '');
+      try {
+        window.pyodide.globals.set('_raw_src_tmp', safeCode);
+        safeCode = window.pyodide.runPython('_transform_user_code_ast(_raw_src_tmp)');
+        window.pyodide.runPython('_install_loop_guard()');
+        return await origRunAsync(safeCode, ...args);
+      } finally {
+        try { window.pyodide.runPython('_clear_loop_guard()'); } catch (_) {}
+      }
+    };
+  }
+
+  const pyPoll = setInterval(() => {
+    if (window.pyodide) {
+      installPythonSafetyGuards();
+      clearInterval(pyPoll);
+    }
+  }, 400);
+
+  /* 5 & 7. YEDEK DOSYASI DOĞRULAMA & GÜVENLİ LOCALSTORAGE KAYIT SİSTEMİ */
+  function clampIndex(val, maxLen) {
+    const n = Number(val);
+    if (!Number.isInteger(n) || n < 0) return 0;
+    if (typeof maxLen === 'number' && maxLen > 0 && n >= maxLen) return maxLen - 1;
+    return n;
+  }
+
+  window.validateAndSanitizeBackupData = function (rawObj) {
+    if (!rawObj || typeof rawObj !== 'object' || Array.isArray(rawObj)) {
+      throw new Error('Geçersiz yedek dosyası formatı.');
+    }
+    const maxTopics = Array.isArray(window.curriculum) ? window.curriculum.length : 10;
+    const topicIdx = clampIndex(rawObj.topicIndex ?? rawObj.currentTopic ?? 0, maxTopics);
+
+    let maxTasks = 20;
+    if (Array.isArray(window.curriculum) && window.curriculum[topicIdx] && Array.isArray(window.curriculum[topicIdx].tasks)) {
+      maxTasks = window.curriculum[topicIdx].tasks.length;
+    }
+    const taskIdx = clampIndex(rawObj.taskIndex ?? rawObj.currentTask ?? 0, maxTasks);
+
+    const safeCodes = {};
+    if (rawObj.savedCodes && typeof rawObj.savedCodes === 'object' && !Array.isArray(rawObj.savedCodes)) {
+      for (const [k, v] of Object.entries(rawObj.savedCodes)) {
+        if (typeof k === 'string' && typeof v === 'string' && v.length <= 50000) {
+          safeCodes[k] = v;
+        }
+      }
+    }
+
+    return {
+      ...rawObj,
+      topicIndex: topicIdx,
+      currentTopic: topicIdx,
+      taskIndex: taskIdx,
+      currentTask: taskIdx,
+      savedCodes: safeCodes
+    };
+  };
+
+  const origSetItem = Storage.prototype.setItem;
+  Storage.prototype.setItem = function (key, value) {
+    try {
+      origSetItem.call(this, key, value);
+    } catch (err) {
+      if (err && (err.name === 'QuotaExceededError' || err.code === 22)) {
+        showStudioAlert('⚠️ Tarayıcı hafızası doldu! İlerlemen kaydedilemedi, gereksiz kodları temizle veya yedek indir.', true);
+      } else {
+        showStudioAlert('⚠️ Kayıt sırasında beklenmeyen bir hata oluştu.', true);
+      }
+    }
+  };
+
+  /* 8. KESİKSİZ DOĞAL TÜRKÇE AI SES & TELAFUZ YAMASI */
+  if ('speechSynthesis' in window) {
+    let bestVoice = null;
+    function loadTrVoice() {
+      const voices = window.speechSynthesis.getVoices() || [];
+      const tr = voices.filter(v => (v.lang || '').toLowerCase().includes('tr'));
+      if (tr.length) {
+        bestVoice = tr.find(v => /google|natural|neural|emel|yelda/i.test(v.name)) || tr[0];
+      }
+    }
+    loadTrVoice();
+    window.speechSynthesis.onvoiceschanged = loadTrVoice;
+
+    function fixPronunciation(text) {
+      return String(text || '')
+        .replace(/print\s*\(\s*\)/gi, 'pirint fonksiyonu')
+        .replace(/\bprint\b/gi, 'pirint')
+        .replace(/input\s*\(\s*\)/gi, 'input fonksiyonu')
+        .replace(/range\s*\(\s*\)/gi, 'reync fonksiyonu')
+        .replace(/\brange\b/gi, 'reync')
+        .replace(/\bwhile\b/gi, 'vayl')
+        .replace(/\belif\b/gi, 'elif')
+        .replace(/\belse\b/gi, 'els')
+        .replace(/\breturn\b/gi, 'ritörn')
+        .replace(/\bbreak\b/gi, 'bireyk')
+        .replace(/\bfloat\b/gi, 'fıloat')
+        .replace(/\bstr\b/gi, 'sıtır')
+        .replace(/\bturtle\b/gi, 'törtıl')
+        .replace(/\bforward\b/gi, 'forvırd')
+        .replace(/\bright\b/gi, 'rayt')
+        .replace(/\bPython\b/gi, 'Paytın')
+        .replace(/[#*_`~]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    const origSpeak = window.speechSynthesis.speak.bind(window.speechSynthesis);
+    let keepTimer = null;
+
+    window.speechSynthesis.speak = function (utter) {
+      if (!utter) return;
+      loadTrVoice();
+      utter.text = fixPronunciation(utter.text);
+      utter.lang = 'tr-TR';
+      if (bestVoice) utter.voice = bestVoice;
+      utter.rate = 0.98;
+      utter.pitch = 1.02;
+
+      clearInterval(keepTimer);
+      utter.onstart = () => {
+        keepTimer = setInterval(() => {
+          if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+            window.speechSynthesis.pause();
+            window.speechSynthesis.resume();
+          } else {
+            clearInterval(keepTimer);
+          }
+        }, 9000);
+      };
+      utter.onend = utter.onerror = () => clearInterval(keepTimer);
+      origSpeak(utter);
+    };
+  }
+})();
+</script>
+  <!-- SİLİNEMEYEN KİLİTLİ ORİJİNAL GİRİŞ EKRANI & TAM GÜVENLİK PAKETİ -->
+<style>
+  #python-studio-lock-gate {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 50% 40%, #1e1b4b 0%, #090d16 70%, #05070c 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2147483647;
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  #python-studio-lock-gate.gate-unlocked {
+    opacity: 0 !important;
+    transform: translateY(-100%) !important;
+    pointer-events: none !important;
+  }
+  .gate-hero-title {
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 900;
+    font-style: italic;
+    background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 55%, #7e22ce 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+    letter-spacing: -0.02em;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: gateSlideUp 0.65s ease forwards 0.1s;
+  }
+  .gate-hero-sub {
+    font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #eab308;
+    margin: 8px 0 0 0;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: gateSlideUp 0.65s ease forwards 0.3s;
+  }
+  @keyframes gateSlideUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .orig-name-wrap {
+    margin-top: 26px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.88);
+    border: 1.5px solid rgba(168, 85, 247, 0.6);
+    border-left: 4px solid #eab308;
+    padding: 9px 11px;
+    border-radius: 6px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    transform: translateY(14px);
+    animation: gateSlideUp 0.65s ease forwards 0.45s;
+  }
+  .orig-name-input {
+    background: rgba(255, 255, 255, 0.96);
+    color: #0f172a;
+    border: 1px solid #a855f7;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    outline: none;
+    width: 220px;
+  }
+  .orig-name-btn {
+    background: linear-gradient(135deg, #9333ea, #6b21a8);
+    color: #fff;
+    border: 1px solid #eab308;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .header-user-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(139, 92, 246, 0.16);
+    border: 1px solid rgba(168, 85, 247, 0.5);
+    border-left: 3px solid var(--accent-gold, #eab308);
+    color: var(--text-primary, #f8fafc);
+    font-size: 0.72rem;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+</style>
+
+<script>
+(function () {
+  /* ÖNCEKİ ÇAKIŞAN KATMANLARI VE ALTTAKİ ÇIKINTIYI TAMAMEN TEMİZLE */
+  ['elite-gate-overlay', 'studio-toast-alert', 'python-studio-lock-gate'].forEach(id => {
+    document.querySelectorAll('#' + id).forEach(el => el.remove());
+  });
+  const oldSplash = document.getElementById('welcome-splash');
+  if (oldSplash) oldSplash.remove();
+
+  const STORAGE_KEY = 'pythonhazirlik_user_name';
+  function sanitizeName(raw) {
+    return String(raw || '').replace(/[\u0000-\u001F\u007F]/g, '').trim().slice(0, 40);
+  }
+  const savedName = sanitizeName(localStorage.getItem(STORAGE_KEY));
+
+  function renderHeaderBadge(name) {
+    const safeName = sanitizeName(name);
+    if (!safeName) return;
+    const actionsBar = document.querySelector('.header-actions');
+    const saveBtn = actionsBar ? actionsBar.querySelector('.save-btn') : null;
+    if (!actionsBar || !saveBtn) return;
+
+    let badge = document.getElementById('header-user-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.id = 'header-user-badge';
+      badge.className = 'header-user-badge';
+      badge.title = 'İsmini değiştirmek için tıkla';
+      actionsBar.insertBefore(badge, saveBtn);
+    }
+
+    badge.onclick = function () {
+      const yeni = prompt('Stüdyoda görünecek adını gir:', sanitizeName(localStorage.getItem(STORAGE_KEY)));
+      const cleanYeni = sanitizeName(yeni);
+      if (cleanYeni) {
+        localStorage.setItem(STORAGE_KEY, cleanYeni);
+        renderHeaderBadge(cleanYeni);
+      }
+    };
+
+    badge.replaceChildren();
+    const diamond = document.createElement('span');
+    diamond.style.color = '#eab308';
+    diamond.textContent = '◆ ';
+    badge.appendChild(diamond);
+    badge.appendChild(document.createTextNode(safeName));
+  }
+
+  if (savedName) renderHeaderBadge(savedName);
+
+  /* ANA KODUN SİLEMEYECEĞİ KİLİTLİ GİRİŞ PERDESİ */
+  const lockGate = document.createElement('div');
+  lockGate.id = 'python-studio-lock-gate';
+
+  const titleEl = document.createElement('h1');
+  titleEl.className = 'gate-hero-title';
+  titleEl.textContent = 'Python Stüdyoya';
+
+  const subEl = document.createElement('p');
+  subEl.className = 'gate-hero-sub';
+  subEl.textContent = 'Hoşgeldiniz';
+
+  const box = document.createElement('div');
+  box.className = 'orig-name-wrap';
+
+  const inp = document.createElement('input');
+  inp.type = 'text';
+  inp.className = 'orig-name-input';
+  inp.placeholder = 'Adını yaz...';
+  inp.autocomplete = 'off';
+  inp.maxLength = 40;
+  inp.value = savedName;
+
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'orig-name-btn';
+  btn.textContent = 'Giriş →';
+
+  box.appendChild(inp);
+  box.appendChild(btn);
+  lockGate.appendChild(titleEl);
+  lockGate.appendChild(subEl);
+  lockGate.appendChild(box);
+  document.body.appendChild(lockGate);
+
+  setTimeout(() => inp.focus(), 200);
+
+  function unlockGate() {
+    const val = sanitizeName(inp.value);
+    if (!val) {
+      inp.style.borderColor = '#f43f5e';
+      inp.focus();
+      return;
+    }
+    try {
+      localStorage.setItem(STORAGE_KEY, val);
+    } catch (e) {
+      alert('Tarayıcı depolama alanı dolu olduğu için ismin geçici kaydedildi.');
+    }
+    renderHeaderBadge(val);
+    lockGate.classList.add('gate-unlocked');
+    setTimeout(() => lockGate.remove(), 750);
+  }
+
+  btn.addEventListener('click', unlockGate);
+  inp.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      unlockGate();
+    }
+  });
+})();
+</script>
+  <!-- 6 MİMARİ SORUNU ÇÖZEN NİHAİ MOTOR, GÜVENLİK VE GİRİŞ YAMASI -->
+<style>
+  #python-studio-lock-gate {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 50% 40%, #1e1b4b 0%, #090d16 70%, #05070c 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2147483647;
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  #python-studio-lock-gate.gate-unlocked {
+    opacity: 0 !important;
+    transform: translateY(-100%) !important;
+    pointer-events: none !important;
+  }
+  .gate-hero-title {
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 900;
+    font-style: italic;
+    background: linear-gradient(135deg, #e9d5ff 0%, #a855f7 55%, #7e22ce 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+    letter-spacing: -0.02em;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: gateSlideUp 0.65s ease forwards 0.1s;
+  }
+  .gate-hero-sub {
+    font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #eab308;
+    margin: 8px 0 0 0;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: gateSlideUp 0.65s ease forwards 0.3s;
+  }
+  @keyframes gateSlideUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .orig-name-wrap {
+    margin-top: 26px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.88);
+    border: 1.5px solid rgba(168, 85, 247, 0.6);
+    border-left: 4px solid #eab308;
+    padding: 9px 11px;
+    border-radius: 6px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    transform: translateY(14px);
+    animation: gateSlideUp 0.65s ease forwards 0.45s;
+  }
+  .orig-name-input {
+    background: rgba(255, 255, 255, 0.96);
+    color: #0f172a;
+    border: 1px solid #a855f7;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    outline: none;
+    width: 220px;
+  }
+  .orig-name-btn {
+    background: linear-gradient(135deg, #9333ea, #6b21a8);
+    color: #fff;
+    border: 1px solid #eab308;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .header-user-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: rgba(139, 92, 246, 0.16);
+    border: 1px solid rgba(168, 85, 247, 0.5);
+    border-left: 3px solid var(--accent-gold, #eab308);
+    color: var(--text-primary, #f8fafc);
+    font-size: 0.72rem;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  #studio-safe-toast {
+    position: fixed;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e1b4b;
+    color: #f8fafc;
+    border: 1.5px solid #eab308;
+    padding: 9px 16px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    z-index: 2147483647;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.65);
+    display: none;
+  }
+</style>
+
+<script>
+(function () {
+  /* =========================================================================
+     SORUN 3 ÇÖZÜMÜ: ESKİ ZAMANLAYICILARI VE ÇOKLU GİRİŞ EKRANLARINI TEMİZLE
+     ========================================================================= */
+  const maxTimerId = window.setTimeout(() => {}, 0);
+  for (let i = 1; i <= maxTimerId; i++) {
+    window.clearInterval(i);
+  }
+  ['welcome-splash', 'elite-gate-overlay', 'studio-toast-alert', 'python-studio-lock-gate'].forEach(id => {
+    document.querySelectorAll('#' + id).forEach(el => el.remove());
+  });
+
+  /* =========================================================================
+     SORUN 5 ÇÖZÜMÜ: KENDİNİ ONARAN BİLDİRİM & HATA İLETEN LOCALSTORAGE SİSTEMİ
+     ========================================================================= */
+  let toastHideTimer = null;
+  function showStudioAlert(msg, isError) {
+    let toast = document.getElementById('studio-safe-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'studio-safe-toast';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = String(msg || '');
+    toast.style.borderColor = isError ? '#f43f5e' : '#eab308';
+    toast.style.display = 'block';
+    clearTimeout(toastHideTimer);
+    toastHideTimer = setTimeout(() => {
+      const t = document.getElementById('studio-safe-toast');
+      if (t) t.style.display = 'none';
+    }, 4200);
+  }
+
+  if (!Storage.prototype.__safePatched) {
+    Storage.prototype.__safePatched = true;
+    const origSetItem = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (key, value) {
+      try {
+        origSetItem.call(this, key, value);
+      } catch (err) {
+        if (err && (err.name === 'QuotaExceededError' || err.code === 22)) {
+          showStudioAlert('⚠️ Tarayıcı depolama alanı doldu! İlerlemen kaydedilemedi.', true);
+        } else {
+          showStudioAlert('⚠️ Kayıt sırasında bir hata oluştu.', true);
+        }
+        throw err; // Hatayı yutmaz, çağıran fonksiyona iletir
+      }
+    };
+  }
+
+  /* =========================================================================
+     SORUN 3 (DEVAM): TEK GİRİŞ EKRANI & XSS KORUMALI İSİM YÖNETİMİ
+     ========================================================================= */
+  const STORAGE_KEY = 'pythonhazirlik_user_name';
+  function sanitizeName(raw) {
+    return String(raw || '').replace(/[\u0000-\u001F\u007F]/g, '').trim().slice(0, 40);
+  }
+  const savedName = sanitizeName(localStorage.getItem(STORAGE_KEY));
+
+  function renderHeaderBadge(name) {
+    const safeName = sanitizeName(name);
+    if (!safeName) return;
+    const actionsBar = document.querySelector('.header-actions');
+    const saveBtn = actionsBar ? actionsBar.querySelector('.save-btn') : null;
+    if (!actionsBar || !saveBtn) return;
+
+    let badge = document.getElementById('header-user-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.id = 'header-user-badge';
+      badge.className = 'header-user-badge';
+      badge.title = 'İsmini değiştirmek için tıkla';
+      actionsBar.insertBefore(badge, saveBtn);
+    }
+
+    badge.onclick = function () {
+      const yeni = prompt('Stüdyoda görünecek adını gir:', sanitizeName(localStorage.getItem(STORAGE_KEY)));
+      const cleanYeni = sanitizeName(yeni);
+      if (cleanYeni) {
+        try {
+          localStorage.setItem(STORAGE_KEY, cleanYeni);
+          renderHeaderBadge(cleanYeni);
+        } catch (_) {}
+      }
+    };
+
+    badge.replaceChildren();
+    const diamond = document.createElement('span');
+    diamond.style.color = '#eab308';
+    diamond.textContent = '◆ ';
+    badge.appendChild(diamond);
+    badge.appendChild(document.createTextNode(safeName));
+  }
+
+  if (savedName) renderHeaderBadge(savedName);
+
+  const lockGate = document.createElement('div');
+  lockGate.id = 'python-studio-lock-gate';
+
+  const titleEl = document.createElement('h1');
+  titleEl.className = 'gate-hero-title';
+  titleEl.textContent = 'Python Stüdyoya';
+
+  const subEl = document.createElement('p');
+  subEl.className = 'gate-hero-sub';
+  subEl.textContent = 'Hoşgeldiniz';
+
+  const box = document.createElement('div');
+  box.className = 'orig-name-wrap';
+
+  const inp = document.createElement('input');
+  inp.type = 'text';
+  inp.className = 'orig-name-input';
+  inp.placeholder = 'Adını yaz...';
+  inp.autocomplete = 'off';
+  inp.maxLength = 40;
+  inp.value = savedName;
+
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'orig-name-btn';
+  btn.textContent = 'Giriş →';
+
+  box.appendChild(inp);
+  box.appendChild(btn);
+  lockGate.appendChild(titleEl);
+  lockGate.appendChild(subEl);
+  lockGate.appendChild(box);
+  document.body.appendChild(lockGate);
+
+  setTimeout(() => inp.focus(), 200);
+
+  function unlockGate() {
+    const val = sanitizeName(inp.value);
+    if (!val) {
+      inp.style.borderColor = '#f43f5e';
+      inp.focus();
+      return;
+    }
+    try {
+      localStorage.setItem(STORAGE_KEY, val);
+    } catch (_) {}
+    renderHeaderBadge(val);
+    lockGate.classList.add('gate-unlocked');
+    setTimeout(() => lockGate.remove(), 750);
+  }
+
+  btn.addEventListener('click', unlockGate);
+  inp.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      unlockGate();
+    }
+  });
+
+  /* =========================================================================
+     SORUN 2 ÇÖZÜMÜ: YEDEK DOSYASI YÜKLEMEYİ OTOMATİK DOĞRULAMA SİSTEMİNE BAĞLA
+     ========================================================================= */
+  function clampIndex(val, maxLen) {
+    const n = Number(val);
+    if (!Number.isInteger(n) || n < 0) return 0;
+    if (typeof maxLen === 'number' && maxLen > 0 && n >= maxLen) return maxLen - 1;
+    return n;
+  }
+
+  window.validateAndSanitizeBackupData = function (rawObj) {
+    if (!rawObj || typeof rawObj !== 'object' || Array.isArray(rawObj)) {
+      throw new Error('Geçersiz yedek dosyası formatı.');
+    }
+    const maxTopics = Array.isArray(window.curriculum) ? window.curriculum.length : 10;
+    const topicIdx = clampIndex(rawObj.topicIndex ?? rawObj.currentTopic ?? 0, maxTopics);
+
+    let maxTasks = 20;
+    if (Array.isArray(window.curriculum) && window.curriculum[topicIdx] && Array.isArray(window.curriculum[topicIdx].tasks)) {
+      maxTasks = window.curriculum[topicIdx].tasks.length;
+    }
+    const taskIdx = clampIndex(rawObj.taskIndex ?? rawObj.currentTask ?? 0, maxTasks);
+
+    const safeCodes = {};
+    if (rawObj.savedCodes && typeof rawObj.savedCodes === 'object' && !Array.isArray(rawObj.savedCodes)) {
+      for (const [k, v] of Object.entries(rawObj.savedCodes)) {
+        if (typeof k === 'string' && typeof v === 'string' && v.length <= 50000) {
+          safeCodes[k] = v;
+        }
+      }
+    }
+
+    return {
+      ...rawObj,
+      topicIndex: topicIdx,
+      currentTopic: topicIdx,
+      taskIndex: taskIdx,
+      currentTask: taskIdx,
+      savedCodes: safeCodes
+    };
+  };
+
+  if (!JSON.__backupParsePatched) {
+    JSON.__backupParsePatched = true;
+    const origJSONParse = JSON.parse;
+    JSON.parse = function (text, reviver) {
+      const parsed = origJSONParse.call(this, text, reviver);
+      if (
+        parsed &&
+        typeof parsed === 'object' &&
+        !Array.isArray(parsed) &&
+        ('savedCodes' in parsed || 'topicIndex' in parsed || 'currentTopic' in parsed)
+      ) {
+        return window.validateAndSanitizeBackupData(parsed);
+      }
+      return parsed;
+    };
+  }
+
+  /* =========================================================================
+     SORUN 1, 4 & 6 ÇÖZÜMÜ: YEREL `pyodide` YAKALAMA + ASYNC DEF AST + SINAV INPUTU
+     ========================================================================= */
+  window._real_interactive_input = function (promptText) {
+    return new Promise((resolve) => {
+      const label = String(promptText || 'Değer girin:');
+      const liveInput = document.querySelector('#live-chat-input, .live-input-field');
+      const liveBtn = document.querySelector('#live-chat-send, .live-input-send');
+      if (liveInput && liveBtn && liveInput.offsetParent !== null) {
+        liveInput.placeholder = label;
+        liveInput.focus();
+        const onSend = () => {
+          const val = liveInput.value;
+          liveInput.value = '';
+          cleanup();
+          resolve(val);
+        };
+        const onKey = (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            onSend();
+          }
+        };
+        const cleanup = () => {
+          liveBtn.removeEventListener('click', onSend);
+          liveInput.removeEventListener('keydown', onKey);
+        };
+        liveBtn.addEventListener('click', onSend);
+        liveInput.addEventListener('keydown', onKey);
+      } else {
+        const ans = window.prompt(label, '');
+        resolve(ans === null ? '' : String(ans));
+      }
+    });
+  };
+
+  function attachGuardsToPyodideInstance(pyInst) {
+    if (!pyInst || pyInst.__guardsAttached) return;
+    pyInst.__guardsAttached = true;
+    window.pyodide = pyInst;
+
+    // 1. AST: Fonksiyon içi def -> async def dönüşümü + sonsuz döngü koruması + sınav input engeli
+    pyInst.runPython(`
+import ast, sys, time, builtins
+
+class _InfiniteLoopError(Exception):
+    pass
+
+def _install_loop_guard(max_steps=180000, max_seconds=3.0):
+    steps = 0
+    start_t = time.monotonic()
+    def _tracer(frame, event, arg):
+        nonlocal steps
+        if event == 'line':
+            steps += 1
+            if steps > max_steps or (time.monotonic() - start_t) > max_seconds:
+                sys.settrace(None)
+                raise _InfiniteLoopError("Sonsuz döngü koruması: Kod çok uzun sürdüğü için durduruldu.")
+        return _tracer
+    sys.settrace(_tracer)
+
+def _clear_loop_guard():
+    sys.settrace(None)
+
+class _FullAsyncInputTransformer(ast.NodeTransformer):
+    def __init__(self):
+        self.async_funcs = set()
+
+    def _contains_input(self, node):
+        for child in ast.walk(node):
+            if isinstance(child, ast.Call) and isinstance(child.func, ast.Name) and child.func.id == 'input':
+                return True
+        return False
+
+    def visit_FunctionDef(self, node):
+        has_inp = self._contains_input(node)
+        if has_inp:
+            self.async_funcs.add(node.name)
+        self.generic_visit(node)
+        if has_inp:
+            async_fn = ast.AsyncFunctionDef(
+                name=node.name,
+                args=node.args,
+                body=node.body,
+                decorator_list=node.decorator_list,
+                returns=node.returns,
+                type_comment=getattr(node, 'type_comment', None)
+            )
+            return ast.copy_location(async_fn, node)
+        return node
+
+    def visit_Call(self, node):
+        self.generic_visit(node)
+        if isinstance(node.func, ast.Name):
+            if node.func.id == 'input':
+                await_node = ast.Await(
+                    value=ast.Call(
+                        func=ast.Name(id='_real_interactive_input', ctx=ast.Load()),
+                        args=node.args,
+                        keywords=node.keywords
+                    )
+                )
+                return ast.copy_location(await_node, node)
+            elif node.func.id in self.async_funcs:
+                return ast.copy_location(ast.Await(value=node), node)
+        return node
+
+def _transform_user_code_ast(source_code):
+    try:
+        tree = ast.parse(source_code, mode='exec')
+        # Çok geçişli dönüşüm: iç içe veya sonradan tanımlanan async fonksiyon çağrılarını da yakalar
+        transformer = _FullAsyncInputTransformer()
+        tree = transformer.visit(tree)
+        if transformer.async_funcs:
+            tree = transformer.visit(tree)
+        ast.fix_missing_locations(tree)
+        return ast.unparse(tree)
+    except SyntaxError:
+        return source_code
+`);
+
+    const origRunPython = pyInst.runPython.bind(pyInst);
+    pyInst.runPython = function (code, ...args) {
+      let src = String(code || '');
+      // Sorun 4 Çözümü: Sınav sistemindeki sabit ("25" / "Python") sahte input atamasını etkisizleştir
+      if (src.includes('builtins.input') && (src.includes('"25"') || src.includes("'25'") || src.includes('"Python"'))) {
+        src = src.replace(/builtins\.input\s*=\s*lambda[^\n]*/g, 'pass # Gercek input korundu');
+      }
+      return origRunPython(src, ...args);
+    };
+
+    const origRunAsync = pyInst.runPythonAsync.bind(pyInst);
+    pyInst.runPythonAsync = async function (code, ...args) {
+      let safeCode = String(code || '');
+      // Sınav modunda veya normal modda sahte input satırı varsa temizle
+      if (safeCode.includes('builtins.input') && (safeCode.includes('"25"') || safeCode.includes('"Python"'))) {
+        safeCode = safeCode.replace(/builtins\.input\s*=\s*lambda[^\n]*/g, 'pass');
+      }
+      try {
+        pyInst.globals.set('_raw_src_tmp', safeCode);
+        safeCode = origRunPython('_transform_user_code_ast(_raw_src_tmp)');
+        origRunPython('_install_loop_guard()');
+        return await origRunAsync(safeCode, ...args);
+      } finally {
+        try { origRunPython('_clear_loop_guard()'); } catch (_) {}
+      }
+    };
+  }
+
+  // Yerel `let pyodide` değişkenini hem loadPyodide üzerinden hem de ilk çalıştırma çağrısında yakala
+  if (typeof window.loadPyodide === 'function' && !window.loadPyodide.__hooked) {
+    const origLoadPyodide = window.loadPyodide;
+    window.loadPyodide = async function (...args) {
+      const inst = await origLoadPyodide.apply(this, args);
+      attachGuardsToPyodideInstance(inst);
+      return inst;
+    };
+    window.loadPyodide.__hooked = true;
+  }
+
+  // Eğer Pyodide bizden önce yüklendiyse, ilk runPythonAsync / runPython çağrısında yakalamak için
+  // WebAssembly / Pyodide nesnesini tarayan genel kanca
+  const pyFinderInterval = setInterval(() => {
+    if (window.pyodide) {
+      attachGuardsToPyodideInstance(window.pyodide);
+      clearInterval(pyFinderInterval);
+      return;
+    }
+    // Global kapsamdaki nesneler arasında Pyodide örneğini ara
+    for (const key of Object.getOwnPropertyNames(window)) {
+      try {
+        const val = window[key];
+        if (val && typeof val === 'object' && typeof val.runPythonAsync === 'function' && typeof val.globals === 'object') {
+          attachGuardsToPyodideInstance(val);
+          clearInterval(pyFinderInterval);
+          return;
+        }
+      } catch (_) {}
+    }
+  }, 500);
+})();
+</script>
 </body>
 </html>
